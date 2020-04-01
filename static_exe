@@ -1,0 +1,36 @@
+# ------------------- By: TSURA @ -------------------
+# ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
+# ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
+# ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝ 
+# ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗ 
+# ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
+# ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+# ---------------------- [.xyz] ---------------------
+
+CC=clang
+
+LDFLAGS= -g -Wall -fPIC -m64 -lm -lstdc++ -std=c++14 $(shell pkg-config --cflags --libs sdl2)  $(shell pkg-config --cflags --libs freetype2) $(shell pkg-config glew --cflags --libs) -pthread -lglut libsgl.a
+
+# SkeletonGL core files
+SOURCES= 
+
+
+OBJECTS=$(SOURCES:.cpp=.o)
+
+EXECUTABLE=snake_sgl
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC)  $(OBJECTS) $(LDFLAGS) -o $@
+
+.cpp.o:
+	$(CC) $< $(LDFLAGS) -c -o $@
+
+
+clean:
+	rm -rf src/*.o
+	rm -rf src/skeletonGL/*.o
+	rm -rf src/skeletonGL/renderer/*.o
+	rm -rf src/skeletonGL/window/*.o
+	rm -rf src/skeletonGL/utility/*.o

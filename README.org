@@ -1,0 +1,65 @@
+#+Title:SkeletonGL: Performance focused 2D game engine
+#+Author: tsura @ NEOHEX.XYZ
+
+
+[[http://www.gnu.org/licenses/gpl-3.0.html][http://img.shields.io/:license-mit-blue.svg]]
+
+- Features: [[https://neohex.xyz/projects?nav=skeletongl][https://neohex.xyz/projects?nav=skeletongl]]
+- Devlog: [[https://neohex.xyz/journal?category=sgl_devlog][https://neohex.xyz/journal?category=sgl_devlog]]
+
+
+
+
+* About SkeletonGL
+  SkeletonGL is a fully featured 2D rendering engine written in C++ with a focus on performance and flexibility, it
+  offers a template to immediately begin working on the essential elements of the application without having to first write 
+  universal, core features.
+
+  The framework provides everything needed to create visual applications while abstracting away OpenGL's shortcomings, the API
+  is optimized to allow for absolute control without injecting unnecessary dependencies, making the compiled static library
+  less than 4 MBs.
+  
+  The code base is very compact and easily modifiable to fit any particular project, it also includes fully featured debugging 
+  tools for the underlying OpenGL drivers making it a complete solution for computer graphics programming.
+  All modern OpenGL rendering capabilities are available, making it a more complete alternative to SDL's 2D renderer
+  while providing a very similar interface, its just as easy to use but with the added benefit of everything a proper
+  engine has to offer. If you're looking for the a complete, yet unobtrusive solution for PC game development, SkeletonGL is for you.
+
+* Dependencies
+  - [[https://glm.g-truc.net/][glm]] // included
+  - [[https://github.com/nothings/stb/blob/master/stb_image.h][stb_image]] // included
+  - [[https://www.freetype.org/][freetype]]
+  - [[http://glew.sourceforge.net/][glew]]
+  - [[https://www.libsdl.org/][SDL2]]
+    
+
+* Installation
+
+  1. Install dependencies
+
+  Apt:
+  #+BEGIN_SRC 
+sudo apt-get update
+sudo apt-get install libsdl2-dev libglew-dev libfreetype6-dev
+  #+END_SRC
+
+  2. Clone the SGL template and compile the included example
+
+  #+BEGIN_SRC 
+git clone https://github.com/NE0HEX/skeletongl
+cd skeletongl/
+make
+./sgl
+  #+END_SRC
+
+
+* Documentation and examples
+
+  SGL includes a default program to verify compilation and serve as an example.
+
+  Other open source software made in SkeletonGL:
+  - SNAKE
+
+ 
+  For more information visit [[https://neohex.xyz/projects?nav=skeletongl][https://neohex.xyz/projects?nav=skeletongl]]
+
