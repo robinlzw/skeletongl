@@ -211,8 +211,6 @@ void SGL_Window::toggleVSYNC(bool enable)
         pWindowCreationSpecs.activeVSYNC = true;
         SGL_Log("VSync enabled.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     }
-    // A
-    SGL_Log("SDL2 Error. " +  std::string(SDL_GetError()), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
 }
 
 /**
@@ -801,8 +799,10 @@ SGL_InputFrame SGL_Window::getFrameInput()
             }
         }
         // --- MOUSE --
-        if (pEvent.button.button == SDL_BUTTON_LEFT) { input.mouseLeft = true; }
-        if (pEvent.button.button == SDL_BUTTON_RIGHT) { input.mouseRight = true; }
+        if (pEvent.button.button == SDL_BUTTON_LEFT && pEvent.button.state == SDL_PRESSED) { input.mouseLeftPressed = true; }
+        if (pEvent.button.button == SDL_BUTTON_LEFT && pEvent.button.state == SDL_RELEASED) { input.mouseLeftReleased = true; }
+        if (pEvent.button.button == SDL_BUTTON_RIGHT && pEvent.button.state == SDL_PRESSED) { input.mouseRightPressed = true; }
+        if (pEvent.button.button == SDL_BUTTON_RIGHT && pEvent.button.state == SDL_RELEASED) { input.mouseRightReleased = true; }
 
         // --- KEYBOARD ---
         //NOTE: Its best to place keys that shouldn't be held down like a toggle button
@@ -1125,13 +1125,9 @@ void SGL_Window::pLoadDefaultAssets()
  */
 void SGL_Window::toggleFullScreen(bool toggle)
 {
-    if (!toggle && pWindowCreationSpecs.fullScreen)
-    {
-        SDL_SetWindowFullscreen(this->pWindow, 0);
-        pWindowCreationSpecs.fullScreen = false;
-        SGL_Log("Fullscreen disabled.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
-    }
-    if (toggle && !pWindowCreationSpecs.fullScreen)
+    SGL_Log("TOGGLE FULLSCREEN.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+
+    if (toggle)
     {
         SDL_SetWindowFullscreen(this->pWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
         pWindowCreationSpecs.fullScreen = true;
@@ -1142,7 +1138,34 @@ void SGL_Window::toggleFullScreen(bool toggle)
         pWindowCreationSpecs.fullscreenH = current.h;
         this->resizeGL(pWindowCreationSpecs.fullscreenW, pWindowCreationSpecs.fullscreenH);
         SGL_Log("Fullscreen enabled @ w: " + std::to_string(pWindowCreationSpecs.fullscreenW) + " h: " + std::to_string(pWindowCreationSpecs.fullscreenH), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+
     }
+    else
+    {
+        SDL_SetWindowFullscreen(this->pWindow, 0);
+        pWindowCreationSpecs.fullScreen = false;
+        SGL_Log("Fullscreen disabled.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+    }
+
+
+    // if (!toggle && pWindowCreationSpecs.fullScreen)
+    // {
+    //     SDL_SetWindowFullscreen(this->pWindow, 0);
+    //     pWindowCreationSpecs.fullScreen = false;
+    //     SGL_Log("Fullscreen disabled.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+    // }
+    // if (toggle && !pWindowCreationSpecs.fullScreen)
+    // {
+    //     SDL_SetWindowFullscreen(this->pWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    //     pWindowCreationSpecs.fullScreen = true;
+    //     // If the internal resolution and the max display resolution aren't compatible, artifacts will form
+    //     SDL_DisplayMode current;
+    //     SDL_GetCurrentDisplayMode(0, &current);
+    //     pWindowCreationSpecs.fullscreenW = current.w;
+    //     pWindowCreationSpecs.fullscreenH = current.h;
+    //     this->resizeGL(pWindowCreationSpecs.fullscreenW, pWindowCreationSpecs.fullscreenH);
+    //     SGL_Log("Fullscreen enabled @ w: " + std::to_string(pWindowCreationSpecs.fullscreenW) + " h: " + std::to_string(pWindowCreationSpecs.fullscreenH), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+    // }
 }
 
 /**

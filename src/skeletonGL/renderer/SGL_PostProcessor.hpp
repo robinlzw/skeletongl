@@ -8,7 +8,6 @@
 // ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 // ---------------------- [.xyz] ---------------------
 
-
 /**
  * @file    src/skeletonGL/utility/SGL_PostProcessor.hpp
  * @author  AlexHG
