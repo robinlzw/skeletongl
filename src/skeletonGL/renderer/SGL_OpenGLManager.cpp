@@ -8,6 +8,7 @@
 // ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 // ---------------------- [.xyz] ---------------------
 
+/**
  * @file    src/skeletonGL/utility/SGL_OpenGLManager.cpp
  * @author  AlexHG
  * @date    9/4/2018

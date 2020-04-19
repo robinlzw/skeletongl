@@ -138,7 +138,7 @@ public:
     // problems related to opengl contexts and window loading here, this is the first function
     // the programmer must call to initialize SkeletonGL
     void initializeWindow(int x, int y, int w, int h, int internalW, int internalH,
-                          const std::string &windowTitle, bool fullscreen, uint8_t FPS, std::string iniFile = "");
+                          const std::string &windowTitle, bool fullscreen, std::string iniFile = "");
 
     // -- WINDOW HANDLERS --
     // Sets the window's title

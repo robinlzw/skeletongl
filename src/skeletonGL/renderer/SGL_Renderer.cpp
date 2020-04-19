@@ -113,6 +113,7 @@ SGL_Renderer::SGL_Renderer(std::shared_ptr<SGL_OpenGLManager> oglm, const SGL_Sh
     this->loadSpriteBatchBuffers(pSpriteBatchShader);
     this->loadLineBatchBuffers(pLineBatchShader);
 
+    this->generateBitmapFont();
 }
 
 /**
@@ -406,6 +407,46 @@ void SGL_Renderer::renderText(std::string text, GLfloat x, GLfloat y, GLfloat sc
     this->pTextShader.unbind(*WMOGLM);
     WMOGLM->bindTexture(GL_TEXTURE_2D, 0);
     WMOGLM->faceCulling(false);
+}
+
+/**
+ * @brief Renders a string of text as a bitmap font
+ * @param line SGL_Text object to render
+ *
+ * @return nothing
+ */
+
+void SGL_Renderer::renderBitmapText(SGL_Bitmap_Text &text)
+{
+    // Get the UV positioning for the character to rener
+    SGL_Sprite s;
+    s.position.x = text.position.x;
+    s.position.y = text.position.y;
+    s.size.x = text.scale;
+    s.size.y = text.scale;
+    s.texture = text.texture;
+    s.color = text.color;
+    // s.rotationOrigin.x = 5;
+    // s.rotationOrigin.y = 5;
+    // s.rotation = 2.0;
+
+    // SGL_Log("Total chars in text to render: " + std::to_string(text.text.size()));
+    std::string str = "";
+    // Iterate through all the characters in the string to render
+    for (const char &c : text.text)
+    {
+        // Get UV coords
+        glm::vec4 uvC = pBitmapCharacters.find(c)->second;
+        s.changeUVCoords(uvC.x, uvC.y, uvC.w, uvC.z);
+        // SGL_Log("X: " + std::to_string(uvC.x) + " Y: " + std::to_string(uvC.y) + " W: " + std::to_string(uvC.w) + " H: " + std::to_string(uvC.z));
+        this->renderSprite(s);
+
+        str.push_back(c);
+        // SGL_Log("CHAR: " + str);
+
+        // Move the X position by the width of the last rendered character
+        s.position.x += s.size.x;
+    }
 }
 
 /**
@@ -1187,4 +1228,118 @@ void SGL_Renderer::generateFont(const std::string fontPath)
     WMOGLM->unbindVAO();
     WMOGLM->unbindVBO();
     WMOGLM->faceCulling(false);
+}
+
+/**
+ * @brief Populates the internal std::map with the character values in the texture
+ *
+ * @return nothing
+ */
+void SGL_Renderer::generateBitmapFont()
+{
+    // Note that the following values are to be processed by Sprite::changeUVCoords
+
+    std::uint16_t charW = 10, charH = 10;
+
+    // Letters
+    pBitmapCharacters['a'] = glm::vec4(0, 30, charW, charH);
+    pBitmapCharacters['A'] = glm::vec4(0, 30, charW, charH);
+    pBitmapCharacters['b'] = glm::vec4(10, 30, charW, charH);
+    pBitmapCharacters['B'] = glm::vec4(10, 30, charW, charH);
+    pBitmapCharacters['c'] = glm::vec4(20, 30, charW, charH);
+    pBitmapCharacters['C'] = glm::vec4(20, 30, charW, charH);
+    pBitmapCharacters['d'] = glm::vec4(30, 30, charW, charH);
+    pBitmapCharacters['D'] = glm::vec4(30, 30, charW, charH);
+    pBitmapCharacters['e'] = glm::vec4(40, 30, charW, charH);
+    pBitmapCharacters['E'] = glm::vec4(40, 30, charW, charH);
+    pBitmapCharacters['f'] = glm::vec4(50, 30, charW, charH);
+    pBitmapCharacters['F'] = glm::vec4(50, 30, charW, charH);
+    pBitmapCharacters['g'] = glm::vec4(60, 30, charW, charH);
+    pBitmapCharacters['G'] = glm::vec4(60, 30, charW, charH);
+    pBitmapCharacters['h'] = glm::vec4(70, 30, charW, charH);
+    pBitmapCharacters['H'] = glm::vec4(70, 30, charW, charH);
+    pBitmapCharacters['i'] = glm::vec4(80, 30, charW, charH);
+    pBitmapCharacters['I'] = glm::vec4(80, 30, charW, charH);
+    pBitmapCharacters['j'] = glm::vec4(90, 30, charW, charH);
+    pBitmapCharacters['J'] = glm::vec4(90, 30, charW, charH);
+    pBitmapCharacters['k'] = glm::vec4(100, 30, charW, charH);
+    pBitmapCharacters['K'] = glm::vec4(100, 30, charW, charH);
+    pBitmapCharacters['l'] = glm::vec4(110, 30, charW, charH);
+    pBitmapCharacters['L'] = glm::vec4(110, 30, charW, charH);
+    pBitmapCharacters['m'] = glm::vec4(120, 30, charW, charH);
+    pBitmapCharacters['M'] = glm::vec4(120, 30, charW, charH);
+
+    pBitmapCharacters['n'] = glm::vec4(0, 40, charW, charH);
+    pBitmapCharacters['N'] = glm::vec4(0, 40, charW, charH);
+    pBitmapCharacters['o'] = glm::vec4(10, 40, charW, charH);
+    pBitmapCharacters['O'] = glm::vec4(10, 40, charW, charH);
+    pBitmapCharacters['p'] = glm::vec4(20, 40, charW, charH);
+    pBitmapCharacters['P'] = glm::vec4(20, 40, charW, charH);
+    pBitmapCharacters['q'] = glm::vec4(30, 40, charW, charH);
+    pBitmapCharacters['Q'] = glm::vec4(30, 40, charW, charH);
+    pBitmapCharacters['r'] = glm::vec4(40, 40, charW, charH);
+    pBitmapCharacters['R'] = glm::vec4(40, 40, charW, charH);
+    pBitmapCharacters['s'] = glm::vec4(50, 40, charW, charH);
+    pBitmapCharacters['S'] = glm::vec4(50, 40, charW, charH);
+    pBitmapCharacters['t'] = glm::vec4(60, 40, charW, charH);
+    pBitmapCharacters['T'] = glm::vec4(60, 40, charW, charH);
+    pBitmapCharacters['u'] = glm::vec4(70, 40, charW, charH);
+    pBitmapCharacters['U'] = glm::vec4(70, 40, charW, charH);
+    pBitmapCharacters['v'] = glm::vec4(80, 40, charW, charH);
+    pBitmapCharacters['V'] = glm::vec4(80, 40, charW, charH);
+    pBitmapCharacters['w'] = glm::vec4(90, 40, charW, charH);
+    pBitmapCharacters['W'] = glm::vec4(90, 40, charW, charH);
+    pBitmapCharacters['x'] = glm::vec4(100, 40, charW, charH);
+    pBitmapCharacters['X'] = glm::vec4(100, 40, charW, charH);
+    pBitmapCharacters['y'] = glm::vec4(110, 40, charW, charH);
+    pBitmapCharacters['Y'] = glm::vec4(110, 40, charW, charH);
+    pBitmapCharacters['z'] = glm::vec4(120, 40, charW, charH);
+    pBitmapCharacters['Z'] = glm::vec4(120, 40, charW, charH);
+
+    // Numbers
+    pBitmapCharacters['0'] = glm::vec4(0, 10, charW, charH);
+    pBitmapCharacters['1'] = glm::vec4(10, 10, charW, charH);
+    pBitmapCharacters['2'] = glm::vec4(20, 10, charW, charH);
+    pBitmapCharacters['3'] = glm::vec4(30, 10, charW, charH);
+    pBitmapCharacters['4'] = glm::vec4(40, 10, charW, charH);
+    pBitmapCharacters['5'] = glm::vec4(50, 10, charW, charH);
+    pBitmapCharacters['6'] = glm::vec4(60, 10, charW, charH);
+    pBitmapCharacters['7'] = glm::vec4(70, 10, charW, charH);
+    pBitmapCharacters['8'] = glm::vec4(80, 10, charW, charH);
+    pBitmapCharacters['9'] = glm::vec4(90, 10, charW, charH);
+    pBitmapCharacters['['] = glm::vec4(100, 10, charW, charH);
+    pBitmapCharacters[']'] = glm::vec4(110, 10, charW, charH);
+
+    // More Symbols
+    pBitmapCharacters['!'] = glm::vec4(0, 0, charW, charH);
+    pBitmapCharacters['"'] = glm::vec4(10, 0, charW, charH);
+    pBitmapCharacters['$'] = glm::vec4(20, 0, charW, charH);
+    pBitmapCharacters['%'] = glm::vec4(30, 0, charW, charH);
+    pBitmapCharacters['('] = glm::vec4(40, 0, charW, charH);
+    pBitmapCharacters[')'] = glm::vec4(50, 0, charW, charH);
+    pBitmapCharacters['*'] = glm::vec4(60, 0, charW, charH);
+    pBitmapCharacters['+'] = glm::vec4(70, 0, charW, charH);
+    pBitmapCharacters['-'] = glm::vec4(80, 0, charW, charH);
+    pBitmapCharacters['/'] = glm::vec4(90, 0, charW, charH);
+    pBitmapCharacters['.'] = glm::vec4(100, 0, charW, charH);
+    pBitmapCharacters['\\'] = glm::vec4(110,0, charW, charH);
+
+    pBitmapCharacters[':'] = glm::vec4(0, 20, charW, charH);
+    pBitmapCharacters[';'] = glm::vec4(10, 20, charW, charH);
+    pBitmapCharacters['{'] = glm::vec4(20, 20, charW, charH);
+    pBitmapCharacters['='] = glm::vec4(30, 20, charW, charH);
+    pBitmapCharacters['}'] = glm::vec4(40, 20, charW, charH);
+    pBitmapCharacters['?'] = glm::vec4(50, 20, charW, charH);
+    pBitmapCharacters['@'] = glm::vec4(60, 20, charW, charH);
+    pBitmapCharacters['_'] = glm::vec4(70, 20, charW, charH);
+    pBitmapCharacters[','] = glm::vec4(80, 20, charW, charH);
+    pBitmapCharacters['|'] = glm::vec4(90, 20, charW, charH);
+
+    // The last inserted entry will be the one returned by find()
+    // should the search fail, making this the default "NOT OFUND"
+    // character
+    pBitmapCharacters['~'] = glm::vec4(0, 120, charW, charH);
+
+    SGL_Log("Total characters  in bitmap font: " + std::to_string(pBitmapCharacters.size()));
+
 }

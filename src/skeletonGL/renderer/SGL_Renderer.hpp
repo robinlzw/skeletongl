@@ -130,10 +130,10 @@ struct SGL_Line
 
 
 /**
- * @brief Encapsulates a string to be rendered
+ * @brief Encapsulates a string to be rendered by a TTF generated font
  * @section DESCRIPTION
  *
- * Represents an string on the screen
+ * Represents a TTF rendered string on the screen
  */
 struct SGL_Text
 {
@@ -143,6 +143,17 @@ struct SGL_Text
     SGL_Color color;                ///< Text color
     SGL_Shader shader;              ///< Text shader
 };
+
+struct SGL_Bitmap_Text
+{
+    glm::vec2 position;
+    std::string text;
+    SGL_Texture texture;
+    SGL_Shader shader;
+    SGL_Color color;
+    std::uint8_t scale;
+};
+
 
 /**
  * @brief Manages the rendering process and setup
@@ -163,6 +174,7 @@ private:
         pSpriteVBO, pTextureUVVBO;             ///< All the required OpenGL buffers
     SGL_Shader pLineShader, pPixelShader;      ///< Shader for the line and pixel renderers
     std::map<GLchar, Character> characters;    ///< Storage the loaded cahracters in a map
+    std::map<char, glm::vec4> pBitmapCharacters; ///< Map storing a character's represntation in the bitmap font texture
     SGL_Shader pTextShader;                    ///< Text rendering shader
     SGL_Shader pSpriteShader;                  ///< Sprite shader
     SGL_Shader pSpriteBatchShader;             ///< Sprite batch shader
@@ -205,6 +217,9 @@ private:
     // Load and generate the ttf font
     void generateFont(const std::string fontPath);
 
+    // Generate the lookup table for bitmap characters
+    void generateBitmapFont();
+
     // Disable all copy and move constructors
     SGL_Renderer(const SGL_Renderer&) = delete;
     SGL_Renderer *operator = (const SGL_Renderer&) = delete;
@@ -232,6 +247,11 @@ public:
     void renderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, SGL_Color color);
     // Render a string
     void renderText(SGL_Text &text);
+
+    // Renders text as bitmap characters
+    void renderBitmapText(SGL_Bitmap_Text &text);
+    // The bitmap font renderer requires a default texture
+    // void renderBitmapText(std::string text, GLfloat x, GLfloat y, GLfloat scale, SGL_Color color);
 
     // Render a sprite
     void renderSprite(const SGL_Sprite &sprite);

@@ -86,7 +86,7 @@ void SGL_Window::destroyEverything()
  * @return nothing
  */
 void SGL_Window::initializeWindow(int x, int y, int w, int h, int internalW, int internalH,
-                                  const std::string &windowTitle, bool fullscreen, uint8_t FPS, std::string iniFile)
+                                  const std::string &windowTitle, bool fullscreen, std::string iniFile)
 {
     pWindowCreationSpecs.currentX = x;
     pWindowCreationSpecs.currentY = y;
@@ -1071,9 +1071,11 @@ void SGL_Window::pLoadDefaultAssets()
     // function, it must be loaded before the AssetManager can properly load textures
     std::string defaultTextureName = "defaultTexture.png";
     std::string blankSquare = FOLDER_STRUCTURE::imagesDir + "blank_square.png";
+    std::string bmpFont = FOLDER_STRUCTURE::imagesDir + "default_bitmap_font.png";
 
     assetManager->loadTexture(FOLDER_STRUCTURE::defaultTexture.c_str(), GL_FALSE, defaultTextureName);
     assetManager->loadTexture(blankSquare.c_str(), GL_TRUE, "blankSquare");
+    assetManager->loadTexture(bmpFont.c_str(), GL_TRUE, "defaultBitmapFont");
 
     SGL_Log("Default textures loaded.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
 

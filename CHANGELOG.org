@@ -1,6 +1,11 @@
 #+Title: SKELETONGL CHANGELOG
 #+Author: tsura @ NEOHEX.XYZ
 
+* VER 1.22
+
+    - Added "pressed" and "released" status checkings to the mouse buttons
+    - Fixed some comments
+    - Fixed a bug where the windows wasn't respecting the .ini file fullscreen request
 
 * VER 1.21
  - Added dynamic VSYNC toggling

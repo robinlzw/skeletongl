@@ -119,7 +119,7 @@ struct WindowCreationSpecs
 };
 
 /**
- * @brief Represents a single character to be processed by the renderer
+ * @brief Represents a single character to be processed by the TTF renderer
  */
 struct Character
 {
@@ -278,5 +278,6 @@ namespace GLCONSTANTS
         RW
     };
 }
+
 
 #endif
