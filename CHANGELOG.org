@@ -1,25 +1,29 @@
 #+Title: SKELETONGL CHANGELOG
 #+Author: tsura @ NEOHEX.XYZ
 
+
+* VER 1.23
+  - Added a bitmap font renderer to the SGL_Renderer class
+  - Fixed some minor input bugs
 * VER 1.22
 
-    - Added "pressed" and "released" status checkings to the mouse buttons
-    - Fixed some comments
-    - Fixed a bug where the windows wasn't respecting the .ini file fullscreen request
+  - Added "pressed" and "released" status checkings to the mouse buttons
+  - Fixed some comments
+  - Fixed a bug where the windows wasn't respecting the .ini file fullscreen request
 
 * VER 1.21
- - Added dynamic VSYNC toggling
- - Added an alternative orthographic projection with the Y axis flipped
+  - Added dynamic VSYNC toggling
+  - Added an alternative orthographic projection with the Y axis flipped
 
 * VER 1.2
- - Deleted test files (sgl/src/), will be making a separate git for testing.
- - Fixed an input bug were unhandled signals where causing spontaneous  SDL_QUIT events.
+  - Deleted test files (sgl/src/), will be making a separate git for testing.
+  - Fixed an input bug were unhandled signals where causing spontaneous  SDL_QUIT events.
 
 * VER 1.1
- - Added instance rendering (sprite batching) to the sprite, pixel and line renderers
- - Removed a few, minor bugs.
+  - Added instance rendering (sprite batching) to the sprite, pixel and line renderers
+  - Removed a few, minor bugs.
 
 * VER 1.0
- - Moved the project to a new git
- - Removed a few useless files
- - Since SkeletonGL already has a stable release, the git has been reset
+  - Moved the project to a new git
+  - Removed a few useless files
+  - Since SkeletonGL already has a stable release, the git has been reset
