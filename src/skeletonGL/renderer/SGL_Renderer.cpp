@@ -476,9 +476,12 @@ void SGL_Renderer::renderSprite(const SGL_Sprite &sprite)
     WMOGLM->bindVAO(this->pSpriteVAO);
     WMOGLM->bindVBO(this->pTextureUVVBO);
     activeShader.use(*WMOGLM);
+    // SGL_Log("shader bound");
+    // WMOGLM->checkForGLErrors();
     // Replace current texture coordinates
     WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(UV), &UV[0]);
-
+    // SGL_Log("buffer UV");
+    //     WMOGLM->checkForGLErrors();
     // If the user didn't specify a blending mode use the renderers default
     if (sprite.blending == 0)
         WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
@@ -494,23 +497,34 @@ void SGL_Renderer::renderSprite(const SGL_Sprite &sprite)
     model = glm::translate(model, glm::vec3(-sprite.rotationOrigin.x, -sprite.rotationOrigin.y, 0.0f)); //set the rotation origin back to origin
     model = glm::scale(model, glm::vec3(sprite.size, 1.0f)); //scale
 
+    // SGL_Log("matrix transofrms");
+
     // Parse uniforms
     activeShader.setMatrix4(*WMOGLM, "model", model);
     // Render texture quad
     activeShader.setVector4f(*WMOGLM, "spriteColor", sprite.color.r, sprite.color.g, sprite.color.b, sprite.color.a);
     activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
     activeShader.setVector2f(*WMOGLM, "spriteDimensions", sprite.size.x, sprite.size.y);
+
+    // SGL_Log("parsed uniforms");
+    //     WMOGLM->checkForGLErrors();
     // Activate textures
     WMOGLM->activeTexture(GL_TEXTURE0);
+    // SGL_Log("texture active");
+    //     WMOGLM->checkForGLErrors();
     sprite.texture.bind(*WMOGLM);
     // Draw it
     WMOGLM->drawArrays(GL_TRIANGLES, 0, 6);
+    // SGL_Log("rendered");
+    //     WMOGLM->checkForGLErrors();
 
     activeShader.unbind(*WMOGLM);
     WMOGLM->unbindVAO();
     WMOGLM->unbindVBO();
     // restore default blending status
     WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
+
+    WMOGLM->checkForGLErrors();
 }
 
 
@@ -884,7 +898,7 @@ void SGL_Renderer::loadLineBatchBuffers(SGL_Shader shader)
 
     WMOGLM->checkForGLErrors();
 
-    this->pLineBatchAmount = 100;
+    this->pLineBatchAmount = 10000;
     glm::vec4 memRes[pLineBatchAmount];
 
     // Pixel batching

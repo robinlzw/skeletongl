@@ -100,6 +100,7 @@ struct WindowCreationSpecs
 {
     bool fullScreen, enableVSYNC;               ///< Enable fullscreen, VSYNC at startup
     bool activeVSYNC;                           ///< Actual VSYNC status
+    bool cursorVisibility;                      ///< Toggles the system cursor on and off
     int displayID;                              ///< Helps when debugging on multiple displays
     std::string windowTitle;                    ///< The title of the window
     int windowPosX;                             ///< Initial window position for non fullscreen applications
@@ -115,7 +116,7 @@ struct WindowCreationSpecs
                             windowPosX(SDL_WINDOWPOS_UNDEFINED), windowPosY(SDL_WINDOWPOS_UNDEFINED),
                             enableVSYNC(true), fullScreen(false), minW(640), minH(360), maxW(1920),
                             maxH(1080), fullscreenW(1920), fullscreenH(1080), windowTitle(""),
-                            activeVSYNC(false), displayID(-1), iniFile("config.ini") {}
+                            cursorVisibility(true), activeVSYNC(false), displayID(-1), iniFile("config.ini") {}
 };
 
 /**
@@ -167,6 +168,24 @@ struct SGL_InputFrame
 struct SGL_IniField
 {
     std::string title, key, value;
+};
+
+/**
+ * @brief Contains an individual frame's time data
+ */
+
+struct SGL_FrameData
+{
+    double time;
+    std::uint16_t ticks;
+    std::uint16_t updateCycles;
+
+    SGL_FrameData() : time(0.0f), ticks(0), updateCycles(0) {}
+    void reset()
+        {
+            time = 0.0f;
+            ticks = 0;
+        }
 };
 
 

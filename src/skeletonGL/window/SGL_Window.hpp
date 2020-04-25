@@ -30,11 +30,14 @@
 
 // C++
 #include <iostream>
+#include <array>
 #include <sstream>
 #include <ctime>
 #include <vector>
 #include <memory>
 #include <stdio.h>
+#include <thread>
+#include <chrono>
 
 // GLEW
 #define GLEW_STATIC
@@ -85,11 +88,20 @@ private:
     SDL_Event pEvent;                                         ///< Internal SDL input polling
     SGL_InputFrame pDeltaInput;                               ///< The frame's  entire input record, used by the post-processor
     // TIME PROFILING
-    float pT0, pT1;                                           ///< Used to calculate the frame's processing time
-    std::uint32_t pTick0, pTick1;                             ///< Tick based
     std::chrono::steady_clock::time_point pChrono0, pChrono1; ///< C++11 chrono based counter
     double pDeltaTimeMS;                                      ///< Time the past frame took to finish
-    double pChronoDeltaTime;                                  ///< C++11 chrono based counter
+    // float pT0, pT1;                                           ///< Used to calculate the frame's processing time
+    // std::uint32_t pTick0, pTick1, pEpochTick;                 ///< Tick based
+    // double pChronoDeltaTime;                                  ///< C++11 chrono based counter
+    // std::uint16_t pTotalFrames;
+    // // FIXED TIME STEP
+    // float pDTAccumulator;
+    // std::uint16_t pUpdateCycles;
+    // std::vector<SGL_FrameData> pRenderedFrames;
+
+    // // FINAL
+    // float pFrameCompletionTime;
+
     // CAMERA AND POST-PROCESSOR
     SGL_Camera *pCamera;                                      ///< 2D camera module (contains the orthographic projection data)
     //FBO and shader to reload the FBO if necessary
@@ -157,6 +169,8 @@ public:
     bool hasMouseFocus();
     // Enable / disable VSYNC
     void toggleVSYNC(bool enable);
+    // Toggles the system cursor visibility
+    void toggleCursor(bool enable);
 
     // -- CAMERA --
     // Sets the camera position
@@ -204,12 +218,10 @@ public:
     void startFrame();
     // End counting frame time
     void endFrame();
+
+
     // Get the delta time as a double
-    double getDeltaTime();
-    // Get the tick count as an integer
-    uint32_t getTickCount();
-    // Sleeps the main thread for a specified amount of time (in milliseconds)
-    void sleep(std::uint32_t ms);
+    double getRenderDeltaTime();
 
     // Manually check for OpenGL errors
     void checkForErrors();

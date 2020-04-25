@@ -46,7 +46,7 @@ SGL_Window::SGL_Window()
 SGL_Window::~SGL_Window()
 {
     SGL_Log("Exiting SkeletonGL.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
-    SGL_Log("( ˘ ³˘)♥ Cheers cunt.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
+    SGL_Log("( ˘ ³˘)♥ Cheers M8.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
     this->destroyEverything();
     // Destroy SDL
     SDL_GL_DeleteContext(pGLContext);
@@ -182,16 +182,44 @@ void SGL_Window::processIniFile(std::string path)
     }
 }
 
-
-
 /**
- * @brief Turns VSYNC on and off
+ * @brief Toggles the visibility of the default system cursor
+ * @param bool enables / disables the system cursor
  * @return nothing
  * @section DESCRIPTION
  *
  *
 */
+void SGL_Window::toggleCursor(bool enable)
+{
+    if (!enable)
+    {
+        int i = SDL_ShowCursor(SDL_FALSE);
+        if (SDL_ShowCursor(SDL_QUERY) != SDL_FALSE)
+            throw SGL_Exception("int SGL_Window::toggleCursor | Error disabling the system cursor \n ");
 
+        pWindowCreationSpecs.cursorVisibility = false;
+        SGL_Log("System cursor disabled.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+    }
+    else
+    {
+        int i = SDL_ShowCursor(SDL_ENABLE);
+        if (SDL_ShowCursor(SDL_ENABLE) != SDL_ENABLE)
+            throw SGL_Exception("int SGL_Window::toggleCursor | Error disablinenabling the system cursor \n ");
+
+        pWindowCreationSpecs.cursorVisibility = true;
+        SGL_Log("System cursor enabled.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+    }
+}
+
+/**
+ * @brief Turns VSYNC on and off
+ * @param bool enables / disables VSYNC
+ * @return nothing
+ * @section DESCRIPTION
+ *
+ *
+*/
 void SGL_Window::toggleVSYNC(bool enable)
 {
     // VSYNC support
@@ -206,7 +234,7 @@ void SGL_Window::toggleVSYNC(bool enable)
     else
     {
         if (SDL_GL_SetSwapInterval(1) < 0)
-            throw SGL_Exception("int SGL_Window::start | Error enabling VSync \n ");
+            throw SGL_Exception("int SGL_Window::toggleVSYNC | Error enabling VSync \n ");
 
         pWindowCreationSpecs.activeVSYNC = true;
         SGL_Log("VSync enabled.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
@@ -478,6 +506,7 @@ void SGL_Window::start()
     this->setWindowIcon(pixels);
 
     pDeltaTimeMS = 0.0f;
+
     SGL_Log("<--- SkeletonGL rendering engine successfully loaded and configured --->", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
     pAlreadyInitialized = true;
 }
@@ -932,41 +961,20 @@ void SGL_Window::startFBO(const SGL_Shader &shader)
 
 
 /**
- * @brief Get time since program initialization (provided by SDL)
- * @return uint32_t Time since the program started
- */
-uint32_t SGL_Window::getTickCount()
-{
-    return SDL_GetTicks();
-}
-
-
-/**
  * @brief Take an initial timestamp of the frame to be processed and reload the post processor
  * @return nothing
  */
 void SGL_Window::startFrame()
 {
-    // SDL2 based profiler
-    pT0 = SDL_GetPerformanceCounter();
-    pTick0 = SDL_GetTicks();
     // C++11 (chrono) based timer
     // pChrono0 = std::chrono::high_resolution_clock::now();
     pChrono0 = std::chrono::steady_clock::now();
+
 
     // Begin FBO operations
     this->pPostProcessorFBO->beginRender();
 }
 
-/**
- * @brief Sleeps the main thread
- * @param double Time to sleep in milliseconds
- * @return nothing
- */
-void SGL_Window::sleep(std::uint32_t ms)
-{
-    SDL_Delay(ms);
-}
 
 /**
  * @brief Calculates delta times, renders the current state of the post processor and swaps the renderer's window
@@ -979,17 +987,13 @@ void SGL_Window::endFrame()
 
     // pChrono1 = std::chrono::high_resolution_clock::now();
     pChrono1 = std::chrono::steady_clock::now();
-    pT1 = SDL_GetPerformanceCounter();
-    pTick1 = SDL_GetTicks();
-    // pDeltaTimeMS = ((pT1 - pT0)) / static_cast<double>(SDL_GetPerformanceFrequency() * 1000.0f);
-    pDeltaTimeMS = (pTick1 - pTick0) / 1000.0f;
 
     auto timeDiff = std::chrono::duration_cast<std::chrono::nanoseconds>(pChrono1 - pChrono0);
-    pChronoDeltaTime = timeDiff.count();
+    pDeltaTimeMS = timeDiff.count();
     // Nanoseconds to seconds
-    pChronoDeltaTime /= 1000000000;
+    pDeltaTimeMS /= 1000000000;
 
-    pDefaultPPShader.renderDetails.deltaTime = pChronoDeltaTime;
+    pDefaultPPShader.renderDetails.deltaTime = pDeltaTimeMS;
     pDefaultPPShader.renderDetails.mousePosX = pDeltaInput.normalizedMousePosX;
     pDefaultPPShader.renderDetails.mousePosY = pDeltaInput.normalizedMousePosY;
 
@@ -1001,13 +1005,13 @@ void SGL_Window::endFrame()
 
 
 /**
- * @brief Returns the time it took to process the frame
+ * @brief Returns the time it took to render the frame
  * @return double Delta time
  */
-double SGL_Window::getDeltaTime()
+double SGL_Window::getRenderDeltaTime()
 {
-    //return pDeltaTimeMS;
-    return pChronoDeltaTime;
+    return pDeltaTimeMS;
+    //return pChronoDeltaTime;
 }
 
 /**
