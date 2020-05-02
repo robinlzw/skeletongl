@@ -1,23 +1,37 @@
-# ------------------- By: TSURA @ -------------------
-# ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-# ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-# ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝ 
-# ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗ 
-# ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-# ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-# ---------------------- [.xyz] ---------------------
+# |-----------------[ By: TSURA @ ]-------------------|
+# |                                                   |
+# |███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗|
+# |████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝|
+# |██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝ |
+# |██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗ |
+# |██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗|
+# |╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝|
+# |                                                   |
+# |----------------------[.XYZ]-----------------------|
+# | Name: Risk Vector                                 |
+# | Copyright: [2018 - 0220] TSURA @ NEOHEX.XYZ       |
+# | License:                                          |
+# |---------------------------------------------------|
+
 
 CC=clang
 
 LDFLAGS= -g -Wall -fPIC -m64 -lm -lstdc++ -std=c++14 $(shell pkg-config --cflags --libs sdl2)  $(shell pkg-config --cflags --libs freetype2) $(shell pkg-config glew --cflags --libs) -pthread -lglut libsgl.a
 
 # SkeletonGL core files
-SOURCES= 
+SOURCES= src/main.cpp \
+		 src/window.cpp \
+		 src/gameObject.cpp \
+		 src/player.cpp \
+		 src/map.cpp \
+		 src/particleManager.cpp \
+		 src/projectile.cpp \
+		 src/enemy.cpp
 
 
 OBJECTS=$(SOURCES:.cpp=.o)
 
-EXECUTABLE=snake_sgl
+EXECUTABLE=risk_vector
 
 all: $(SOURCES) $(EXECUTABLE)
 

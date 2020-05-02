@@ -11,7 +11,7 @@
 
 /**
  * @file    src/skeletonGL/window/SGL_Window.cpp
- * @author  AlexHG
+ * @author  TSURA @ NEOHEX.XYZ
  * @date    9/4/2018
  * @version 1.0
  *
@@ -257,7 +257,7 @@ void SGL_Window::start()
 
     SGL_Log("(•̀ᴗ•́)و< \Initializing SkeletonGL ver. " + std::to_string(pSGLVERSION), LOG_LEVEL::SGL_DEBUG,
              LOG_COLOR::TERM_GREEN);
-    SGL_Log("      <--o-- By AlexHG --o-->", LOG_LEVEL::SGL_DEBUG,
+    SGL_Log("      <--o-- By TSURA @ NEOHEX.XYZ --o-->", LOG_LEVEL::SGL_DEBUG,
         LOG_COLOR::TERM_GREEN);
 
     pHasMouseFocus = false;
@@ -459,7 +459,7 @@ void SGL_Window::start()
     SGL_Log("Orthographic shader height: " + std::to_string(this->getWindowCreationSpecs().internalH), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     SGL_Log("Camera and orthographic shader configured.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     // Configure renderer
-    this->pClearScreen = {1.0f, 1.0f, 1.0f, 1.0f};
+    //this->pClearScreen = {1.0f, 1.0f, 1.0f, 1.0f};
     renderer = std::make_unique<SGL_Renderer>(pOGLM, assetManager->getShader("line"), assetManager->getShader("point"), assetManager->getShader("text"), assetManager->getShader("spriteUV"), assetManager->getShader("spriteBatchUV"), assetManager->getShader("pixelBatch"),
     assetManager->getShader("lineBatch"));
     SGL_Log("Renderer configured.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);

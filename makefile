@@ -1,22 +1,34 @@
+# |-----------------[ By: TSVRA @ ]-------------------|
+# |                                                   |
+# |███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗|
+# |████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝|
+# |██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝ |
+# |██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗ |
+# |██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗|
+# |╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝|
+# |                                                   |
+# |----------------------[.XYZ]-----------------------|
+# | Name: Risk Vector                                 |
+# | Copyright: [2018 - 0220] TSURA @ NEOHEX.XYZ       |
+# | License:                                          |
+# |---------------------------------------------------|
 
-# ------------------- By: TSURA @ -------------------
-# ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-# ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-# ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝ 
-# ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗ 
-# ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-# ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-# ---------------------- [.xyz] ---------------------
+CC=clang++
+
+SGL_SPECIFIC = -DSGL_LOG_DISABLE_DEBUG_OUTPUT
 
 
-CC=clang
-
-LDFLAGS= -g -Wall -fPIC -m64 -lm -lstdc++ -std=c++14 $(shell pkg-config --cflags --libs sdl2)  $(shell pkg-config --cflags --libs freetype2) $(shell pkg-config glew --cflags --libs) -pthread -lglut
-
+#LDFLAGS= -g -Wall -fPIC -m64 -lm -lstdc++ -std=c++14 $(shell pkg-config --cflags --libs sdl2)  $(shell pkg-config --cflags --libs freetype2) $(shell pkg-config glew --cflags --libs) -pthread -lglut
+LDFLAGS= $(SGL_SPECIFIC) -g -Wall -m64 -lm -lstdc++ -std=c++14 $(shell pkg-config --cflags --libs sdl2)  $(shell pkg-config --cflags --libs freetype2) $(shell pkg-config glew --cflags --libs) -pthread -lglut
 # SkeletonGL core files
 SOURCES= src/main.cpp \
 		 src/window.cpp \
+		 src/gameObject.cpp \
+		 src/player.cpp \
 		 src/map.cpp \
+		 src/particleManager.cpp \
+		 src/projectile.cpp \
+		 src/enemy.cpp \
 	 	 src/skeletonGL/window/SGL_Window.cpp \
 		 src/skeletonGL/utility/SGL_AssetManager.cpp \
 		 src/skeletonGL/utility/SGL_Utility.cpp \
@@ -30,7 +42,7 @@ SOURCES= src/main.cpp \
 
 OBJECTS=$(SOURCES:.cpp=.o)
 
-EXECUTABLE=snake_sgl
+EXECUTABLE=risk_vector
 
 all: $(SOURCES) $(EXECUTABLE)
 
@@ -39,6 +51,9 @@ $(EXECUTABLE): $(OBJECTS)
 
 .cpp.o:
 	$(CC) $< $(LDFLAGS) -c -o $@
+
+clean-app:
+	rm -rf src/*.o
 
 
 clean:

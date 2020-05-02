@@ -10,7 +10,7 @@
 
 /**
  * @file    src/skeletonGL/utility/SGL_DataStructures.cpp
- * @author  AlexHG
+ * @author  TSURA @ NEOHEX.XYZ
  * @date    9/4/2018
  * @version 1.0
  *
@@ -38,7 +38,6 @@
 
 // PRE-PROCESSOR COMPILATION OPTIONS
 // #define SGL_OUTPUT_OPENGL_DETAILS true ///< Enables (extra) OpenGLManager output. Useful for debugging.
-
 
 /**
  * @brief Common math constants

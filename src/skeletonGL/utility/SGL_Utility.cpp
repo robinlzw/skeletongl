@@ -10,7 +10,7 @@
 
 /**
  * @file    src/skeletonGL/utility/SGL_Utility.cpp
- * @author  AlexHG
+ * @author  TSURA @ NEOHEX.XYZ
  * @date    9/4/2018
  * @version 1.0
  *
@@ -37,7 +37,7 @@ void SGL_Log(const std::string &msg, LOG_LEVEL logLevel, LOG_COLOR logColor)
 {
     std::string msgLogLevel, msgColorPrefix, msgColorPostfix;
     msgColorPostfix = "\033[0m";
-
+    bool internalMSG = false; // Filter internal SGL messages to avoid outputting debug data on production builds
     switch (logLevel)
     {
     case LOG_LEVEL::NO_LOG_LEVEL:
@@ -46,9 +46,11 @@ void SGL_Log(const std::string &msg, LOG_LEVEL logLevel, LOG_COLOR logColor)
         msgLogLevel = "\033[1;32mDEBUG_MSG-";
         break;
     case LOG_LEVEL::ERROR:
+        internalMSG = true;
         msgLogLevel = "\033[1;31mERROR_MSG-";
         break;
     case LOG_LEVEL::SGL_DEBUG:
+        internalMSG = true;
         msgLogLevel = "\033[1;36mSGL-";
         break;
     default:
@@ -100,7 +102,14 @@ void SGL_Log(const std::string &msg, LOG_LEVEL logLevel, LOG_COLOR logColor)
     now = "[" + now + "]: ";
 
     SGL_LOG_HISTORY.push_back(now + msg);
-    std::cout << msgLogLevel << now << msgColorPostfix << msgColorPrefix << msg << msgColorPostfix << std::endl;
+    if (!internalMSG)
+        std::cout << msgLogLevel << now << msgColorPostfix << msgColorPrefix << msg << msgColorPostfix << std::endl;
+    else
+    {
+#ifdef SGL_LOG_DISABLE_DEBUG_OUTPUT
+        std::cout << msgLogLevel << now << msgColorPostfix << msgColorPrefix << msg << msgColorPostfix << std::endl;
+#endif
+    }
 }
 
 

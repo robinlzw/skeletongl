@@ -10,7 +10,7 @@
 
 /**
  * @file    src/skeletonGL/utility/SGL_PostProcessor.hpp
- * @author  AlexHG
+ * @author  TSURA @ NEOHEX.XYZ
  * @date    9/4/2018
  * @version 1.0
  *
@@ -68,7 +68,7 @@ void SGL_Camera::initialize(int windowW, int windowH)
     //this->pOrthographicProjection = glm::ortho(0.0f, static_cast<float>(pScreenW), 0.0f, static_cast<float>(pScreenH), -1.0f, 1.0f);
     this->pOverlayMatrix = pOrthographicProjection;
 
-    this->pCameraPos = glm::vec2(pScreenW / 2, pScreenH / 2);
+    this->pCameraPos = glm::vec2(static_cast<float>(pScreenW / 2), static_cast<float>(pScreenH / 2));
     this->pDeltaCameraPos = pCameraPos;
 }
 
@@ -99,7 +99,7 @@ void SGL_Camera::updateCamera(bool forceUpdate)
     {
         // Update the camera
         // Move the camera
-        glm::vec3 translate(-pCameraPos.x + (pScreenW / 2), -pCameraPos.y + (pScreenH / 2), 0.0f);
+        glm::vec3 translate(-pCameraPos.x + static_cast<float>(pScreenW / 2), -pCameraPos.y + static_cast<float>(pScreenH / 2), 0.0f);
         pCameraMatrix = glm::translate(pOrthographicProjection, translate);
         // Scale the camera
         glm::vec3 scale(pScale, pScale, 0.0f);

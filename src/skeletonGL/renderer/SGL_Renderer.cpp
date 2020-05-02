@@ -10,7 +10,7 @@
 
 /**
  * @file    src/skeletonGL/utility/SGL_Renderer.cpp
- * @author  AlexHG
+ * @author  TSURA @ NEOHEX.XYZ
  * @date    9/4/2018
  * @version 1.0
  *
@@ -489,7 +489,7 @@ void SGL_Renderer::renderSprite(const SGL_Sprite &sprite)
         WMOGLM->blending(true, sprite.blending);
 
     // Prepare transformations
-    glm::mat4 model;
+    glm::mat4 model(1.0f);
     model = glm::translate(model, glm::vec3(sprite.position, 0.0f)); //move
     // Move origin of rotation specified in sprite's data
     model = glm::translate(model, glm::vec3(sprite.rotationOrigin.x, sprite.rotationOrigin.y, 0.0f));
@@ -571,7 +571,7 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite)
     for (int i = 0; i < pBatchAmount; ++i)
     {
         // Prepare transformations
-        glm::mat4 model;
+        glm::mat4 model(1.0f);
         model = glm::translate(model, glm::vec3(i*80, i*15, 0.0f)); //move
         // // Move origin of rotation specified in sprite's data
         model = glm::translate(model, glm::vec3(sprite.rotationOrigin.x, sprite.rotationOrigin.y, 0.0f));
@@ -679,7 +679,7 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite, const std::vector
     for (std::vector<glm::vec2>::const_iterator i = vectors->begin(); i < vectors->end(); ++i)
     {
         // Prepare transformations
-        glm::mat4 model;
+        glm::mat4 model(1.0f);
         model = glm::translate(model, glm::vec3((*i).x, (*i).y, 0.0f)); //move
         // // Move origin of rotation specified in sprite's data
         model = glm::translate(model, glm::vec3(sprite.rotationOrigin.x, sprite.rotationOrigin.y, 0.0f));
@@ -823,7 +823,7 @@ void SGL_Renderer::renderLineBatch(const SGL_Line &line)
     int index = 0;
     for(int i = 0; i < pLineBatchAmount; ++i)
     {
-        glm::vec4 translation;
+        glm::vec4 translation(1.0f);
         translation.x = i + 1;
         translation.y = i + 1;
         translation.z = i + 3;

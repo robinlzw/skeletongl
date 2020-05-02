@@ -10,7 +10,7 @@
 
 /**
  * @file    src/skeletonGL/utility/SGL_PostProcessor.cpp
- * @author  AlexHG
+ * @author  TSURA @ NEOHEX.XYZ
  * @date    9/4/2018
  * @version 1.0
  *
@@ -72,7 +72,7 @@ SGL_PostProcessor::SGL_PostProcessor(std::shared_ptr<SGL_OpenGLManager> oglm, co
 
 
 /**
- * @brief Changes the ckear screen color
+ * @brief Changes the clear screen color
  *
  * @param color The clear screen color
  * @return nothing
@@ -175,6 +175,7 @@ void SGL_PostProcessor::reload(GLuint newWidth, GLuint newHeight)
 void SGL_PostProcessor::beginRender()
 {
     WMOGLM->bindFBO(this->pMainFBO);
+    //SGL_Color color{1.0f, 1.0f, 1.0f, 1.0f};
     WMOGLM->setClearColor(pClearColor);
     WMOGLM->clearColorBuffer();
     //WMOGLM->clearDepthBuffer();
@@ -188,7 +189,7 @@ void SGL_PostProcessor::beginRender()
  */
 void SGL_PostProcessor::endRender()
 {
-    // Now resolve multisampled color-buffer into intermediate FBO to store to texture
+    // Resolve multisampled color-buffer into intermediate FBO to store to texture
     WMOGLM->bindFBO(this->pMainFBO, GLCONSTANTS::R);
     WMOGLM->bindFBO(this->pSecondaryFBO, GLCONSTANTS::W);
     WMOGLM->blitFrameBuffer(0, 0, this->pWidth, this->pHeight, 0, 0, this->pWidth, this->pHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);

@@ -1,11 +1,19 @@
-# ------------------- By: TSURA @ -------------------
-# ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-# ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-# ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝ 
-# ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗ 
-# ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-# ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-# ---------------------- [.xyz] ---------------------
+# |-----------------[ By: TSURA @ ]-------------------|
+# |                                                   |
+# |███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗|
+# |████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝|
+# |██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝ |
+# |██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗ |
+# |██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗|
+# |╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝|
+# |                                                   |
+# |----------------------[.XYZ]-----------------------|
+# | Name: Risk Vector                                 |
+# | Copyright: [2018 - 0220] TSURA @ NEOHEX.XYZ       |
+# | License:                                          |
+# |---------------------------------------------------|
+
+SGL_SPECIFIC = -DSGL_LOG_DISABLE_DEBUG_OUTPUT
 
 # SkeletonGL core files
 SRC= 	 src/skeletonGL/window/SGL_Window.cpp \
@@ -35,11 +43,11 @@ CCC = clang
 LIBS = -lm -lstdc++ -pthread -lglut -lGL -lGLU -lGLEW -lfreetype -I/usr/local/include/SDL2 -lSDL2 
 
 # compile flags
-LDFLAGS = -g -fPIC
+LDFLAGS = $(SGL_SPECIFIC) -g -fPIC
 
 .SUFFIXES: .cpp
 
-default: dep $(OUT)
+# default: dep $(OUT)
 
 .cpp.o:
 	$(CCC) $(INCLUDES) $(CCFLAGS) -c $< -o $@
@@ -47,10 +55,10 @@ default: dep $(OUT)
 $(OUT): $(OBJ)
 	ar rcs $(OUT) $(OBJ)
 
-depend: dep
+# depend: dep
 
-dep:
-	makedepend -- $(CFLAGS) -- $(INCLUDES) $(SRC)
+# dep:
+# 	makedepend -- $(CFLAGS) -- $(INCLUDES) $(SRC)
 
 clean:
 	rm -rf src/skeletonGL/*.o

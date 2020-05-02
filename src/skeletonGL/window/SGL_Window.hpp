@@ -11,7 +11,7 @@
 
 /**
  *  @file    src/skeletonGL/SGL_Window.hpp
- *  @author  AlexHG
+ *  @author  TSURA @ NEOHEX.XYZ
  *  @date    9/4/2018
  *  @version 1.0
  *
