@@ -542,6 +542,19 @@ void SGL_Window::setCameraScale(float newScale)
     this->pCamera->setScale(newScale);
 }
 
+
+/**
+ * @brief Scale the console output filter level
+ * @param LogLeveL [DEBUG, ERROR, SGL_DEBUG]
+ * @return nothing
+ */
+void SGL_Window::setLogLevel(LOG_LEVEL logLevel)
+{
+    SGL_STDOUT_FILTER = logLevel;
+}
+
+
+
 /**
  * @brief Toggles the camera mode between DEFAULT and OVERLAY and updates the PP shaders
  * @param mode Mode to be implemented

@@ -40,6 +40,8 @@
 #include "SGL_DataStructures.hpp"
 
 extern std::vector<std::string> SGL_LOG_HISTORY; ///< The entire log history
+extern LOG_LEVEL SGL_STDOUT_FILTER;
+
 
 void SGL_Log(const std::string &msg, LOG_LEVEL logLevel = LOG_LEVEL::NO_LOG_LEVEL, LOG_COLOR logColor = LOG_COLOR::TERM_DEFAULT);
 

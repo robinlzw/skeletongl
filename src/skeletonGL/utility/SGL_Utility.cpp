@@ -33,11 +33,12 @@
  * @return nothing
  */
 std::vector<std::string> SGL_LOG_HISTORY;
+LOG_LEVEL SGL_STDOUT_FILTER = LOG_LEVEL::DEBUG;
+
 void SGL_Log(const std::string &msg, LOG_LEVEL logLevel, LOG_COLOR logColor)
 {
     std::string msgLogLevel, msgColorPrefix, msgColorPostfix;
     msgColorPostfix = "\033[0m";
-    bool internalMSG = false; // Filter internal SGL messages to avoid outputting debug data on production builds
     switch (logLevel)
     {
     case LOG_LEVEL::NO_LOG_LEVEL:
@@ -46,11 +47,9 @@ void SGL_Log(const std::string &msg, LOG_LEVEL logLevel, LOG_COLOR logColor)
         msgLogLevel = "\033[1;32mDEBUG_MSG-";
         break;
     case LOG_LEVEL::ERROR:
-        internalMSG = true;
         msgLogLevel = "\033[1;31mERROR_MSG-";
         break;
     case LOG_LEVEL::SGL_DEBUG:
-        internalMSG = true;
         msgLogLevel = "\033[1;36mSGL-";
         break;
     default:
@@ -102,13 +101,33 @@ void SGL_Log(const std::string &msg, LOG_LEVEL logLevel, LOG_COLOR logColor)
     now = "[" + now + "]: ";
 
     SGL_LOG_HISTORY.push_back(now + msg);
-    if (!internalMSG)
-        std::cout << msgLogLevel << now << msgColorPostfix << msgColorPrefix << msg << msgColorPostfix << std::endl;
-    else
+
+    switch (SGL_STDOUT_FILTER)
     {
-#ifdef SGL_LOG_DISABLE_DEBUG_OUTPUT
+    case LOG_LEVEL::NO_LOG_LEVEL: // OUTPUT EVERYTHING
+    {
         std::cout << msgLogLevel << now << msgColorPostfix << msgColorPrefix << msg << msgColorPostfix << std::endl;
-#endif
+        break;
+    }
+    case LOG_LEVEL::ERROR: // OUTPUT ONLY ERROR MESSAGES (CHOOSE THIS FOR PRODUCTION)
+    {
+        if (logLevel == LOG_LEVEL::ERROR)
+            std::cout << msgLogLevel << now << msgColorPostfix << msgColorPrefix << msg << msgColorPostfix << std::endl;
+        break;
+    }
+
+    case LOG_LEVEL::DEBUG: // OUTPUT NON SGL DEBUG AND ERROR MESSAGES
+    {
+        if (logLevel == LOG_LEVEL::DEBUG || logLevel == LOG_LEVEL::ERROR)
+            std::cout << msgLogLevel << now << msgColorPostfix << msgColorPrefix << msg << msgColorPostfix << std::endl;
+        break;
+    }
+
+    case LOG_LEVEL::SGL_DEBUG: // OUTPUT EVERYTHING
+    {
+        std::cout << msgLogLevel << now << msgColorPostfix << msgColorPrefix << msg << msgColorPostfix << std::endl;
+        break;
+    }
     }
 }
 

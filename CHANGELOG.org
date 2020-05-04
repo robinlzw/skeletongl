@@ -1,29 +1,41 @@
 #+Title: SKELETONGL CHANGELOG
 #+Author: tsura @ NEOHEX.XYZ
 
+* ver 1.4 [ 02/05/2020 ]
+■ Updated GLM to v0.9.9.0
+■ Updated stb_image to ver 2.5
+■ Added a filter to the stdout calls by SGL_Log
+■ Updated the makefiles
+■ Manually initialized all internal glm::vector & glm::mat
+■ Included a file with the dependencies and their licenes in deps/ 
 
-* VER 1.23
-  - Added a bitmap font renderer to the SGL_Renderer class
-  - Fixed some minor input bugs
-* VER 1.22
+* ver 1.3 [ 25/04/2020 ]
+■ Remove many profiling crap, the internal SGL_Window delta time measures the time between renders ONLY
+■ Removed useless helper functions
+■ While working on Risk Vector I added a proper fixed time-step updating to the physics
 
-  - Added "pressed" and "released" status checkings to the mouse buttons
-  - Fixed some comments
-  - Fixed a bug where the windows wasn't respecting the .ini file fullscreen request
+* ver 1.23 [ 19/04/2020 ]
+■ Added a bitmap font renderer to the SGL_Renderer class
+■ Fixed some minor input bugs 
 
-* VER 1.21
-  - Added dynamic VSYNC toggling
-  - Added an alternative orthographic projection with the Y axis flipped
+* ver 1.22 [ 10/04/2020 ]
+■ Added "pressed" and "released" status checkings to the mouse buttons
+■ Fixed some comments
+■ Fixed a bug where the windows wasn't respecting the .ini file fullscreen request
 
-* VER 1.2
-  - Deleted test files (sgl/src/), will be making a separate git for testing.
-  - Fixed an input bug were unhandled signals where causing spontaneous  SDL_QUIT events.
+* ver 1.21 [ 20/03/2020 ]
+■ Added dynamic VSYNC toggling
+■ Added an alternative orthographic projection with the Y axis flipped 
 
-* VER 1.1
-  - Added instance rendering (sprite batching) to the sprite, pixel and line renderers
-  - Removed a few, minor bugs.
+* ver 1.2 [ 0/02/2020 ]
+■ Deleted test files (sgl/src/), will be making a separate git for testing.
+■ Fixed an input bug were unhandled signals where causing spontaneous SDL_QUIT events.
 
-* VER 1.0
-  - Moved the project to a new git
-  - Removed a few useless files
-  - Since SkeletonGL already has a stable release, the git has been reset
+* ver 1.1 [ 20/01/2020 ]
+■ Added instance rendering (sprite batching) to the sprite, pixel and line renderers
+■ Removed a few, minor bugs.
+
+* ver 1.0 [ 31/11/2019 ]
+■ Moved the project to a new git
+■ Removed a few useless files
+■ Since SkeletonGL already has a stable release, the git has been reset 

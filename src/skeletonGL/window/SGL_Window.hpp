@@ -179,6 +179,8 @@ public:
     void setCameraScale(float newScale);
     // Change between overaly and default camera modes
     void setCameraMode(CAMERA_MODE mode = CAMERA_MODE::DEFAULT);
+    // Set the console output filter level
+    void setLogLevel(LOG_LEVEL logLevel = LOG_LEVEL::SGL_DEBUG);
     // Update the camera
     void updateCamera(bool forceUpdate = false);
     // Get the camera's x position

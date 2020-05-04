@@ -13,7 +13,7 @@
 # | License:                                          |
 # |---------------------------------------------------|
 
-SGL_SPECIFIC = -DSGL_LOG_DISABLE_DEBUG_OUTPUT
+SGL_SPECIFIC =
 
 # SkeletonGL core files
 SRC= 	 src/skeletonGL/window/SGL_Window.cpp \

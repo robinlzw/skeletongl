@@ -233,8 +233,8 @@ struct CurrentSettings
 enum LOG_LEVEL
 {
     NO_LOG_LEVEL,
-    DEBUG,
-    ERROR,
+    DEBUG,    // Non critical output, for non SGL debugging
+    ERROR,    // Outputs errors only, for production builds
     SGL_DEBUG // This one is exclusvely used by the internal SGL code!
 };
 

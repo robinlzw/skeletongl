@@ -15,7 +15,7 @@
 
 CC=clang++
 
-SGL_SPECIFIC = -DSGL_LOG_DISABLE_DEBUG_OUTPUT
+SGL_SPECIFIC =
 
 
 #LDFLAGS= -g -Wall -fPIC -m64 -lm -lstdc++ -std=c++14 $(shell pkg-config --cflags --libs sdl2)  $(shell pkg-config --cflags --libs freetype2) $(shell pkg-config glew --cflags --libs) -pthread -lglut
