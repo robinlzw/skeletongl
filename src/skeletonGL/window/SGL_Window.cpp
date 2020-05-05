@@ -100,7 +100,7 @@ void SGL_Window::initializeWindow(int x, int y, int w, int h, int internalW, int
     // Process the ini file
     if (iniFile != "")
     {
-        SGL_Log("Parsing configuration file: " + iniFile);
+        SGL_Log("Parsing configuration file: " + iniFile, LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_BLUE);
         pWindowCreationSpecs.iniFile = iniFile;
         processIniFile(iniFile);
     }
@@ -147,7 +147,7 @@ void SGL_Window::processIniFile(std::string path)
 
     // Vsync
     std::string vsyncIni = pIniParser->getRawValue("[VIDEO]", "vsync");
-    SGL_Log("INI FILE vsync = " + vsyncIni);
+    SGL_Log("INI FILE vsync = " + vsyncIni, LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_BLUE);
     if (!vsyncIni.empty())
     {
         if (vsyncIni == "0")
@@ -157,7 +157,7 @@ void SGL_Window::processIniFile(std::string path)
     }
     // Fullscreen
     std::string fullscreenIni = pIniParser->getRawValue("[VIDEO]", "fullscreen");
-    SGL_Log("INI FILE fullscreen = " + fullscreenIni);
+    SGL_Log("INI FILE fullscreen = " + fullscreenIni, LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_BLUE);
     if (fullscreenIni == "0")
         pWindowCreationSpecs.fullScreen = false;
     else
@@ -172,12 +172,12 @@ void SGL_Window::processIniFile(std::string path)
     int main_gamepad_id = pIniParser->getIntValue("[INPUT]", "main_gamepad_id");
     if (main_gamepad_id > 4)
     {
-        SGL_Log("INI FILE main_gamepad_id: " + std::to_string(main_gamepad_id) + " INVALID ID. Setting to 0.");
+        SGL_Log("INI FILE main_gamepad_id: " + std::to_string(main_gamepad_id) + " INVALID ID. Setting to 0.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_BLUE);
         pWindowCreationSpecs.gamepad1 = 0;
     }
     else
     {
-        SGL_Log("INI FILE main_gamepad_id = " + std::to_string(main_gamepad_id));
+        SGL_Log("INI FILE main_gamepad_id = " + std::to_string(main_gamepad_id), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_BLUE);
         pWindowCreationSpecs.gamepad1 = main_gamepad_id;
     }
 }
@@ -255,10 +255,8 @@ void SGL_Window::start()
     if (pAlreadyInitialized)
         return;
 
-    SGL_Log("(•̀ᴗ•́)و< \Initializing SkeletonGL ver. " + std::to_string(pSGLVERSION), LOG_LEVEL::SGL_DEBUG,
-             LOG_COLOR::TERM_GREEN);
-    SGL_Log("      <--o-- By TSURA @ NEOHEX.XYZ --o-->", LOG_LEVEL::SGL_DEBUG,
-        LOG_COLOR::TERM_GREEN);
+    SGL_Log("(•̀ᴗ•́)و< \Initializing SkeletonGL ver. " + std::to_string(pSGLVERSION), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
+    SGL_Log("      <--o-- By AlexHG @ NEOHEX.XYZ --o-->", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
 
     pHasMouseFocus = false;
     pHasKeyboardFocus = false;
@@ -677,8 +675,7 @@ void SGL_Window::resizeWindow(int w, int h, bool scaleInternalResolution)
             SGL_Log("Can't resize window on fullscreen mode.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
             return;
         }
-        SGL_Log("Resized window to w: " + std::to_string(w) +
-                    " h: " + std::to_string(h));
+        SGL_Log("Resized window to w: " + std::to_string(w) + " h: " + std::to_string(h), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
         pWindowCreationSpecs.currentW = w;
         pWindowCreationSpecs.currentH = h;
         SDL_SetWindowSize(this->pWindow, w, h);
@@ -841,10 +838,31 @@ SGL_InputFrame SGL_Window::getFrameInput()
             }
         }
         // --- MOUSE --
-        if (pEvent.button.button == SDL_BUTTON_LEFT && pEvent.button.state == SDL_PRESSED) { input.mouseLeftPressed = true; }
-        if (pEvent.button.button == SDL_BUTTON_LEFT && pEvent.button.state == SDL_RELEASED) { input.mouseLeftReleased = true; }
-        if (pEvent.button.button == SDL_BUTTON_RIGHT && pEvent.button.state == SDL_PRESSED) { input.mouseRightPressed = true; }
-        if (pEvent.button.button == SDL_BUTTON_RIGHT && pEvent.button.state == SDL_RELEASED) { input.mouseRightReleased = true; }
+        if (pEvent.type == SDL_MOUSEBUTTONDOWN)
+        {
+            if (pEvent.button.button == SDL_BUTTON_MIDDLE)
+                input.mouseMiddlePressed = true;
+            if (pEvent.button.button == SDL_BUTTON_LEFT)
+                input.mouseLeftPressed = true;
+            if (pEvent.button.button == SDL_BUTTON_RIGHT)
+                input.mouseRightPressed = true;
+        }
+        if (pEvent.type == SDL_MOUSEBUTTONUP)
+        {
+            if (pEvent.button.button == SDL_BUTTON_MIDDLE)
+                input.mouseMiddleReleased = true;
+            if (pEvent.button.button == SDL_BUTTON_LEFT)
+                input.mouseLeftReleased = true;
+            if (pEvent.button.button == SDL_BUTTON_RIGHT)
+                input.mouseRightReleased = true;
+        }
+        if (pEvent.type == SDL_MOUSEWHEEL)
+        {
+            if (pEvent.wheel.y > 0) // Scroll up
+                input.mouseScrollUp = true;
+            if (pEvent.wheel.y < 0) // Scroll down
+                input.mouseScrollDown = true;
+        }
 
         // --- KEYBOARD ---
         //NOTE: Its best to place keys that shouldn't be held down like a toggle button
@@ -1091,7 +1109,7 @@ void SGL_Window::pLoadDefaultAssets()
     std::string bmpFont = FOLDER_STRUCTURE::imagesDir + "default_bitmap_font.png";
 
     assetManager->loadTexture(FOLDER_STRUCTURE::defaultTexture.c_str(), GL_FALSE, defaultTextureName);
-    assetManager->loadTexture(blankSquare.c_str(), GL_TRUE, "blankSquare");
+    assetManager->loadTexture(blankSquare.c_str(), GL_TRUE, "box");
     assetManager->loadTexture(bmpFont.c_str(), GL_TRUE, "defaultBitmapFont");
 
     SGL_Log("Default textures loaded.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);

@@ -153,12 +153,13 @@ struct SGL_InputFrame
     GLboolean up, down, left, right;                                                   ///< Arrow keys
     GLboolean q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m;                     ///< Letter keys
     GLboolean num1, num2, num3, num4, num5, num6, num7, num8, num9;                    ///< Upper numbers
-    GLboolean mouseRightPressed, mouseRightReleased, mouseLeftPressed, mouseLeftReleased;   ///< Mouse buttons
+    GLboolean mouseRightPressed, mouseRightReleased, mouseLeftPressed, mouseLeftReleased,
+        mouseMiddleReleased, mouseMiddlePressed, mouseScrollUp, mouseScrollDown;   ///< Mouse buttons
     GLint rawMousePosX, rawMousePosY, normalizedMousePosX, normalizedMousePosY;        ///< Mouse position + normalized to internal resolution
     GLboolean sdlInternalQuit;                                                         ///< Internal SDL exit event
     GLboolean esc, space, enter, backspace, ctrl, shift, alt;                          ///< Modifiers
     GLboolean mouseFocus, keyboardFocus, windowFocus, windowMinimized, windowRestored; ///< Window state
-    SGL_InputFrame() : q(false), w(false), e(false), r(false), t(false), y(false), u(false), i(false), o(false), p(false), a(false), s(false), d(false), f(false), g(false), h(false), j(false), k(false), l(false), z(false), x(false), c(false), v(false), b(false), n(false), m(false), num1(false), num2(false), num3(false), num4(false), num5(false), num6(false), num7(false), num8(false), num9(false), up(false), down(false), left(false), right(false), esc(false), space(false), enter(false), backspace(false), ctrl(false), shift(false),  alt(false), sdlInternalQuit(false), mouseLeftPressed(false), mouseLeftReleased(false), mouseRightPressed(false), mouseRightReleased(false), mouseFocus(false),  keyboardFocus(false), windowFocus(false), windowMinimized(false), windowRestored(false) {}
+    SGL_InputFrame() : q(false), w(false), e(false), r(false), t(false), y(false), u(false), i(false), o(false), p(false), a(false), s(false), d(false), f(false), g(false), h(false), j(false), k(false), l(false), z(false), x(false), c(false), v(false), b(false), n(false), m(false), num1(false), num2(false), num3(false), num4(false), num5(false), num6(false), num7(false), num8(false), num9(false), up(false), down(false), left(false), right(false), esc(false), space(false), enter(false), backspace(false), ctrl(false), shift(false),  alt(false), sdlInternalQuit(false), mouseLeftPressed(false), mouseLeftReleased(false), mouseRightPressed(false), mouseRightReleased(false), mouseMiddlePressed(false), mouseMiddleReleased(false), mouseScrollUp(false), mouseScrollDown(false), mouseFocus(false),  keyboardFocus(false), windowFocus(false), windowMinimized(false), windowRestored(false) {}
 };
 
 /**
