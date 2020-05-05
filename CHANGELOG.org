@@ -1,5 +1,10 @@
 #+Title: SKELETONGL CHANGELOG
-#+Author: tsura @ NEOHEX.XYZ
+
+Also available at [[https://neohex.xyz/projects/?nav=skeletongl#changelog][NEOHEX.XYZ]]
+
+* ver 1.5 [ 05/05/2020 ]
+■ Fixed a mouse input bug were the buttons weren't being correctly reset
+■ Added support for scrolling wheels and middle buttons
 
 * ver 1.4 [ 02/05/2020 ]
 ■ Updated GLM to v0.9.9.0
