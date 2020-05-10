@@ -40,13 +40,16 @@
 // #define SGL_OUTPUT_OPENGL_DETAILS true ///< Enables (extra) OpenGLManager output. Useful for debugging.
 
 /**
- * @brief Common math constants
+ * @brief General purpose
  */
 namespace SGL
 {
-  const float PI = 3.14159265;
-  const float PIx2 = 6.2831853;
-  const float E = 2.7182818284;
+    // Math constants
+    const float PI = 3.14159265;
+    const float PIx2 = 6.2831853;
+    const float E = 2.7182818284;
+    // Default texture name, used by both the AssetManager and the SGL_Renderer
+    const std::string DEFAULT_TEXTURE_NAME = "default_texture";
 }
 
 
@@ -99,6 +102,7 @@ struct WindowCreationSpecs
 {
     bool fullScreen, enableVSYNC;               ///< Enable fullscreen, VSYNC at startup
     bool activeVSYNC;                           ///< Actual VSYNC status
+    bool showFPS;                               ///< Honored by the user, stored here for ez .ini file access
     bool cursorVisibility;                      ///< Toggles the system cursor on and off
     int displayID;                              ///< Helps when debugging on multiple displays
     std::string windowTitle;                    ///< The title of the window
@@ -114,7 +118,7 @@ struct WindowCreationSpecs
     WindowCreationSpecs() : currentX(0), currentY(0), currentW(0), currentH(0), internalW(0), internalH(0),
                             windowPosX(SDL_WINDOWPOS_UNDEFINED), windowPosY(SDL_WINDOWPOS_UNDEFINED),
                             enableVSYNC(true), fullScreen(false), minW(640), minH(360), maxW(1920),
-                            maxH(1080), fullscreenW(1920), fullscreenH(1080), windowTitle(""),
+                            maxH(1080), fullscreenW(1920), fullscreenH(1080), windowTitle(""), showFPS(false),
                             cursorVisibility(true), activeVSYNC(false), displayID(-1), iniFile("config.ini") {}
 };
 
@@ -262,18 +266,18 @@ enum LOG_COLOR
  */
 enum BLENDING_TYPE
 {
-    NONE,
-    DEFAULT_RENDERING,
-    SPRITE_RENDERING,
-    TEXT_RENDERING,
-    PARTICLE_RENDERING,
-    // All these ones are up for testing
-    LIGHT_RENDERING,
-    TEST_RENDERING,
-    LIGHT_SRC,
-    DARKNESS,
+    NONE,               // DISABLES BLENDING MODE
+    CUSTOM,             // USE THE PROVIDED sfactor & dfactor
+    DEFAULT_RENDERING,  // USED BY DEFAULT WHEN BLENDING IS ENABLED BUT NOT SPECIFIED
+    SPRITE_RENDERING,   // DEFAULT OF SGL_SPRITE
+    TEXT_RENDERING,     // DEFAULT TO THE SGL_RENDERER TEXT RENDERER
+    PARTICLE_RENDERING, // FOR PARTICLES
 };
 
+enum OPENGL_BLENDING_MODES
+{
+
+};
 
 /**
  * @brief Switch between the two avilable camera modes

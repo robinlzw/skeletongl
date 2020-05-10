@@ -168,7 +168,7 @@ public:
     // Enable face culling?
     void faceCulling(bool value);
     // Set blending type
-    void blending(bool value, BLENDING_TYPE type);
+    void blending(bool value = true, BLENDING_TYPE type = BLENDING_TYPE::DEFAULT_RENDERING, GLenum sfactor = 0, GLenum dfactor = 0);
     // Generate a texture
     void genTextures(GLsizei n, GLuint *textures);
     // Bind texture

@@ -129,7 +129,7 @@ SGL_Texture SGL_AssetManager::loadTexture(const GLchar *file, GLboolean alpha, s
 SGL_Texture SGL_AssetManager::getTexture(std::string name)
 {
     if (textures.count(name) <= 0)
-        return textures[pDefaultTextureName];
+        return textures[SGL::DEFAULT_TEXTURE_NAME];
     else
         return textures[name];
 }
@@ -241,7 +241,7 @@ SGL_Texture SGL_AssetManager::loadTextureFromFile(const GLchar *file, GLboolean 
     if (image == NULL)
     {
         SGL_Log("Texture not found: " + std::string(file));
-        return this->getTexture(this->pDefaultTextureName);
+        return this->getTexture(SGL::DEFAULT_TEXTURE_NAME);
     }
     else
     {

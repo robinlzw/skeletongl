@@ -44,7 +44,6 @@ class SGL_AssetManager
 {
 private:
     std::shared_ptr<SGL_OpenGLManager> WMOGLM;                    ///< Owned by the windowManager
-    const std::string pDefaultTextureName = "defaultTexture.png"; ///< Texture to be shown by default
     std::map<std::string, SGL_Shader> shaders;                    ///< Map of all available shaders
     std::map<std::string, SGL_Texture> textures;                  ///< Map of all available textures
     long long int pTextureGPUMemory;                              ///< How much GPU memory the program is using

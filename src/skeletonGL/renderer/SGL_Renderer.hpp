@@ -181,6 +181,8 @@ private:
     SGL_Shader pPixelBatchShader;              ///< Pixel batch shader
     SGL_Shader pLineBatchShader;              ///< Pixel batch shader
     UV_Wrapper pDefaultUV;                     ///< Default UV values
+    // Default texture in case a render is requested without a valid SGL_texture
+    SGL_Texture pDefaultTexture;
 
     // EXPERIMENTAL
     // SPRITE BATCHING
@@ -228,7 +230,7 @@ private:
 
 public:
     // Constructor
-    SGL_Renderer(std::shared_ptr<SGL_OpenGLManager> oglm, const SGL_Shader &shaderLine, const SGL_Shader &shaderPoint,
+    SGL_Renderer(std::shared_ptr<SGL_OpenGLManager> oglm, const SGL_Texture texture, const SGL_Shader &shaderLine, const SGL_Shader &shaderPoint,
                  const SGL_Shader &shaderText, const SGL_Shader &spriteShader, const SGL_Shader &spriteBatchShader, const SGL_Shader &pixelBatchShader, const SGL_Shader &lineBatchShader);
     // Destructor
     ~SGL_Renderer();

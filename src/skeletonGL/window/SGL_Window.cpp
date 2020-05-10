@@ -36,6 +36,9 @@
  */
 SGL_Window::SGL_Window()
 {
+    // Enable logging during initialization, the user should modify this
+    // value after
+    setLogLevel(LOG_LEVEL::SGL_DEBUG);
     pAlreadyInitialized = false;
 }
 
@@ -166,7 +169,16 @@ void SGL_Window::processIniFile(std::string path)
     int display_idIni = pIniParser->getIntValue("[VIDEO]", "display_id");
     SGL_Log("INI FILE display_id = " + std::to_string(display_idIni));
     pWindowCreationSpecs.displayID = display_idIni;
-
+    // Show FPS
+    std::string showFPSIni = pIniParser->getRawValue("[VIDEO]", "show_fps");
+    if (!showFPSIni.empty())
+    {
+        if (showFPSIni == "0")
+            pWindowCreationSpecs.showFPS = false;
+        else
+            pWindowCreationSpecs.showFPS = true;
+    }
+    SGL_Log("INI FILE show_fps = " + showFPSIni, LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_BLUE);
     // [INPUT]
     // Gamepad ID shouldn't be higher than 4
     int main_gamepad_id = pIniParser->getIntValue("[INPUT]", "main_gamepad_id");
@@ -458,7 +470,7 @@ void SGL_Window::start()
     SGL_Log("Camera and orthographic shader configured.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     // Configure renderer
     //this->pClearScreen = {1.0f, 1.0f, 1.0f, 1.0f};
-    renderer = std::make_unique<SGL_Renderer>(pOGLM, assetManager->getShader("line"), assetManager->getShader("point"), assetManager->getShader("text"), assetManager->getShader("spriteUV"), assetManager->getShader("spriteBatchUV"), assetManager->getShader("pixelBatch"),
+    renderer = std::make_unique<SGL_Renderer>(pOGLM, assetManager->getTexture(SGL::DEFAULT_TEXTURE_NAME), assetManager->getShader("line"), assetManager->getShader("point"), assetManager->getShader("text"), assetManager->getShader("spriteUV"), assetManager->getShader("spriteBatchUV"), assetManager->getShader("pixelBatch"),
     assetManager->getShader("lineBatch"));
     SGL_Log("Renderer configured.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     // Setup the post processor
@@ -1102,13 +1114,10 @@ void SGL_Window::pLoadDefaultAssets()
     SGL_Log("<--- Default assets --->", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
     assetManager = std::make_unique<SGL_AssetManager>(pOGLM);
 
-    // The default texture will replace any texture not found by the loadTexture
-    // function, it must be loaded before the AssetManager can properly load textures
-    std::string defaultTextureName = "defaultTexture.png";
     std::string blankSquare = FOLDER_STRUCTURE::imagesDir + "blank_square.png";
     std::string bmpFont = FOLDER_STRUCTURE::imagesDir + "default_bitmap_font.png";
 
-    assetManager->loadTexture(FOLDER_STRUCTURE::defaultTexture.c_str(), GL_FALSE, defaultTextureName);
+    assetManager->loadTexture(FOLDER_STRUCTURE::defaultTexture.c_str(), GL_FALSE, SGL::DEFAULT_TEXTURE_NAME);
     assetManager->loadTexture(blankSquare.c_str(), GL_TRUE, "box");
     assetManager->loadTexture(bmpFont.c_str(), GL_TRUE, "defaultBitmapFont");
 

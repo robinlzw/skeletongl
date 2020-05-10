@@ -921,40 +921,34 @@ void SGL_OpenGLManager::faceCulling(bool value)
  * @param type Blending mode to use
  * @return nothing
  */
-void SGL_OpenGLManager::blending(bool value, BLENDING_TYPE type)
+void SGL_OpenGLManager::blending(bool value, BLENDING_TYPE type, GLenum sfactor, GLenum dfactor)
 {
-    if (value)
+    if (value || !(type == BLENDING_TYPE::NONE))
     {
         glEnable(GL_BLEND);
         currentGLSettings.blending.active = true;
 
-        switch(type)
+        if (type == BLENDING_TYPE::CUSTOM) // Use the provided sfactor & dfactor enums
+            glBlendFunc(sfactor, dfactor);
+        else // Use the convenience wrappers
         {
-        case NONE:
-            break;
-        case DEFAULT_RENDERING:
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            break;
-        case TEST_RENDERING:
-            glBlendFunc(GL_SRC_COLOR,  GL_DST_ALPHA);
-            break;
-        case TEXT_RENDERING:
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            break;
-        case PARTICLE_RENDERING:
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-            break;
-        case LIGHT_RENDERING:
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-            break;
-
-        case LIGHT_SRC:
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            break;
-        case DARKNESS:
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            // glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_DST_COLOR); // color inverter
-            break;
+            switch(type)
+            {
+            case NONE:
+                break;
+            case DEFAULT_RENDERING:
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                break;
+            case SPRITE_RENDERING:
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                break;
+            case TEXT_RENDERING:
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                break;
+            case PARTICLE_RENDERING:
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+                break;
+            }
         }
     }
     else
@@ -963,6 +957,7 @@ void SGL_OpenGLManager::blending(bool value, BLENDING_TYPE type)
         currentGLSettings.blending.active = false;
     }
 }
+
 
 /**
  * @brief Resize the view port

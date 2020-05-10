@@ -33,7 +33,7 @@
  * @param spriteShader The default shader for the sprite renderer
  * @return nothing
  */
-SGL_Renderer::SGL_Renderer(std::shared_ptr<SGL_OpenGLManager> oglm, const SGL_Shader &shaderLine, const SGL_Shader &shaderPoint,
+SGL_Renderer::SGL_Renderer(std::shared_ptr<SGL_OpenGLManager> oglm, const SGL_Texture texture, const SGL_Shader &shaderLine, const SGL_Shader &shaderPoint,
                            const SGL_Shader &shaderText, const SGL_Shader &spriteShader, const SGL_Shader &spriteBatchShader,
                            const SGL_Shader &pixelBatchShader, const SGL_Shader &lineBatchShader)
 {
@@ -72,6 +72,10 @@ SGL_Renderer::SGL_Renderer(std::shared_ptr<SGL_OpenGLManager> oglm, const SGL_Sh
     // Texture buffers: Simple buffer to hold UV data
     this->pTextureUVVBO = "_SGL_Renderer_textureCoords_VBO";
 
+    // Default texture, this will be used in place of the sprtie's texture if this one is
+    // invalid / empty, the AssetManager returns this same texture when queried for
+    // a texture it can't find
+    this->pDefaultTexture = texture;
 
     // Instancing buffers: These VBO are used to allocate the memory required to
     // fit the batch / instances to be rendered, this same buffer is then recycled
@@ -463,6 +467,12 @@ void SGL_Renderer::renderSprite(const SGL_Sprite &sprite)
     else
         activeShader = sprite.shader;
 
+    SGL_Texture activeTexture;
+    if (sprite.texture.width == 0) // Uninitialized texture
+        activeTexture = pDefaultTexture;
+    else
+        activeTexture = sprite.texture;
+
     GLfloat UV[] = {
         sprite.uvCoords.UV_topLeft.x / sprite.texture.width, sprite.uvCoords.UV_topLeft.y / sprite.texture.height,
         sprite.uvCoords.UV_botRight.x / sprite.texture.width, sprite.uvCoords.UV_botRight.y / sprite.texture.height,
@@ -512,7 +522,7 @@ void SGL_Renderer::renderSprite(const SGL_Sprite &sprite)
     WMOGLM->activeTexture(GL_TEXTURE0);
     // SGL_Log("texture active");
     //     WMOGLM->checkForGLErrors();
-    sprite.texture.bind(*WMOGLM);
+    activeTexture.bind(*WMOGLM);
     // Draw it
     WMOGLM->drawArrays(GL_TRIANGLES, 0, 6);
     // SGL_Log("rendered");
@@ -544,6 +554,14 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite)
         activeShader = sprite.shader;
 
     activeShader = pSpriteBatchShader;
+
+    SGL_Texture activeTexture;
+    if (sprite.texture.width == 0) // Uninitialized texture
+        activeTexture = pDefaultTexture;
+    else
+        activeTexture = sprite.texture;
+
+
 
     GLfloat UV[] = {
         sprite.uvCoords.UV_topLeft.x / sprite.texture.width, sprite.uvCoords.UV_topLeft.y / sprite.texture.height,
@@ -616,7 +634,7 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite)
     activeShader.setVector2f(*WMOGLM, "spriteDimensions", sprite.size.x, sprite.size.y);
     // Activate textures
     WMOGLM->activeTexture(GL_TEXTURE0);
-    sprite.texture.bind(*WMOGLM);
+    activeTexture.bind(*WMOGLM);
     // Draw it
     // WMOGLM->drawArrays(GL_TRIANGLES, 0, 6);
     // WMOGLM->checkForGLErrors();
