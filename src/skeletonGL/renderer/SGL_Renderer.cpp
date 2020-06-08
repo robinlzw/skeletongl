@@ -586,7 +586,7 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite)
 
 
     // TESTING --
-    for (int i = 0; i < pBatchAmount; ++i)
+    for (int i = 0; i < pSpriteBatchAmount; ++i)
     {
         // Prepare transformations
         glm::mat4 model(1.0f);
@@ -612,7 +612,7 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite)
 
     // SGL_Log("Reloading instance buffers.");
     WMOGLM->bindVBO(pSpriteBatchInstancesVBO);
-    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::mat4) * pBatchAmount, &modelMatrices[0]);
+    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::mat4) * pSpriteBatchAmount, &modelMatrices[0]);
     WMOGLM->unbindVBO();
 
     WMOGLM->bindVBO(this->pSpriteBatchVBO);
@@ -639,8 +639,8 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite)
     // WMOGLM->drawArrays(GL_TRIANGLES, 0, 6);
     // WMOGLM->checkForGLErrors();
 
-    WMOGLM->drawArraysInstanced(GL_TRIANGLES, 0, 6, pBatchAmount);
-    // WMOGLM->drawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, pBatchAmount);
+    WMOGLM->drawArraysInstanced(GL_TRIANGLES, 0, 6, pSpriteBatchAmount);
+    // WMOGLM->drawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, pSpriteBatchAmount);
     // WMOGLM->checkForGLErrors();
 
     activeShader.unbind(*WMOGLM);
@@ -717,9 +717,9 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite, const std::vector
 
     // WMOGLM->checkForGLErrors();
 
-    // SGL_Log("Reloading instance buffers.");
+    // THE VECTOR SIZE CAN NOT BE LARGER THAN pSpriteBatchAmount
     WMOGLM->bindVBO(pSpriteBatchInstancesVBO);
-    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::mat4) * pBatchAmount, &modelMatrices[0]);
+    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::mat4) * vectors->size(), &modelMatrices[0]);
     WMOGLM->unbindVBO();
 
     WMOGLM->bindVBO(this->pSpriteBatchVBO);
@@ -734,7 +734,7 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite, const std::vector
     sprite.texture.bind(*WMOGLM);
 
     // Render it
-    WMOGLM->drawArraysInstanced(GL_TRIANGLES, 0, 6, pBatchAmount);
+    WMOGLM->drawArraysInstanced(GL_TRIANGLES, 0, 6, vectors->size());
 
     activeShader.unbind(*WMOGLM);
     WMOGLM->unbindVAO();
@@ -978,7 +978,7 @@ void SGL_Renderer::loadPixelBatchBuffers(SGL_Shader shader)
     glm::vec2 translations[pPixelBatchAmount];
     int index = 0;
     float offset = 0.1;
-    // for(int y = -10; y < pBatchAmount; y += 2)
+    // for(int y = -10; y < pSpriteBatchAmount; y += 2)
     // {
     //     for(int x = -10; x < 10; x += 2)
     //     {
@@ -1099,10 +1099,10 @@ void SGL_Renderer::loadSpriteBatchBuffers(SGL_Shader shader)
     };
 
 
-    pBatchAmount = 300;
-    modelMatrices = new glm::mat4[pBatchAmount];
+    pSpriteBatchAmount = 20000;
+    modelMatrices = new glm::mat4[pSpriteBatchAmount];
 
-    for (int i = 0; i < pBatchAmount; ++i)
+    for (int i = 0; i < pSpriteBatchAmount; ++i)
     {
         // Prepare transformations
         glm::mat4 model;
@@ -1133,7 +1133,7 @@ void SGL_Renderer::loadSpriteBatchBuffers(SGL_Shader shader)
     SGL_Log("Generating instance buffers.");
     WMOGLM->checkForGLErrors();
     WMOGLM->bindVBO(pSpriteBatchInstancesVBO);
-    WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * pBatchAmount, &modelMatrices[0], GL_STATIC_DRAW);
+    WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * pSpriteBatchAmount, &modelMatrices[0], GL_STATIC_DRAW);
     WMOGLM->unbindVBO();
     // Parse buffers to GPU
     WMOGLM->bindVBO(this->pTextureUVVBO);

@@ -54,14 +54,14 @@
 struct SGL_Sprite
 {
 public:
-    glm::vec2 position, size, rotationOrigin; ///< Positioning, scaling and rotation origin
-    GLfloat rotation;                         ///< Rotation in radians (degrees deprecated in glm::rotate since 0.9.6)
-    SGL_Color color;                          ///< Sprite color
-    UV_Wrapper uvCoords;                      ///< Texture coordinates
-    SGL_Texture texture;                      ///< Sprite texture
-    bool enableCustomUV;                      ///< Does the sprite require custom UV values
-    SGL_Shader shader;                        ///< Sprite shader
-    BLENDING_TYPE blending;                   ///< Blending type
+    glm::vec2 position, size, rotationOrigin;    ///< Positioning, scaling and rotation origin
+    GLfloat rotation;                            ///< Rotation in radians (degrees deprecated in glm::rotate since 0.9.6)
+    SGL_Color color;                             ///< Sprite color
+    UV_Wrapper uvCoords;                         ///< Texture coordinates
+    SGL_Texture texture;                         ///< Sprite texture
+    bool enableCustomUV;                         ///< Does the sprite require custom UV values
+    SGL_Shader shader;                           ///< Sprite shader
+    BLENDING_TYPE blending;                      ///< Blending type
 
     // Reset the UV coordinates to show the full texture
     void resetUVCoords()
@@ -110,9 +110,9 @@ public:
  */
 struct SGL_Pixel
 {
-    glm::vec2 position;             ///< Pixel position
-    SGL_Color color;                ///< Pixel color
-    SGL_Shader shader;              ///< Shader to process the pixel (because why the fuck not)
+    glm::vec2 position;                          ///< Pixel position
+    SGL_Color color;                             ///< Pixel color
+    SGL_Shader shader;                           ///< Shader to process the pixel (because why the fuck not)
 };
 
 /**
@@ -123,9 +123,9 @@ struct SGL_Pixel
  */
 struct SGL_Line
 {
-    glm::vec2 positionA, positionB; ///< Vertices for both ends of the line
-    SGL_Color color;                ///< Line color
-    SGL_Shader shader;              ///< Line shader
+    glm::vec2 positionA, positionB;              ///< Vertices for both ends of the line
+    SGL_Color color;                             ///< Line color
+    SGL_Shader shader;                           ///< Line shader
 };
 
 
@@ -137,11 +137,11 @@ struct SGL_Line
  */
 struct SGL_Text
 {
-    glm::vec2 position;             ///< Text position
-    float scale;                    ///< Text size
-    std::string message;            ///< The text string to be rendered
-    SGL_Color color;                ///< Text color
-    SGL_Shader shader;              ///< Text shader
+    glm::vec2 position;                          ///< Text position
+    float scale;                                 ///< Text size
+    std::string message;                         ///< The text string to be rendered
+    SGL_Color color;                             ///< Text color
+    SGL_Shader shader;                           ///< Text shader
 };
 
 struct SGL_Bitmap_Text
@@ -167,38 +167,40 @@ struct SGL_Bitmap_Text
 class SGL_Renderer
 {
 private:
-    std::shared_ptr<SGL_OpenGLManager> WMOGLM; ///< Window's OpenGL context
+    std::shared_ptr<SGL_OpenGLManager> WMOGLM;   ///< Window's OpenGL context
     SGL_Color pDefaultColor;
     std::string pLineVAO, pLineVBO, pPointVAO,
         pPointVBO, pTextVAO, pTextVBO, pSpriteVAO,
-        pSpriteVBO, pTextureUVVBO;             ///< All the required OpenGL buffers
-    SGL_Shader pLineShader, pPixelShader;      ///< Shader for the line and pixel renderers
-    std::map<GLchar, Character> characters;    ///< Storage the loaded cahracters in a map
+        pSpriteVBO, pTextureUVVBO;               ///< All the required OpenGL buffers
+    SGL_Shader pLineShader, pPixelShader;        ///< Shader for the line and pixel renderers
+    std::map<GLchar, Character> characters;      ///< Storage the loaded cahracters in a map
     std::map<char, glm::vec4> pBitmapCharacters; ///< Map storing a character's represntation in the bitmap font texture
-    SGL_Shader pTextShader;                    ///< Text rendering shader
-    SGL_Shader pSpriteShader;                  ///< Sprite shader
-    SGL_Shader pSpriteBatchShader;             ///< Sprite batch shader
-    SGL_Shader pPixelBatchShader;              ///< Pixel batch shader
-    SGL_Shader pLineBatchShader;              ///< Pixel batch shader
-    UV_Wrapper pDefaultUV;                     ///< Default UV values
+    SGL_Shader pTextShader;                      ///< Text rendering shader
+    SGL_Shader pSpriteShader;                    ///< Sprite shader
+    SGL_Shader pSpriteBatchShader;               ///< Sprite batch shader
+    SGL_Shader pPixelBatchShader;                ///< Pixel batch shader
+    SGL_Shader pLineBatchShader;                 ///< Pixel batch shader
+    UV_Wrapper pDefaultUV;                       ///< Default UV values
     // Default texture in case a render is requested without a valid SGL_texture
     SGL_Texture pDefaultTexture;
 
     // EXPERIMENTAL
     // SPRITE BATCHING
+    // TODO: The space reserved by the batcheAmount variables isn't taken into account by
+    // the AssetManager resource counter, gotta fix that later
     std::string pSpriteBatchVBO, pSpriteBatchVAO, pSpriteBatchInstancesVBO;
-    std::uint32_t pBatchAmount;
+    std::uint32_t pSpriteBatchAmount;            ///< Maximum amount of sprites to render at once (CASUES SEGFAULT IF EXCEEDED!)
     glm::mat4 *modelMatrices;
 
     // PIXEL BATCHING
     std::string pPixelBatchVBO, pPixelBatchVAO, pPixelBatchInstancesVBO;
-    std::uint32_t pPixelBatchAmount;
+    std::uint32_t pPixelBatchAmount;             ///< Maximum amount of pixels to render at once (CASUES SEGFAULT IF EXCEEDED!)
     glm::vec2 *posVectors;
 
     // Line BATCHING
     std::string pLineBatchVBO, pLineBatchVAO, pLineBatchInstancesVBO;
-    std::uint32_t pLineBatchAmount;
-    glm::vec4 *pLineVectors;                   ///< Pointer to the data to be batched
+    std::uint32_t pLineBatchAmount;              ///< Maximum amount of linex to render at once (CASUES SEGFAULT IF EXCEEDED!)
+    glm::vec4 *pLineVectors;                     ///< Pointer to the data to be batched
 
 
     // Its important to point out that the individual pixel, line and sprite renderers
