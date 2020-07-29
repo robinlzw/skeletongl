@@ -1,5 +1,6 @@
 #+Title: [[https://neohex.xyz/projects/?nav=skeletongl][SkeletonGL]]: Performance focused 2D game engine
 #+Author: AlexHG @ NEOHEX.XYZ
+#+OPTIONS: \n:t
 
 [[http://www.gnu.org/licenses/gpl-3.0.html][http://img.shields.io/:license-mit-blue.svg]]
 
@@ -85,4 +86,5 @@
   The following programs are made in SkeletonGL and free for you to tinker with.
 
   [[https://neohex.xyz.localhost/projects/?nav=snake-sgl][Snake-SGL]] // Simple snake clone and first SkeletonGL example program
+
   [[https://neohex.xyz.localhost/projects/?nav=cas-sgl][CAS-SGL]]   // Conway's game of life simulator made in SkeletonGL & C++ with a focus on performance.
