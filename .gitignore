@@ -6,7 +6,7 @@
 *.exe
 *.o
 *.so
-sgl
+snake_sgl
 
 # Packages #
 ############
@@ -48,12 +48,12 @@ nbproject
 .settings
 composer.lock
 
-# GDB files #
-#############
+# GDB #
+#######
 .gdb_history
 
 # EMACS files #
-#############
+##############
 .\#*
 *~
 \#*\#
@@ -63,3 +63,8 @@ composer.lock
 GTAGS
 GRTAGS
 GPATH
+
+# Compiled SGL static library #
+##############################
+*.a
+

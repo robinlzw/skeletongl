@@ -1,13 +1,9 @@
-#+Title:SkeletonGL: Performance focused 2D game engine
-#+Author: tsura @ NEOHEX.XYZ
-
+#+Title: [[https://neohex.xyz/projects/?nav=skeletongl][SkeletonGL]]: Performance focused 2D game engine
+#+Author: AlexHG @ NEOHEX.XYZ
 
 [[http://www.gnu.org/licenses/gpl-3.0.html][http://img.shields.io/:license-mit-blue.svg]]
 
-- Features: [[https://neohex.xyz/projects?nav=skeletongl][https://neohex.xyz/projects?nav=skeletongl]]
-- Devlog: [[https://neohex.xyz/journal?category=sgl_devlog][https://neohex.xyz/journal?category=sgl_devlog]]
-
-
+#+html: <p align="center"><img src="https://data.whicdn.com/images/287949138/original.gif" /></p>
 
 
 * About SkeletonGL
@@ -23,7 +19,7 @@
   tools for the underlying OpenGL drivers making it a complete solution for computer graphics programming.
   All modern OpenGL rendering capabilities are available, making it a more complete alternative to SDL's 2D renderer
   while providing a very similar interface, its just as easy to use but with the added benefit of everything a proper
-  engine has to offer. If you're looking for the a complete, yet unobtrusive solution for PC game development, SkeletonGL is for you.
+  engine has to offer. If you're looking for a complete, yet unobtrusive solution for PC game development, SkeletonGL is for you.
 
 * Dependencies
   - [[https://glm.g-truc.net/][glm]] // included
@@ -37,29 +33,56 @@
 
   1. Install dependencies
 
-  Apt:
+  For Debia/Ubuntu systems:
   #+BEGIN_SRC 
-sudo apt-get update
-sudo apt-get install libsdl2-dev libglew-dev libfreetype6-dev
+  sudo apt-get update
+  sudo apt-get install libsdl2-dev libglew-dev libfreetype6-dev
+  #+END_SRC
+  For Arch based systems:
+  #+BEGIN_SRC 
+  sudo pacman -S sdl2 glew freetype2
   #+END_SRC
 
-  2. Clone the SGL template and compile the included example
+  2. Clone the SkeletonGL repo:
 
   #+BEGIN_SRC 
-git clone https://github.com/NE0HEX/skeletongl
-cd skeletongl/
-make
-./sgl
+  git clone https://github.com/NE0HEX/skeletongl
+  cd skeletongl/
+  make
+  ./sgl
   #+END_SRC
 
 
-* Documentation and examples
+* Documentation
 
-  SGL includes a default program to verify compilation and serve as an example.
+  The source code is thoroughly documented using the doxygen standard, any doxygen generator can parse the code and output the API's specification into a portable format of your choosing.
+  The root folder contents are already setup as a template for new projects, simply add your own source code to the /src/ folder and update the makefile: 
+  
+  Root project folder:
+  #+BEGIN_SRC 
+    ■ src/: Source code folder
+    ■ static_lib: Compile the SGL insto a static (.a) library
+    ■ static_exe: Statically compile the sgl.a lib into the final executable
+    ■ makefile: Dynamically compile the final executable
+    ■ skeletongl.ini: Runtime settings file
+  #+END_SRC
+  
+  src/ code folder:
+  #+BEGIN_SRC 
+    ■ skeletongl/: SkeletonGL library source code
+    ■ skeletongl/skeletonGL.hpp: Monolithic include file
+    ■ skeletongl/window/: Window manager and main library interface
+    ■ skeletongl/renderer/: All render and OpenGL related code
+    ■ skeletongl/utility: Data structures, constants and general utility
+    ■ skeletongl/deps: Header only dependencies (GLM & stb_image)
+  #+END_SRC
 
-  Other open source software made in SkeletonGL:
-  - SNAKE
+  Note that the entire SkeletonGL interface can be seen in the window/window.hpp file.
 
- 
-  For more information visit [[https://neohex.xyz/projects?nav=skeletongl][https://neohex.xyz/projects?nav=skeletongl]]
+  Visit the official project site at [[https://neohex.xyz.localhost/projects/?nav=skeletongl][NEOHEX.XYZ]] for more information.
+  
+* Example programs
+  The following programs are made in SkeletonGL and free for you to tinker with.
 
+  [[https://neohex.xyz.localhost/projects/?nav=snake-sgl][Snake-SGL]] // Simple snake clone and first SkeletonGL example program
+  [[https://neohex.xyz.localhost/projects/?nav=cas-sgl][CAS-SGL]]   // Conway's game of life simulator made in SkeletonGL & C++ with a focus on performance.
