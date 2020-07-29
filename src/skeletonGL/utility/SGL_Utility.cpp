@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 /**
  * @file    src/skeletonGL/utility/SGL_Utility.cpp
  * @author  TSURA @ NEOHEX.XYZ
@@ -211,12 +210,12 @@ SGL_IniParser::SGL_IniParser(const std::string &filePath)
  * @param ley The key that points to the desired value
  * @return string
  */
-std::string SGL_IniParser::getRawValue(const std::string section, const std::string key)
+std::string SGL_IniParser::getRawValue(const std::string section, const std::string key)  const noexcept
 {
     if (!pFileLoaded)
         return pNotFound;
 
-    for (std::vector<SGL_IniField>::iterator it = pIniFields.begin(); it != pIniFields.end(); ++it)
+    for (std::vector<SGL_IniField>::const_iterator it = pIniFields.begin(); it != pIniFields.end(); ++it)
     {
         if (((*it).title) == section && ((*it).key) == key)
             return (*it).value;
@@ -232,14 +231,14 @@ std::string SGL_IniParser::getRawValue(const std::string section, const std::str
  * @param ley The key that points to the desired value
  * @return int
  */
-int SGL_IniParser::getIntValue(const std::string section, const std::string key)
+int SGL_IniParser::getIntValue(const std::string section, const std::string key)  const noexcept
 {
     std::size_t returnValue = 0;
     if (!pFileLoaded)
         return static_cast<int>(returnValue);
 
     std::string foundValue = "";
-    for (std::vector<SGL_IniField>::iterator it = pIniFields.begin(); it != pIniFields.end(); ++it)
+    for (std::vector<SGL_IniField>::const_iterator it = pIniFields.begin(); it != pIniFields.end(); ++it)
     {
         if (((*it).title) == section && ((*it).key) == key)
             foundValue =  (*it).value;
@@ -258,7 +257,7 @@ int SGL_IniParser::getIntValue(const std::string section, const std::string key)
  * @param str String to test
  * @return bool
  */
-bool SGL_IniParser::pCheckForMultipleTokens(const char token, const std::string &str)
+bool SGL_IniParser::pCheckForMultipleTokens(const char token, const std::string &str)  const noexcept
 {
     int count = 0;
     for (int i = 0; i < str.size(); ++i)

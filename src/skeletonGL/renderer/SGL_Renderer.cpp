@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 /**
  * @file    src/skeletonGL/utility/SGL_Renderer.cpp
  * @author  TSURA @ NEOHEX.XYZ
@@ -33,9 +32,7 @@
  * @param spriteShader The default shader for the sprite renderer
  * @return nothing
  */
-SGL_Renderer::SGL_Renderer(std::shared_ptr<SGL_OpenGLManager> oglm, const SGL_Texture texture, const SGL_Shader &shaderLine, const SGL_Shader &shaderPoint,
-                           const SGL_Shader &shaderText, const SGL_Shader &spriteShader, const SGL_Shader &spriteBatchShader,
-                           const SGL_Shader &pixelBatchShader, const SGL_Shader &lineBatchShader)
+SGL_Renderer::SGL_Renderer(std::shared_ptr<SGL_OpenGLManager> oglm, const SGL_Texture texture, const SGL_Shader &shaderLine, const SGL_Shader &shaderPoint, const SGL_Shader &shaderText, const SGL_Shader &spriteShader, const SGL_Shader &spriteBatchShader, const SGL_Shader &pixelBatchShader, const SGL_Shader &lineBatchShader)
 {
     SGL_Log("Configuring renderer...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     // Geometry shader configuration
@@ -420,7 +417,7 @@ void SGL_Renderer::renderText(std::string text, GLfloat x, GLfloat y, GLfloat sc
  * @return nothing
  */
 
-void SGL_Renderer::renderBitmapText(SGL_Bitmap_Text &text)
+void SGL_Renderer::renderBitmapText(SGL_Bitmap_Text &text) const
 {
     // Get the UV positioning for the character to rener
     SGL_Sprite s;
@@ -459,7 +456,7 @@ void SGL_Renderer::renderBitmapText(SGL_Bitmap_Text &text)
  *
  * @return nothing
  */
-void SGL_Renderer::renderSprite(const SGL_Sprite &sprite)
+void SGL_Renderer::renderSprite(const SGL_Sprite &sprite) const
 {
     SGL_Shader activeShader;
     if (sprite.shader.shaderType != SHADER_TYPE::SPRITE)
@@ -875,7 +872,7 @@ void SGL_Renderer::renderLineBatch(const SGL_Line &line)
  *
  * @return nothing
  */
-void SGL_Renderer::loadLineBuffers(SGL_Shader shader)
+void SGL_Renderer::loadLineBuffers(SGL_Shader shader) noexcept
 {
     shader.use(*WMOGLM);
 
@@ -899,7 +896,7 @@ void SGL_Renderer::loadLineBuffers(SGL_Shader shader)
  *
  * @return nothing
  */
-void SGL_Renderer::loadLineBatchBuffers(SGL_Shader shader)
+void SGL_Renderer::loadLineBatchBuffers(SGL_Shader shader) noexcept
 {
     SGL_Log("Configuring line batch renderer...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     shader.use(*WMOGLM);
@@ -942,7 +939,7 @@ void SGL_Renderer::loadLineBatchBuffers(SGL_Shader shader)
  *
  * @return nothing
  */
-void SGL_Renderer::loadPointBuffers(SGL_Shader shader)
+void SGL_Renderer::loadPointBuffers(SGL_Shader shader) noexcept
 {
     shader.use(*WMOGLM);
 
@@ -966,7 +963,7 @@ void SGL_Renderer::loadPointBuffers(SGL_Shader shader)
  *
  * @return nothing
  */
-void SGL_Renderer::loadPixelBatchBuffers(SGL_Shader shader)
+void SGL_Renderer::loadPixelBatchBuffers(SGL_Shader shader) noexcept
 {
     shader.use(*WMOGLM);
 
@@ -1026,7 +1023,7 @@ void SGL_Renderer::loadPixelBatchBuffers(SGL_Shader shader)
  *
  * @return nothing
  */
-void SGL_Renderer::loadSpriteBuffers(SGL_Shader shader)
+void SGL_Renderer::loadSpriteBuffers(SGL_Shader shader) noexcept
 {
     GLfloat vertices[] = {
         // pos   tex
@@ -1076,7 +1073,7 @@ void SGL_Renderer::loadSpriteBuffers(SGL_Shader shader)
  *               MUST COINCIDE WITH THE SAME ATTRIB DIVISOR USED IN SHADER
  * @return nothing
  */
-void SGL_Renderer::loadSpriteBatchBuffers(SGL_Shader shader)
+void SGL_Renderer::loadSpriteBatchBuffers(SGL_Shader shader) noexcept
 {
     GLfloat vertices[] = {
         // pos   tex
@@ -1267,7 +1264,7 @@ void SGL_Renderer::generateFont(const std::string fontPath)
  *
  * @return nothing
  */
-void SGL_Renderer::generateBitmapFont()
+void SGL_Renderer::generateBitmapFont() noexcept
 {
     // Note that the following values are to be processed by Sprite::changeUVCoords
 

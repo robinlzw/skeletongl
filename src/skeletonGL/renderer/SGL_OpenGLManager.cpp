@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 /**
  * @file    src/skeletonGL/utility/SGL_OpenGLManager.cpp
  * @author  TSURA @ NEOHEX.XYZ
@@ -66,7 +65,7 @@ SGL_OpenGLManager::~SGL_OpenGLManager()
  * @param name The VBO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::createVBO(const std::string &name)
+void SGL_OpenGLManager::createVBO(const std::string &name) noexcept
 {
     if (VBO.count(name) > 0 )
     {
@@ -95,7 +94,7 @@ void SGL_OpenGLManager::createVBO(const std::string &name)
  * @param name The EBO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::createEBO(const std::string &name)
+void SGL_OpenGLManager::createEBO(const std::string &name) noexcept
 {
     if (EBO.count(name) > 0 )
     {
@@ -124,7 +123,7 @@ void SGL_OpenGLManager::createEBO(const std::string &name)
  * @param name The VAO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::createVAO(const std::string &name)
+void SGL_OpenGLManager::createVAO(const std::string &name) noexcept
 {
     if (VAO.count(name) > 0 )
     {
@@ -155,7 +154,7 @@ void SGL_OpenGLManager::createVAO(const std::string &name)
  * @param name The FBO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::createFBO(const std::string &name)
+void SGL_OpenGLManager::createFBO(const std::string &name) noexcept
 {
     if (FBO.count(name) > 0 )
     {
@@ -186,7 +185,7 @@ void SGL_OpenGLManager::createFBO(const std::string &name)
  * @param name The VBO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::bindVBO(const std::string &name)
+void SGL_OpenGLManager::bindVBO(const std::string &name) noexcept
 {
     if (VBO.find(name) == VBO.end())
     {
@@ -210,7 +209,7 @@ void SGL_OpenGLManager::bindVBO(const std::string &name)
  * @param name The EBO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::bindEBO(const std::string &name)
+void SGL_OpenGLManager::bindEBO(const std::string &name) noexcept
 {
     if (EBO.find(name) == EBO.end())
     {
@@ -234,7 +233,7 @@ void SGL_OpenGLManager::bindEBO(const std::string &name)
  * @param name The VAO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::bindVAO(const std::string &name)
+void SGL_OpenGLManager::bindVAO(const std::string &name) noexcept
 {
     if (VAO.find(name) == VAO.end())
     {
@@ -258,7 +257,7 @@ void SGL_OpenGLManager::bindVAO(const std::string &name)
  * @param name The FBO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::bindFBO(const std::string &name, GLCONSTANTS::FBO type)
+void SGL_OpenGLManager::bindFBO(const std::string &name, GLCONSTANTS::FBO type) noexcept
 {
     if (FBO.find(name) == FBO.end())
     {
@@ -295,7 +294,7 @@ void SGL_OpenGLManager::bindFBO(const std::string &name, GLCONSTANTS::FBO type)
  * @param textures Gluint to hold the ID
  * @return nothing
  */
-void SGL_OpenGLManager::genTextures(GLsizei n, GLuint *textures)
+void SGL_OpenGLManager::genTextures(GLsizei n, GLuint *textures) const noexcept
 {
     glGenTextures(n, textures);
 }
@@ -308,7 +307,7 @@ void SGL_OpenGLManager::genTextures(GLsizei n, GLuint *textures)
  * @param textures Texture ID
  * @return nothing
  */
-void SGL_OpenGLManager::bindTexture(GLenum target, GLuint texture)
+void SGL_OpenGLManager::bindTexture(GLenum target, GLuint texture) const noexcept
 {
     glBindTexture(target, texture);
 }
@@ -320,7 +319,7 @@ void SGL_OpenGLManager::bindTexture(GLenum target, GLuint texture)
  * @param textures Texture ID
  * @return nothing
  */
-void SGL_OpenGLManager::deleteTextures(GLsizei n, const GLuint *textures)
+void SGL_OpenGLManager::deleteTextures(GLsizei n, const GLuint *textures) const noexcept
 {
     glDeleteTextures(n, textures);
 }
@@ -332,7 +331,7 @@ void SGL_OpenGLManager::deleteTextures(GLsizei n, const GLuint *textures)
  * @param param Value for the pname argument
  * @return nothing
  */
-void SGL_OpenGLManager::pixelStorei(GLenum pname, GLint param)
+void SGL_OpenGLManager::pixelStorei(GLenum pname, GLint param) const noexcept
 {
     glPixelStorei(pname, param);
 }
@@ -345,7 +344,7 @@ void SGL_OpenGLManager::pixelStorei(GLenum pname, GLint param)
  * @param param For the scalar commands, specifies the value of pname.
  * @return nothing
  */
-void SGL_OpenGLManager::texParameteri(GLenum target, GLenum pname, GLint param)
+void SGL_OpenGLManager::texParameteri(GLenum target, GLenum pname, GLint param) const noexcept
 {
     glTexParameteri(target, pname, param);
 }
@@ -358,7 +357,7 @@ void SGL_OpenGLManager::texParameteri(GLenum target, GLenum pname, GLint param)
  * @param param For the scalar commands, specifies the value of pname.
  * @return nothing
  */
-void SGL_OpenGLManager::texParameterf(GLenum target, GLenum pname, GLfloat param)
+void SGL_OpenGLManager::texParameterf(GLenum target, GLenum pname, GLfloat param) const noexcept
 {
     glTexParameterf(target, pname, param);
 }
@@ -379,7 +378,7 @@ void SGL_OpenGLManager::texParameterf(GLenum target, GLenum pname, GLfloat param
  *
  * @return nothing
  */
-void SGL_OpenGLManager::texImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data)
+void SGL_OpenGLManager::texImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data) const noexcept
 {
     glTexImage2D(target, level, internalformat, width, height, border, format, type, data);
 }
@@ -392,7 +391,7 @@ void SGL_OpenGLManager::texImage2D(GLenum target, GLint level, GLint internalfor
  * @param name Points to a null terminated string containing the name of the uniform variable whose location is to be queried.
  * @return GLint
  */
-GLint SGL_OpenGLManager::getUniformLocation(GLuint program, const GLchar *name)
+GLint SGL_OpenGLManager::getUniformLocation(GLuint program, const GLchar *name) const noexcept
 {
     return glGetUniformLocation(program, name);
 }
@@ -404,7 +403,7 @@ GLint SGL_OpenGLManager::getUniformLocation(GLuint program, const GLchar *name)
  * @param v0 Value to use
  * @return nothing
  */
-void SGL_OpenGLManager::uniform1f(GLint location, GLfloat v0)
+void SGL_OpenGLManager::uniform1f(GLint location, GLfloat v0) const noexcept
 {
     glUniform1f(location, v0);
 }
@@ -416,7 +415,7 @@ void SGL_OpenGLManager::uniform1f(GLint location, GLfloat v0)
  * @param v0 Value to use
  * @return nothing
  */
-void SGL_OpenGLManager::uniform1i(GLint location, GLint v0)
+void SGL_OpenGLManager::uniform1i(GLint location, GLint v0) const noexcept
 {
     glUniform1i(location, v0);
 }
@@ -429,7 +428,7 @@ void SGL_OpenGLManager::uniform1i(GLint location, GLint v0)
  * @param value Specifies a pointer to an array of count values that will be used to update the specified uniform variable.
  * @return nothing
  */
-void SGL_OpenGLManager::uniform1fv(GLint location, GLsizei count, const GLfloat *value)
+void SGL_OpenGLManager::uniform1fv(GLint location, GLsizei count, const GLfloat *value) const noexcept
 {
     glUniform1fv(location, count, value);
 }
@@ -442,7 +441,7 @@ void SGL_OpenGLManager::uniform1fv(GLint location, GLsizei count, const GLfloat 
  * @param value Specifies a pointer to an array of count values that will be used to update the specified uniform variable.
  * @return nothing
  */
-void SGL_OpenGLManager::uniform1iv(GLint location, GLsizei count, const GLint *value)
+void SGL_OpenGLManager::uniform1iv(GLint location, GLsizei count, const GLint *value) const noexcept
 {
     glUniform1iv(location, count, value);
 }
@@ -455,7 +454,7 @@ void SGL_OpenGLManager::uniform1iv(GLint location, GLsizei count, const GLint *v
  * @param value Specifies a pointer to an array of count values that will be used to update the specified uniform variable.
  * @return nothing
  */
-void SGL_OpenGLManager::uniform2fv(GLint location, GLsizei count, const GLfloat *value)
+void SGL_OpenGLManager::uniform2fv(GLint location, GLsizei count, const GLfloat *value) const noexcept
 {
     glUniform2fv(location, count, value);
 }
@@ -468,7 +467,7 @@ void SGL_OpenGLManager::uniform2fv(GLint location, GLsizei count, const GLfloat 
  * @param v1 Specifies a pointer to an array of count values that will be used to update the specified uniform variable.
  * @return nothing
  */
-void SGL_OpenGLManager::uniform2f(GLint location, GLfloat v0, GLfloat v1)
+void SGL_OpenGLManager::uniform2f(GLint location, GLfloat v0, GLfloat v1) const noexcept
 {
     glUniform2f(location, v0, v1);
 }
@@ -483,7 +482,7 @@ void SGL_OpenGLManager::uniform2f(GLint location, GLfloat v0, GLfloat v1)
  * @param v2 Third value
  * @return nothing
  */
-void SGL_OpenGLManager::uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
+void SGL_OpenGLManager::uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2) const noexcept
 {
     glUniform3f(location, v0, v1, v2);
 }
@@ -499,7 +498,7 @@ void SGL_OpenGLManager::uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloa
  * @param v3 Fourth value
  * @return nothing
  */
-void SGL_OpenGLManager::uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
+void SGL_OpenGLManager::uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const noexcept
 {
     glUniform4f(location, v0, v1, v2, v3);
 }
@@ -514,7 +513,7 @@ void SGL_OpenGLManager::uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloa
  * @param value Pointer to the content
  * @return nothing
  */
-void SGL_OpenGLManager::uniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+void SGL_OpenGLManager::uniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) const noexcept
 {
     glUniformMatrix4fv(location, count, transpose, value);
 }
@@ -525,7 +524,7 @@ void SGL_OpenGLManager::uniformMatrix4fv(GLint location, GLsizei count, GLboolea
  * @param program Shader program to delete
  * @return nothing
  */
-void SGL_OpenGLManager::deleteProgram(GLuint program)
+void SGL_OpenGLManager::deleteProgram(GLuint program) const noexcept
 {
     glDeleteProgram(program);
 }
@@ -536,7 +535,7 @@ void SGL_OpenGLManager::deleteProgram(GLuint program)
  * @param program Shader program to use
  * @return nothing
  */
-void SGL_OpenGLManager::useProgram(GLuint program)
+void SGL_OpenGLManager::useProgram(GLuint program) noexcept
 {
     currentShaderID = program;
     glUseProgram(program);
@@ -551,7 +550,7 @@ void SGL_OpenGLManager::useProgram(GLuint program)
  * @param length Shader source length
  * @return nothing
  */
-void SGL_OpenGLManager::shaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length)
+void SGL_OpenGLManager::shaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length) const noexcept
 {
     glShaderSource(shader, count, string, length);
 }
@@ -562,7 +561,7 @@ void SGL_OpenGLManager::shaderSource(GLuint shader, GLsizei count, const GLchar 
  * @param shaderType Type of shader to create
  * @return GLuint Created shader ID
  */
-GLuint SGL_OpenGLManager::createShader(GLenum shaderType)
+GLuint SGL_OpenGLManager::createShader(GLenum shaderType) const noexcept
 {
     return glCreateShader(shaderType);
 }
@@ -574,7 +573,7 @@ GLuint SGL_OpenGLManager::createShader(GLenum shaderType)
  * @param shader Shader ID
  * @return nothing
  */
-void SGL_OpenGLManager::compileShader(GLuint shader)
+void SGL_OpenGLManager::compileShader(GLuint shader) const noexcept
 {
     glCompileShader(shader);
 }
@@ -587,7 +586,7 @@ void SGL_OpenGLManager::compileShader(GLuint shader)
  * @param shader Shader ID
  * @return nothing
  */
-void SGL_OpenGLManager::attachShader(GLuint program, GLuint shader)
+void SGL_OpenGLManager::attachShader(GLuint program, GLuint shader) const noexcept
 {
     glAttachShader(program, shader);
 }
@@ -599,7 +598,7 @@ void SGL_OpenGLManager::attachShader(GLuint program, GLuint shader)
  * @param shader Shader ID
  * @return nothing
  */
-void SGL_OpenGLManager::deleteShader(GLuint shader)
+void SGL_OpenGLManager::deleteShader(GLuint shader) const noexcept
 {
     glDeleteShader(shader);
 }
@@ -610,7 +609,7 @@ void SGL_OpenGLManager::deleteShader(GLuint shader)
  *
  * @return nothing
  */
-GLuint SGL_OpenGLManager::createProgram()
+GLuint SGL_OpenGLManager::createProgram() const noexcept
 {
     return glCreateProgram();
 }
@@ -620,7 +619,7 @@ GLuint SGL_OpenGLManager::createProgram()
  *
  * @return nothing
  */
-void SGL_OpenGLManager::linkProgram(GLuint program)
+void SGL_OpenGLManager::linkProgram(GLuint program) const noexcept
 {
     glLinkProgram(program);
 }
@@ -633,7 +632,7 @@ void SGL_OpenGLManager::linkProgram(GLuint program)
  * @param params Returns the requested object parameter.
  * @return nothing
  */
-void SGL_OpenGLManager::getShaderiv(GLuint shader, GLenum pname, GLint *params)
+void SGL_OpenGLManager::getShaderiv(GLuint shader, GLenum pname, GLint *params) const noexcept
 {
     glGetShaderiv(shader, pname, params);
 }
@@ -647,7 +646,7 @@ void SGL_OpenGLManager::getShaderiv(GLuint shader, GLenum pname, GLint *params)
  * @param infoLog Specifies an array of characters that is used to return the information log.
  * @return nothing
  */
-void SGL_OpenGLManager::getShaderInfoLog(GLuint shader,  GLsizei maxLength, GLsizei *length, GLchar *infoLog)
+void SGL_OpenGLManager::getShaderInfoLog(GLuint shader,  GLsizei maxLength, GLsizei *length, GLchar *infoLog) const noexcept
 {
     glGetShaderInfoLog(shader, maxLength, length, infoLog);
 }
@@ -661,7 +660,7 @@ void SGL_OpenGLManager::getShaderInfoLog(GLuint shader,  GLsizei maxLength, GLsi
  * @param params Returns the requested object parameter.
  * @return nothing
  */
-void SGL_OpenGLManager::getProgramiv(GLuint shader, GLenum pname, GLint *params)
+void SGL_OpenGLManager::getProgramiv(GLuint shader, GLenum pname, GLint *params) const noexcept
 {
     glGetProgramiv(shader, pname, params);
 }
@@ -675,7 +674,7 @@ void SGL_OpenGLManager::getProgramiv(GLuint shader, GLenum pname, GLint *params)
  * @param infoLog Specifies an array of characters that is used to return the information log.
  * @return nothing
  */
-void SGL_OpenGLManager::getProgramInfoLog(GLuint shader,  GLsizei maxLength, GLsizei *length, GLchar *infoLog)
+void SGL_OpenGLManager::getProgramInfoLog(GLuint shader,  GLsizei maxLength, GLsizei *length, GLchar *infoLog) const noexcept
 {
     glGetProgramInfoLog(shader, maxLength, length, infoLog);
 }
@@ -686,7 +685,7 @@ void SGL_OpenGLManager::getProgramInfoLog(GLuint shader,  GLsizei maxLength, GLs
  * @param target FBOs to check on
  * @return nothing
  */
-GLenum SGL_OpenGLManager::checkFrameBufferStatus(GLenum target)
+GLenum SGL_OpenGLManager::checkFrameBufferStatus(GLenum target) const noexcept
 {
     return glCheckFramebufferStatus(target);
 }
@@ -701,7 +700,7 @@ GLenum SGL_OpenGLManager::checkFrameBufferStatus(GLenum target)
  * @param level Specifies the mipmap level of the texture image to be attached, which must be 0.
  * @return nothing
  */
-void SGL_OpenGLManager::frameBufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
+void SGL_OpenGLManager::frameBufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level) const noexcept
 {
     glFramebufferTexture2D(target, attachment, textarget, texture, level);
 }
@@ -721,7 +720,7 @@ void SGL_OpenGLManager::frameBufferTexture2D(GLenum target, GLenum attachment, G
  * @param filter  Specifies the interpolation to be applied if the image is stretched. Must be GL_NEAREST or GL_LINEAR. 
  * @return nothing
  */
-void SGL_OpenGLManager::blitFrameBuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter)
+void SGL_OpenGLManager::blitFrameBuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter) const noexcept
 {
     glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
 }
@@ -731,7 +730,7 @@ void SGL_OpenGLManager::blitFrameBuffer(GLint srcX0, GLint srcY0, GLint srcX1, G
  * @brief Unbinds active VBO and EBO
  * @return nothing
  */
-void SGL_OpenGLManager::clearBuffers()
+void SGL_OpenGLManager::clearBuffers() noexcept
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -743,7 +742,7 @@ void SGL_OpenGLManager::clearBuffers()
  * @param name the VBO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::deleteVBO(const std::string &name)
+void SGL_OpenGLManager::deleteVBO(const std::string &name) noexcept
 {
     if (!VBO.empty() && VBO.find(name) == VBO.end())
     {
@@ -759,7 +758,7 @@ void SGL_OpenGLManager::deleteVBO(const std::string &name)
  * @param name the EBO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::deleteEBO(const std::string &name)
+void SGL_OpenGLManager::deleteEBO(const std::string &name) noexcept
 {
     if (!EBO.empty() && EBO.find(name) == EBO.end())
     {
@@ -774,7 +773,7 @@ void SGL_OpenGLManager::deleteEBO(const std::string &name)
  * @param name the VAO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::deleteVAO(const std::string &name)
+void SGL_OpenGLManager::deleteVAO(const std::string &name) noexcept
 {
     if (!VAO.empty() && VAO.find(name) == VAO.end())
     {
@@ -790,7 +789,7 @@ void SGL_OpenGLManager::deleteVAO(const std::string &name)
  * @param name the FBO identifier
  * @return nothing
  */
-void SGL_OpenGLManager::deleteFBO(const std::string &name)
+void SGL_OpenGLManager::deleteFBO(const std::string &name) noexcept
 {
     if (!FBO.empty() && FBO.find(name) == FBO.end())
     {
@@ -804,7 +803,7 @@ void SGL_OpenGLManager::deleteFBO(const std::string &name)
  * @brief Unbind VBO
  * @return nothing
  */
-void SGL_OpenGLManager::unbindVBO()
+void SGL_OpenGLManager::unbindVBO() noexcept
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     currentGLBuffers.currentVBO.name = "NO_VBO";
@@ -816,7 +815,7 @@ void SGL_OpenGLManager::unbindVBO()
  * @brief Unbind EBO
  * @return nothing
  */
-void SGL_OpenGLManager::unbindEBO()
+void SGL_OpenGLManager::unbindEBO() noexcept
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     currentGLBuffers.currentEBO.name = "NO_EBO";
@@ -828,7 +827,7 @@ void SGL_OpenGLManager::unbindEBO()
  * @brief Unbind VAO
  * @return nothing
  */
-void SGL_OpenGLManager::unbindVAO()
+void SGL_OpenGLManager::unbindVAO() noexcept
 {
     glBindVertexArray(0);
     currentGLBuffers.currentVAO.name = "NO_VAO";
@@ -840,7 +839,7 @@ void SGL_OpenGLManager::unbindVAO()
  * @brief Unbind FBO
  * @return nothing
  */
-void SGL_OpenGLManager::unbindFBO()
+void SGL_OpenGLManager::unbindFBO() noexcept
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -861,7 +860,7 @@ void SGL_OpenGLManager::unbindFBO()
  * @param value Enable depth testing?
  * @return nothing
  */
-void SGL_OpenGLManager::depthTesting(bool value)
+void SGL_OpenGLManager::depthTesting(bool value) noexcept
 {
     if (value)
     {
@@ -881,7 +880,7 @@ void SGL_OpenGLManager::depthTesting(bool value)
  * @param value Enable depth mask?
  * @return nothing
  */
-void SGL_OpenGLManager::depthMask(bool value)
+void SGL_OpenGLManager::depthMask(bool value) noexcept
 {
     if (value)
     {
@@ -900,7 +899,7 @@ void SGL_OpenGLManager::depthMask(bool value)
  * @param value Enable face culling?
  * @return nothing
  */
-void SGL_OpenGLManager::faceCulling(bool value)
+void SGL_OpenGLManager::faceCulling(bool value) noexcept
 {
     if (value)
     {
@@ -921,7 +920,7 @@ void SGL_OpenGLManager::faceCulling(bool value)
  * @param type Blending mode to use
  * @return nothing
  */
-void SGL_OpenGLManager::blending(bool value, BLENDING_TYPE type, GLenum sfactor, GLenum dfactor)
+void SGL_OpenGLManager::blending(bool value, BLENDING_TYPE type, GLenum sfactor, GLenum dfactor) noexcept
 {
     if (value || !(type == BLENDING_TYPE::NONE))
     {
@@ -967,7 +966,7 @@ void SGL_OpenGLManager::blending(bool value, BLENDING_TYPE type, GLenum sfactor,
  * @param h New h value
  * @return nothing
  */
-void SGL_OpenGLManager::resizeGL(int x, int y, int w, int h)
+void SGL_OpenGLManager::resizeGL(int x, int y, int w, int h) const noexcept
 {
     glViewport(x, y, w, h);
     // SGL_OpenGLManager::pLog->print("New window width: ", w);
@@ -979,7 +978,7 @@ void SGL_OpenGLManager::resizeGL(int x, int y, int w, int h)
  * @param newColor The new clear screen color
  * @return nothing
  */
-void SGL_OpenGLManager::setClearColor(SGL_Color &newColor)
+void SGL_OpenGLManager::setClearColor(SGL_Color &newColor) const noexcept
 {
     glClearColor(newColor.r, newColor.g, newColor.b, newColor.a);
 
@@ -990,7 +989,7 @@ void SGL_OpenGLManager::setClearColor(SGL_Color &newColor)
  * @brief Clears the color buffer
  * @return nothing
  */
-void SGL_OpenGLManager::clearColorBuffer()
+void SGL_OpenGLManager::clearColorBuffer() const noexcept
 {
     glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -1000,7 +999,7 @@ void SGL_OpenGLManager::clearColorBuffer()
  * @brief Clears the depth buffer
  * @return nothing
  */
-void SGL_OpenGLManager::clearDepthBuffer()
+void SGL_OpenGLManager::clearDepthBuffer() const noexcept
 {
     glClear(GL_DEPTH_BUFFER_BIT);
 }
@@ -1010,7 +1009,7 @@ void SGL_OpenGLManager::clearDepthBuffer()
  * @brief Clears both the color and depth buffer
  * @return nothing
  */
-void SGL_OpenGLManager::clearColorAndDepthBuffers()
+void SGL_OpenGLManager::clearColorAndDepthBuffers() const noexcept
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -1025,7 +1024,7 @@ void SGL_OpenGLManager::clearColorAndDepthBuffers()
  * @param usage Specifies the expected usage pattern of the data store.
  * @return nothing
  */
-void SGL_OpenGLManager::bufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage)
+void SGL_OpenGLManager::bufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage) const noexcept
 {
     glBufferData(target, size, data, usage);
 }
@@ -1039,7 +1038,7 @@ void SGL_OpenGLManager::bufferData(GLenum target, GLsizeiptr size, const GLvoid*
  * @param data Specifies a pointer to data that will be copied into the data store for initialization, or NULL if no data is to be copied.
  * @return nothing
  */
-void SGL_OpenGLManager::bufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data)
+void SGL_OpenGLManager::bufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data) const noexcept
 {
     glBufferSubData(target, offset, size, data);
 }
@@ -1051,7 +1050,7 @@ void SGL_OpenGLManager::bufferSubData(GLenum target, GLintptr offset, GLsizeiptr
  * @param texture Texture ID to activate
  * @return nothing
  */
-void SGL_OpenGLManager::activeTexture(GLenum texture)
+void SGL_OpenGLManager::activeTexture(GLenum texture) noexcept
 {
     currentTextureID = texture;
     glActiveTexture(texture);
@@ -1066,7 +1065,7 @@ void SGL_OpenGLManager::activeTexture(GLenum texture)
  * @param count Specifies the number of indices to be rendered.
  * @return nothing
  */
-void SGL_OpenGLManager::drawArrays(GLenum mode, GLint first, GLsizei count)
+void SGL_OpenGLManager::drawArrays(GLenum mode, GLint first, GLsizei count) const noexcept
 {
     glDrawArrays(mode, first, count);
 }
@@ -1080,7 +1079,7 @@ void SGL_OpenGLManager::drawArrays(GLenum mode, GLint first, GLsizei count)
  * @param instancecount Specifies the number of instances of the specified range of indices to be rendered
  * @return nothing
  */
-void SGL_OpenGLManager::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount)
+void SGL_OpenGLManager::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount) const noexcept
 {
     glDrawArraysInstanced(mode, first, count, instancecount);
 }
@@ -1095,7 +1094,7 @@ void SGL_OpenGLManager::drawArraysInstanced(GLenum mode, GLint first, GLsizei co
  * @param instancecount  Specifies the number of instances of the specified range of indices to be rendered.
  * @return nothing
  */
-void SGL_OpenGLManager::drawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount)
+void SGL_OpenGLManager::drawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount) const noexcept
 {
     glDrawElementsInstanced(mode, count, type, indices, instancecount);
 }
@@ -1105,7 +1104,7 @@ void SGL_OpenGLManager::drawElementsInstanced(GLenum mode, GLsizei count, GLenum
  * @param index Specifies the index of the generic vertex attribute to be enabled or disabled.
  * @return nothing
  */
-void SGL_OpenGLManager::enableVertexAttribArray(GLuint index)
+void SGL_OpenGLManager::enableVertexAttribArray(GLuint index) const noexcept
 {
     glEnableVertexAttribArray(index);
 }
@@ -1116,7 +1115,7 @@ void SGL_OpenGLManager::enableVertexAttribArray(GLuint index)
  * @param divisor  Specify the number of instances that will pass between updates of the generic attribute at slot index.
  * @return nothing
  */
-void SGL_OpenGLManager::vertexAttribDivisor(GLuint index, GLint divisor)
+void SGL_OpenGLManager::vertexAttribDivisor(GLuint index, GLint divisor) const noexcept
 {
     glVertexAttribDivisor(index, divisor);
 }
@@ -1133,7 +1132,7 @@ void SGL_OpenGLManager::vertexAttribDivisor(GLuint index, GLint divisor)
  * @param pointer Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the GL_ARRAY_BUFFER target. The initial value is 0.
  * @return nothing
  */
-void SGL_OpenGLManager::vertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer)
+void SGL_OpenGLManager::vertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer) const noexcept
 {
     glVertexAttribPointer(index, size, type, normalized, stride, pointer);
 }
@@ -1143,7 +1142,7 @@ void SGL_OpenGLManager::vertexAttribPointer(GLuint index, GLint size, GLenum typ
  * @brief Check for anyhow internal OpenGL errors
  * @return nothing
  */
-void SGL_OpenGLManager::checkForGLErrors()
+void SGL_OpenGLManager::checkForGLErrors() noexcept
 {
     GLenum errCode;
     const GLubyte *errString;
@@ -1171,7 +1170,7 @@ void SGL_OpenGLManager::checkForGLErrors()
  * @brief Returns the total active VBOs
  * @return int
  */
-int  SGL_OpenGLManager::totalVBO()
+int  SGL_OpenGLManager::totalVBO() const noexcept
 {
     return VBO.size();
 }
@@ -1180,7 +1179,7 @@ int  SGL_OpenGLManager::totalVBO()
  * @brief Returns the total active VAOs
  * @return int
  */
-int SGL_OpenGLManager::totalVAO()
+int SGL_OpenGLManager::totalVAO() const noexcept
 {
     return VAO.size();
 }
@@ -1189,7 +1188,7 @@ int SGL_OpenGLManager::totalVAO()
  * @brief Returns the total active EBOs
  * @return int
  */
-int SGL_OpenGLManager::totalEBO()
+int SGL_OpenGLManager::totalEBO() const noexcept
 {
     return EBO.size();
 }
@@ -1198,7 +1197,7 @@ int SGL_OpenGLManager::totalEBO()
  * @brief Returns the total active FBOs
  * @return int
  */
-int SGL_OpenGLManager::totalFBO()
+int SGL_OpenGLManager::totalFBO() const noexcept
 {
     return FBO.size();
 }

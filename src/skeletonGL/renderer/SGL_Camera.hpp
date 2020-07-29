@@ -1,12 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 
 /**
  * @file    src/skeletonGL/utility/SGL_Camera.cpp
@@ -59,19 +59,19 @@ public:
     // Configure the orthographic shader and initial camera position
     void initialize(int windowW, int windowH);
     // Updates the MVP matrix
-    void updateCamera(bool forceUpdate = false);
+    void updateCamera(bool forceUpdate = false) noexcept;
     // Switches between the available camera modes, check the data structures header file for more info
-    void cameraMode(SGL_Shader shader, CAMERA_MODE mode = CAMERA_MODE::DEFAULT);
+    void cameraMode(SGL_Shader shader, CAMERA_MODE mode = CAMERA_MODE::DEFAULT) noexcept;
     // Move the camera
-    void setPosition(glm::vec2 pos);
+    void setPosition(glm::vec2 pos) noexcept;
     // Scale the camera (-1.0 <-> 1.0)
-    void setScale(float newScale);
+    void setScale(float newScale) noexcept;
     // Returns the final matrix
-    glm::mat4 getCameraMatrix();
+    glm::mat4 getCameraMatrix() const noexcept;
     // Returns the overlay matrix
-    glm::mat4 getOverlayMatrix();
+    glm::mat4 getOverlayMatrix() const noexcept;
     // Returns the camera position
-    glm::vec4 getPosition();
+    glm::vec4 getPosition() const noexcept;
 };
 
 #endif // SRC_SKELETONGL_RENDERER_CAMERA_HPP

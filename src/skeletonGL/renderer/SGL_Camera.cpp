@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 /**
  * @file    src/skeletonGL/utility/SGL_PostProcessor.hpp
  * @author  TSURA @ NEOHEX.XYZ
@@ -79,8 +78,13 @@ void SGL_Camera::initialize(int windowW, int windowH)
  * @param newScale Float with the new value (-1.0 <-> 1.0)
  * @return nothing
  */
-void SGL_Camera::setScale(float newScale)
+void SGL_Camera::setScale(float newScale) noexcept
 {
+    if (newScale < -1.0 )
+        newScale = -1.0;
+    if (newScale > 1.0 )
+        newScale = 1.0;
+
     this->pScale = newScale;
 }
 
@@ -91,7 +95,7 @@ void SGL_Camera::setScale(float newScale)
  * @param forceUpdate Bool to force the new values on the matrices
  * @return nothing
  */
-void SGL_Camera::updateCamera(bool forceUpdate)
+void SGL_Camera::updateCamera(bool forceUpdate) noexcept
 {
     if (pDeltaCameraPos != pCameraPos || pDeltaScale != pScale)
         pUpdateMatrix = true;
@@ -119,7 +123,7 @@ void SGL_Camera::updateCamera(bool forceUpdate)
  * @param mode Camera mode to use (default or overlay)
  * @return nothing
  */
-void SGL_Camera::cameraMode(SGL_Shader shader, CAMERA_MODE mode)
+void SGL_Camera::cameraMode(SGL_Shader shader, CAMERA_MODE mode) noexcept
 {
     if (mode == DEFAULT)
     {
@@ -140,7 +144,7 @@ void SGL_Camera::cameraMode(SGL_Shader shader, CAMERA_MODE mode)
  * @param pos GLM::vec2 (x, y)
  * @return nothing
  */
-void SGL_Camera::setPosition(glm::vec2 pos)
+void SGL_Camera::setPosition(glm::vec2 pos) noexcept
 {
     this->pCameraPos = pos;
 }
@@ -150,7 +154,7 @@ void SGL_Camera::setPosition(glm::vec2 pos)
  *
  * @return glm::mat4 The camera matrix
  */
-glm::mat4 SGL_Camera::getCameraMatrix()
+glm::mat4 SGL_Camera::getCameraMatrix() const noexcept
 {
     return this->pCameraMatrix;
 }
@@ -161,7 +165,7 @@ glm::mat4 SGL_Camera::getCameraMatrix()
  *
  * @return glm::mat4 The overlay mode matrix
  */
-glm::mat4 SGL_Camera::getOverlayMatrix()
+glm::mat4 SGL_Camera::getOverlayMatrix() const noexcept
 {
     return this->pOverlayMatrix;
 }
@@ -172,7 +176,7 @@ glm::mat4 SGL_Camera::getOverlayMatrix()
  *
  * @return glm::mat4 The overlay mode matrix
  */
-glm::vec4 SGL_Camera::getPosition()
+glm::vec4 SGL_Camera::getPosition() const noexcept
 {
     return glm::vec4(this->pCameraPos.x, this->pCameraPos.y, pScreenW, pScreenH);
 }

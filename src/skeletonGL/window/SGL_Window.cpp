@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 
 /**
  * @file    src/skeletonGL/window/SGL_Window.cpp
@@ -591,7 +590,7 @@ void SGL_Window::setCameraMode(CAMERA_MODE mode)
  * @param mode Mode to be implemented
  * @return int Horizontal camera position
  */
-int SGL_Window::getCameraPosX()
+int SGL_Window::getCameraPosX() const
 {
     return static_cast<int>(this->pCamera->getPosition().x);
 }
@@ -601,7 +600,7 @@ int SGL_Window::getCameraPosX()
  * @brief Returns the vertical position of the camera
  * @return int Vertical camera position
  */
-int SGL_Window::getCameraPosY()
+int SGL_Window::getCameraPosY() const
 {
     return static_cast<int>(this->pCamera->getPosition().y);
 }
@@ -611,7 +610,7 @@ int SGL_Window::getCameraPosY()
  * @brief Returns the width of the camera
  * @return int Camera's width
  */
-int SGL_Window::getCameraPosW()
+int SGL_Window::getCameraPosW() const
 {
     return static_cast<int>(this->pCamera->getPosition().z);
 }
@@ -620,7 +619,7 @@ int SGL_Window::getCameraPosW()
  * @brief Returns the height of the camera
  * @return int Camera's height
  */
-int SGL_Window::getCameraPosH()
+int SGL_Window::getCameraPosH() const
 {
     return static_cast<int>(this->pCamera->getPosition().w);
 }
@@ -705,7 +704,7 @@ void SGL_Window::resizeWindow(int w, int h, bool scaleInternalResolution)
  * @brief Does the window have the user's keyboard focus?
  * @return bool
  */
-bool SGL_Window::hasKeyboardFocus()
+bool SGL_Window::hasKeyboardFocus() const
 {
     return pHasKeyboardFocus;
 }
@@ -715,7 +714,7 @@ bool SGL_Window::hasKeyboardFocus()
  * @brief Does the window have the user's mouse focus?
  * @return bool
  */
-bool SGL_Window::hasMouseFocus()
+bool SGL_Window::hasMouseFocus() const
 {
     return pHasMouseFocus;
 }
@@ -1051,7 +1050,7 @@ void SGL_Window::endFrame()
  * @brief Returns the time it took to render the frame
  * @return double Delta time
  */
-double SGL_Window::getRenderDeltaTime()
+double SGL_Window::getRenderDeltaTime() const
 {
     return pDeltaTimeMS;
     //return pChronoDeltaTime;
@@ -1100,7 +1099,7 @@ void SGL_Window::setConfuseEffect(bool confuse)
  * @brief Check for any potential errors, useful to debug a particular render or gl process
  * @return nothing
  */
-void SGL_Window::checkForErrors()
+void SGL_Window::checkForErrors() const
 {
     pOGLM->checkForGLErrors();
 }

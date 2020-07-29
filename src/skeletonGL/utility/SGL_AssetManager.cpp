@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 /**
  * @file    src/skeletonGL/utility/SGL_AssetManager.cpp
  * @author  TSURA @ NEOHEX.XYZ
@@ -88,12 +87,13 @@ SGL_Shader SGL_AssetManager::loadShaders(const GLchar *vertexSource, const GLcha
  * @param name Name of the shader to be returned
  * @return SGL_Shader The requested shader
  */
-SGL_Shader SGL_AssetManager::getShader(std::string name)
+SGL_Shader SGL_AssetManager::getShader(std::string name) const
 {
     std::string msg = "SGL_AssetManager::getShader | Shader not found: " + name;
     if (shaders.count(name) <= 0)
         throw SGL_Exception(msg.c_str());
-    return shaders[name];
+
+    return shaders.at(name);
 }
 
 
@@ -126,12 +126,12 @@ SGL_Texture SGL_AssetManager::loadTexture(const GLchar *file, GLboolean alpha, s
  * @param name String to the image file
  * @return SGL_Texture The requested texture or the default one
  */
-SGL_Texture SGL_AssetManager::getTexture(std::string name)
+SGL_Texture SGL_AssetManager::getTexture(std::string name) const
 {
     if (textures.count(name) <= 0)
-        return textures[SGL::DEFAULT_TEXTURE_NAME];
+        return textures.at(SGL::DEFAULT_TEXTURE_NAME);
     else
-        return textures[name];
+        return textures.at(name);
 }
 
 /**
@@ -149,6 +149,7 @@ SGL_Shader SGL_AssetManager::loadShaderFromFile(SHADER_TYPE shaderType, const GL
     std::string vertexCode;
     std::string fragmentCode;
     std::string geometryCode;
+
 
     try
     {
@@ -268,7 +269,7 @@ SGL_Texture SGL_AssetManager::loadTextureFromFile(const GLchar *file, GLboolean 
  * @brief Return the total memory allocated by this process
  * @return int Total memory in bytes
  */
-int SGL_AssetManager::getTextureMemoryGPU()
+int SGL_AssetManager::getTextureMemoryGPU() const
 {
     return pTextureGPUMemory;
 }

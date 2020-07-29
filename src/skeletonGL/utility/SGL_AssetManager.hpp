@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 /**
  * @file    src/skeletonGL/utility/SGL_As.cpp
  * @author  TSURA @ NEOHEX.XYZ
@@ -61,12 +60,15 @@ public:
 
     //loads and generates a shader program from a source file
     SGL_Shader loadShaders(const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource, std::string name, SHADER_TYPE shaderType);
-    //finds and retrieves a stored shader, throws on error (can't render without a shader)
-    SGL_Shader getShader(std::string name);
     //loads and generates a texture from a file, throws SGL_Exception if shit happens
     SGL_Texture loadTexture(const GLchar *file, GLboolean alpha, std::string name);
+
+    // Finds and retrieves a stored shader, throws on error (can't render without a shader)
+    // Note that these const functions used to return map[key] instead of map.at(key) and thus
+    // weren't "constable" since map[key] creates an entry if not found
+    SGL_Shader getShader(std::string name) const;
     //finds and retrieves a stored texture
-    SGL_Texture getTexture(std::string name);
+    SGL_Texture getTexture(std::string name) const;
 
     // This map contains an accessible container
     // with all the loaded shaders and their respective
@@ -76,6 +78,6 @@ public:
     std::map<std::string, SHADER_TYPE> shaderTypes;
 
     // Returns the total GPU memory allocated
-    int getTextureMemoryGPU();
+    int getTextureMemoryGPU() const;
 };
 #endif // SRC_SKELETONGL_ASSETS_ASSET_MANAGER_HPP

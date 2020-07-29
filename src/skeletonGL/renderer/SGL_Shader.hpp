@@ -75,30 +75,30 @@ public:
     ~SGL_Shader();
 
     // Activates the shader
-    SGL_Shader &use(SGL_OpenGLManager &oglm);
+    SGL_Shader &use(SGL_OpenGLManager &oglm) noexcept;
     // Deactivates the shader
-    void unbind(SGL_OpenGLManager &oglm);
+    void unbind(SGL_OpenGLManager &oglm) const noexcept;
     // Compiles, links, and enables the shader
-    void compileShaders(SGL_OpenGLManager &oglm, SHADER_TYPE shaderType, const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource = nullptr);
+    void compileShaders(SGL_OpenGLManager &oglm, SHADER_TYPE shaderType, const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource = nullptr) noexcept;
 
     // Set a single float value
-    void setFloat(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat value, GLboolean useShader = false);
+    void setFloat(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat value, GLboolean useShader = false) noexcept;
     // Set a single integer value
-    void setInteger(SGL_OpenGLManager &oglm, const GLchar *name, GLint value, GLboolean useShader = false);
+    void setInteger(SGL_OpenGLManager &oglm, const GLchar *name, GLint value, GLboolean useShader = false) noexcept;
     // Set a 2D vector of floats
-    void setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLboolean useShader = false);
+    void setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLboolean useShader = false) noexcept;
     // Set a 2D vector of floats
-    void setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec2 value, GLboolean useShader = false);
+    void setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec2 value, GLboolean useShader = false) noexcept;
     // Set a 3D vector of floats
-    void setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLboolean useShader = false);
+    void setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLboolean useShader = false) noexcept;
     // Set a 3D vector of floats
-    void setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec3 value, GLboolean useShader = false);
+    void setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec3 value, GLboolean useShader = false) noexcept;
     // Set a 4D vector of floats
-    void setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean useShader = false);
+    void setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean useShader = false) noexcept;
     // Set a 4D vector of floats
-    void setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec4 value, GLboolean useShader = false);
+    void setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec4 value, GLboolean useShader = false) noexcept;
     // Set a 4x4 matrix of floats
-    void setMatrix4(SGL_OpenGLManager &oglm, const GLchar *name, glm::mat4 matrix, GLboolean useShader = false);
+    void setMatrix4(SGL_OpenGLManager &oglm, const GLchar *name, glm::mat4 matrix, GLboolean useShader = false) noexcept;
 };
 
 

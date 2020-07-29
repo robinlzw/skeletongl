@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 
 /**
  * @file    src/skeletonGL/utility/SGL_Utility.hpp
@@ -59,7 +58,7 @@ public:
             pErrMsg = "(╥﹏╥) EXCEPTION: ";
             pErrMsg.append(errMsg);
         }
-    const char* what() const throw()
+    const char* what() const noexcept
         {
             return pErrMsg.c_str();
         }
@@ -77,7 +76,7 @@ struct SGL_DeviceInfo
     unsigned int majorSDLVer, minorSDLVer, patchSDLVer;                      ///< Compiled SDL2 versions
     unsigned int linkedMajorSDLVer, linkedMinorSDLVer, linkedPatchSDLVer;    ///< Linked SDL2 version
 
-    inline void printDeviceInfo()
+    inline void printDeviceInfo() const noexcept
         {
             std::stringstream ss;
             SGL_Log("<--- Hardware Specs --->", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_GREEN);
@@ -131,13 +130,13 @@ private:
     const std::string pNotFound = "";           ///< Default return value for not found request
 
     // Only one pToken allowed between each key and value
-    bool pCheckForMultipleTokens(const char token, const std::string &str);
+    bool pCheckForMultipleTokens(const char token, const std::string &str) const noexcept;
 public:
     SGL_IniParser(const std::string &filePath);
     // Get value as a C++ string
-    std::string getRawValue(const std::string section, const std::string key);
+    std::string getRawValue(const std::string section, const std::string key) const noexcept;
     // Get value as a 32bit int
-    int getIntValue(const std::string section, const std::string key);
+    int getIntValue(const std::string section, const std::string key)  const noexcept;
 };
 
 

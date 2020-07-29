@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 /**
  * @file    src/skeletonGL/utility/SGL_Renderer.hpp
  * @author  TSURA @ NEOHEX.XYZ
@@ -64,7 +63,7 @@ public:
     BLENDING_TYPE blending;                      ///< Blending type
 
     // Reset the UV coordinates to show the full texture
-    void resetUVCoords()
+    void resetUVCoords() noexcept
         {
             // Empty texture
             if (texture.width <= 0)
@@ -74,7 +73,7 @@ public:
         }
 
     // Specify a custom quad as UV coordinates
-    void changeUVCoords(int x, int y, int w, int h)
+    void changeUVCoords(int x, int y, int w, int h) noexcept
         {
             // stb_image can automatically flip loaded textures on their y-axis
             // to conform with opengl's flipped y-axis, this must be taken into
@@ -207,22 +206,22 @@ private:
     // have independent VBO, VAO and shaders
 
     // Load all the required line buffers
-    void loadLineBuffers(SGL_Shader shader);
-    void loadLineBatchBuffers(SGL_Shader shader);
+    void loadLineBuffers(SGL_Shader shader) noexcept;
+    void loadLineBatchBuffers(SGL_Shader shader) noexcept;
 
     // Load all the required pixel buffers
-    void loadPointBuffers(SGL_Shader shader);
-    void loadPixelBatchBuffers(SGL_Shader shader);
+    void loadPointBuffers(SGL_Shader shader) noexcept;
+    void loadPixelBatchBuffers(SGL_Shader shader) noexcept;
 
     // Load all the required sprite buffers
-    void loadSpriteBuffers(SGL_Shader shader);
-    void loadSpriteBatchBuffers(SGL_Shader shader);
+    void loadSpriteBuffers(SGL_Shader shader) noexcept;
+    void loadSpriteBatchBuffers(SGL_Shader shader) noexcept;
 
     // Load and generate the ttf font
     void generateFont(const std::string fontPath);
 
     // Generate the lookup table for bitmap characters
-    void generateBitmapFont();
+    void generateBitmapFont() noexcept;
 
     // Disable all copy and move constructors
     SGL_Renderer(const SGL_Renderer&) = delete;
@@ -253,12 +252,12 @@ public:
     void renderText(SGL_Text &text);
 
     // Renders text as bitmap characters
-    void renderBitmapText(SGL_Bitmap_Text &text);
+    void renderBitmapText(SGL_Bitmap_Text &text) const;
     // The bitmap font renderer requires a default texture
     // void renderBitmapText(std::string text, GLfloat x, GLfloat y, GLfloat scale, SGL_Color color);
 
     // Render a sprite
-    void renderSprite(const SGL_Sprite &sprite);
+    void renderSprite(const SGL_Sprite &sprite) const;
 
     // EXPERIMENTAL
     void renderSpriteBatch(const SGL_Sprite &sprite);

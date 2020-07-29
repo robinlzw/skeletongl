@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 /**
  * @file    src/skeletonGL/utility/SGL_Texture.cpp
  * @author  TSURA @ NEOHEX.XYZ
@@ -58,7 +57,7 @@ SGL_Texture::~SGL_Texture()
  *
  * @return nothing
  * */
-void SGL_Texture::generate(SGL_OpenGLManager &oglm, GLuint width, GLuint height, unsigned char *data)
+void SGL_Texture::generate(SGL_OpenGLManager &oglm, GLuint width, GLuint height, unsigned char *data) noexcept
 {
     oglm.genTextures(1, &this->ID);
     this->width = width;
@@ -79,7 +78,7 @@ void SGL_Texture::generate(SGL_OpenGLManager &oglm, GLuint width, GLuint height,
  * @brief Activates the texture
  * @return nothing
  */
-void SGL_Texture::bind(SGL_OpenGLManager &oglm) const
+void SGL_Texture::bind(SGL_OpenGLManager &oglm) const noexcept
 {
     oglm.bindTexture(GL_TEXTURE_2D, this->ID);
 }

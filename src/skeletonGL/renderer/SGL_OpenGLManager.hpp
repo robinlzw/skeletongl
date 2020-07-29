@@ -1,12 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 
 /**
  * @file    src/skeletonGL/utility/SGL_OpenGLManager.hpp
@@ -70,157 +70,162 @@ public:
     // Destructor
     ~SGL_OpenGLManager();
 
+    // Most of these functions are wrappers for C-style OpenGL calls that rely on error codes, not exceptions
+    // or object modifications
+
     // Create a VBO
-    void createVBO(const std::string &name);
+    void createVBO(const std::string &name) noexcept;
     // Create an EBO
-    void createEBO(const std::string &name);
+    void createEBO(const std::string &name) noexcept;
     // Create a VAO
-    void createVAO(const std::string &name);
+    void createVAO(const std::string &name) noexcept;
     // Create a FBO
-    void createFBO(const std::string &name);
+    void createFBO(const std::string &name) noexcept;
     // Create a RBO
-    void createRBO(const std::string &name);
+    void createRBO(const std::string &name) noexcept;
     // Bind the selected buffer
-    void bindVBO(const std::string &name);
+    void bindVBO(const std::string &name) noexcept;
     // Bind the selected buffer
-    void bindEBO(const std::string &name);
+    void bindEBO(const std::string &name) noexcept;
     // Bind the selected VAO
-    void bindVAO(const std::string &name);
+    void bindVAO(const std::string &name) noexcept;
     // Bind the selected FBO
-    void bindFBO(const std::string &name, GLCONSTANTS::FBO type = GLCONSTANTS::RW);
+    void bindFBO(const std::string &name, GLCONSTANTS::FBO type = GLCONSTANTS::RW) noexcept;
     // Unbind the current buffer
-    void unbindVBO();
+    void unbindVBO() noexcept;
     // Unbind the current EBO
-    void unbindEBO();
+    void unbindEBO() noexcept;
     // Unbind the current VAO
-    void unbindVAO();
+    void unbindVAO() noexcept;
     // Unbind the current FBO
-    void unbindFBO();
+    void unbindFBO() noexcept;
     // Cleans all buffer storage
-    void clearBuffers();
+    void clearBuffers() noexcept;
     // Deletes all the VBO
-    void deleteVBO(const std::string &name);
+    void deleteVBO(const std::string &name) noexcept;
     // Deletes all the EBO
-    void deleteEBO(const std::string &name);
+    void deleteEBO(const std::string &name) noexcept;
     // Deletes all the VAO
-    void deleteVAO(const std::string &name);
+    void deleteVAO(const std::string &name) noexcept;
     // Deletes all the FBO
-    void deleteFBO(const std::string &name);
+    void deleteFBO(const std::string &name) noexcept;
 
     // Activates the specified shader program
-    void useProgram(GLuint program);
+    void useProgram(GLuint program) noexcept;
     // Creates a shader
-    GLuint createShader(GLenum shaderType);
+    GLuint createShader(GLenum shaderType) const noexcept;
     // Compile a shader program
-    void compileShader(GLuint shader);
+    void compileShader(GLuint shader) const noexcept;
     // Specify the shader data
-    void shaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);
+    void shaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length) const noexcept;
     // Link shaders into a program
-    void attachShader(GLuint program, GLuint shader);
+    void attachShader(GLuint program, GLuint shader) const noexcept;
     // Delete a shader
-    void deleteShader(GLuint shader);
+    void deleteShader(GLuint shader) const noexcept;
     // Create the shader program
-    GLuint createProgram();
+    GLuint createProgram() const noexcept;
     // Link a compiled shader program
-    void linkProgram(GLuint program);
+    void linkProgram(GLuint program) const noexcept;
     // Get shader data
-    void getShaderiv(GLuint shader, GLenum pname, GLint *params);
+    void getShaderiv(GLuint shader, GLenum pname, GLint *params) const noexcept;
     // Gets the shader info log
-    void getShaderInfoLog(GLuint shader,  GLsizei maxLength, GLsizei *length, GLchar *infoLog);
+    void getShaderInfoLog(GLuint shader,  GLsizei maxLength, GLsizei *length, GLchar *infoLog) const noexcept;
     // Gets them program data
-    void getProgramiv(GLuint shader, GLenum pname, GLint *params);
+    void getProgramiv(GLuint shader, GLenum pname, GLint *params) const noexcept;
     // Gets the program log
-    void getProgramInfoLog(GLuint shader,  GLsizei maxLength, GLsizei *length, GLchar *infoLog);
+    void getProgramInfoLog(GLuint shader,  GLsizei maxLength, GLsizei *length, GLchar *infoLog) const noexcept;
 
     // Sets a uniform location from the specified shader
-    GLint getUniformLocation(GLuint program, const GLchar *name);
+    GLint getUniformLocation(GLuint program, const GLchar *name) const noexcept;
     // Sets a float uniform location from the specified shader
-    void uniform1f(GLint location, GLfloat v0);
+    void uniform1f(GLint location, GLfloat v0) const noexcept;
     // Sets an integer location from the specified shader
-    void uniform1i(GLint location, GLint v0);
+    void uniform1i(GLint location, GLint v0) const noexcept;
     // Sets a two floats uniforms from the specified shader
-    void uniform2f(GLint location, GLfloat v0, GLfloat v1);
+    void uniform2f(GLint location, GLfloat v0, GLfloat v1) const noexcept;
     // Sets a three float uniforms from the specified shader
-    void uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
+    void uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2) const noexcept;
     // Sets a four float uniforms from the specified shader
-    void uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
+    void uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const noexcept;
     // Sets a 4x4 float uniform matrix from the specified shader
-    void uniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    void uniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) const noexcept;
     // Sets a 2fv from the specified shader
-    void uniform2fv(GLint location, GLsizei count, const GLfloat *value);
+    void uniform2fv(GLint location, GLsizei count, const GLfloat *value) const noexcept;
     // Sets a 1iv from the specified shader
-    void uniform1iv(GLint location, GLsizei count, const GLint *value);
+    void uniform1iv(GLint location, GLsizei count, const GLint *value) const noexcept;
     // Sets a 1fv from the specified shader
-    void uniform1fv(GLint location, GLsizei count, const GLfloat *value);
+    void uniform1fv(GLint location, GLsizei count, const GLfloat *value) const noexcept;
 
     // Sets the clear screen color
-    void setClearColor(SGL_Color &newColor);
+    void setClearColor(SGL_Color &newColor) const noexcept;
     // Clears the color buffer
-    void clearColorBuffer();
+    void clearColorBuffer() const noexcept;
     // Clears the depth buffer (UNUSED AS OF v 1.0)
-    void clearDepthBuffer();
+    void clearDepthBuffer() const noexcept;
     // Clears both color and depth buffers
-    void clearColorAndDepthBuffers();
+    void clearColorAndDepthBuffers() const noexcept;
     // Check for depth testing?
-    void depthTesting(bool value);
+    void depthTesting(bool value) noexcept;
     // Enable depth mask?
-    void depthMask(bool value);
+    void depthMask(bool value) noexcept;
     // Enable face culling?
-    void faceCulling(bool value);
+    void faceCulling(bool value) noexcept;
     // Set blending type
-    void blending(bool value = true, BLENDING_TYPE type = BLENDING_TYPE::DEFAULT_RENDERING, GLenum sfactor = 0, GLenum dfactor = 0);
+    void blending(bool value = true, BLENDING_TYPE type = BLENDING_TYPE::DEFAULT_RENDERING, GLenum sfactor = 0, GLenum dfactor = 0) noexcept;
+
     // Generate a texture
-    void genTextures(GLsizei n, GLuint *textures);
+    void genTextures(GLsizei n, GLuint *textures) const noexcept;
     // Bind texture
-    void bindTexture(GLenum target, GLuint texture);
+    void bindTexture(GLenum target, GLuint texture) const noexcept;
     // Activates a texture
-    void activeTexture(GLenum texture);
+    void activeTexture(GLenum texture) noexcept;
     // Deletes textures
-    void deleteTextures(GLsizei n, const GLuint *textures);
+    void deleteTextures(GLsizei n, const GLuint *textures) const noexcept;
     // Texture pixel format
-    void pixelStorei(GLenum pname, GLint param);
+    void pixelStorei(GLenum pname, GLint param) const noexcept;
     // Texture creation parameters
-    void texParameteri(GLenum target, GLenum pname, GLint param);
+    void texParameteri(GLenum target, GLenum pname, GLint param) const noexcept;
     // Texture creation parameters
-    void texParameterf(GLenum target, GLenum pname, GLfloat param);
+    void texParameterf(GLenum target, GLenum pname, GLfloat param) const noexcept;
     // Creates a 2D texture
-    void texImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data);
+    void texImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data) const noexcept;
+
     // Draws loaded state machine
-    void drawArrays(GLenum mode, GLint first, GLsizei count);
+    void drawArrays(GLenum mode, GLint first, GLsizei count) const noexcept;
     // Draw multiple instances of a range of elements
-    void drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
+    void drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount) const noexcept;
     // Draw multiple instances of a set of elements
-    void drawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount);
+    void drawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount) const noexcept;
     // Add data to buffer
-    void bufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage);
+    void bufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage) const noexcept;
     // Replace data to buffer
-    void bufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data);
+    void bufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data) const noexcept;
     // Enable or disable a generic vertex attribute array
-    void enableVertexAttribArray(GLuint index);
+    void enableVertexAttribArray(GLuint index) const noexcept;
     // Define an array of generic vertex attribute data
-    void vertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
+    void vertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer) const noexcept;
     // modify the rate at which generic vertex attributes advance during instanced rendering
-    void vertexAttribDivisor(GLuint index, GLint divisor);
+    void vertexAttribDivisor(GLuint index, GLint divisor) const noexcept;
     // Deletes a compiled and linked shader program
-    void deleteProgram(GLuint program);
+    void deleteProgram(GLuint program) const noexcept;
     // Generate framebuffer
-    void frameBufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
+    void frameBufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level) const noexcept;
     // Render framebuffer
-    void blitFrameBuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
+    void blitFrameBuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter) const noexcept;
     // Checks the current FBO status
-    GLenum checkFrameBufferStatus(GLenum target);
+    GLenum checkFrameBufferStatus(GLenum target) const noexcept;
     // Resize the viewport
-    void resizeGL(int x, int y, int w, int h);
+    void resizeGL(int x, int y, int w, int h) const noexcept;
     // Error reporting
-    void checkForGLErrors();
+    void checkForGLErrors() noexcept;
     // Total amount of active VBO for this OpenGL context
-    int totalVBO();
+    int totalVBO() const noexcept;
     // Total amount of active VAOs for this OpenGL context
-    int totalVAO();
+    int totalVAO() const noexcept;
     // Total amount of active EBOs for this OpenGL context
-    int totalEBO();
+    int totalEBO() const noexcept;
     // Total amount of active FBO for this OpenGL context
-    int totalFBO();
+    int totalFBO() const noexcept;
 };
 
 #endif // SRC_SKELETONGL_RENDERER_OPENGLMANAGER_HPP

@@ -77,7 +77,7 @@ SGL_PostProcessor::SGL_PostProcessor(std::shared_ptr<SGL_OpenGLManager> oglm, co
  * @param color The clear screen color
  * @return nothing
  */
-void SGL_PostProcessor::setClearColor(SGL_Color color)
+void SGL_PostProcessor::setClearColor(SGL_Color color) noexcept
 {
     this->pClearColor = color;
 }
@@ -172,7 +172,7 @@ void SGL_PostProcessor::reload(GLuint newWidth, GLuint newHeight)
  *
  * @return nothing
  */
-void SGL_PostProcessor::beginRender()
+void SGL_PostProcessor::beginRender() noexcept
 {
     WMOGLM->bindFBO(this->pMainFBO);
     //SGL_Color color{1.0f, 1.0f, 1.0f, 1.0f};
@@ -187,7 +187,7 @@ void SGL_PostProcessor::beginRender()
  *
  * @return nothing
  */
-void SGL_PostProcessor::endRender()
+void SGL_PostProcessor::endRender() noexcept
 {
     // Resolve multisampled color-buffer into intermediate FBO to store to texture
     WMOGLM->bindFBO(this->pMainFBO, GLCONSTANTS::R);

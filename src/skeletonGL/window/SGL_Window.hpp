@@ -1,12 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 
 
 /**
@@ -164,9 +164,9 @@ public:
     // Turns fullscreen on / off
     void toggleFullScreen(bool toggle = true);
     // Does the window has the keyboard focus?
-    bool hasKeyboardFocus();
+    bool hasKeyboardFocus() const;
     // Does the window has the mouse focus?
-    bool hasMouseFocus();
+    bool hasMouseFocus() const;
     // Enable / disable VSYNC
     void toggleVSYNC(bool enable);
     // Toggles the system cursor visibility
@@ -184,13 +184,13 @@ public:
     // Update the camera
     void updateCamera(bool forceUpdate = false);
     // Get the camera's x position
-    int getCameraPosX();
+    int getCameraPosX() const;
     // Get the camera's y position
-    int getCameraPosY();
+    int getCameraPosY() const;
     // Get the camera's width
-    int getCameraPosW();
+    int getCameraPosW() const;
     // Get the camera's height
-    int getCameraPosH();
+    int getCameraPosH() const;
 
     // -- INPUT --
     // Returns a COPY of the this frame's total input
@@ -223,10 +223,10 @@ public:
 
 
     // Get the delta time as a double
-    double getRenderDeltaTime();
+    double getRenderDeltaTime() const;
 
     // Manually check for OpenGL errors
-    void checkForErrors();
+    void checkForErrors() const;
 };
 
 

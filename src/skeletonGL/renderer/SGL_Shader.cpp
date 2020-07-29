@@ -1,13 +1,12 @@
-
-// ------------------- By: TSURA @ -------------------
-// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗
-// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝
-// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝
-// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗
-// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗
-// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-// ---------------------- [.xyz] ---------------------
-
+// ███╗   ██╗███████╗ ██████╗ ██╗  ██╗███████╗██╗  ██╗   ██╗  ██╗██╗   ██╗███████╗
+// ████╗  ██║██╔════╝██╔═══██╗██║  ██║██╔════╝╚██╗██╔╝   ╚██╗██╔╝╚██╗ ██╔╝╚══███╔╝
+// ██╔██╗ ██║█████╗  ██║   ██║███████║█████╗   ╚███╔╝     ╚███╔╝  ╚████╔╝   ███╔╝
+// ██║╚██╗██║██╔══╝  ██║   ██║██╔══██║██╔══╝   ██╔██╗     ██╔██╗   ╚██╔╝   ███╔╝
+// ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗██╔╝ ██╗██╗██╔╝ ██╗   ██║   ███████╗
+// ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Author:  AlexHG @ NEOHEX.XYZ
+// License: MIT License
+// Website: https://neohex.xyz
 /**
  * @file    src/skeletonGL/utility/SGL_Shader.cpp
  * @author  TSURA @ NEOHEX.XYZ
@@ -53,7 +52,7 @@ SGL_Shader::~SGL_Shader()
  *
  * @return nothing
  */
-SGL_Shader &SGL_Shader::use(SGL_OpenGLManager &oglm)
+SGL_Shader &SGL_Shader::use(SGL_OpenGLManager &oglm) noexcept
 {
     oglm.useProgram(this->ID);
     return *this;
@@ -66,7 +65,7 @@ SGL_Shader &SGL_Shader::use(SGL_OpenGLManager &oglm)
  *
  * @return nothing
  */
-void SGL_Shader::unbind(SGL_OpenGLManager &oglm)
+void SGL_Shader::unbind(SGL_OpenGLManager &oglm) const noexcept
 {
     oglm.useProgram(0);
 }
@@ -82,7 +81,7 @@ void SGL_Shader::unbind(SGL_OpenGLManager &oglm)
  *
  * @return nothing
  */
-void SGL_Shader::compileShaders(SGL_OpenGLManager &oglm, SHADER_TYPE shaderType, const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource)
+void SGL_Shader::compileShaders(SGL_OpenGLManager &oglm, SHADER_TYPE shaderType, const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource) noexcept
 
 {
     GLuint sVertex, sFragment, sGeometry;
@@ -133,7 +132,7 @@ void SGL_Shader::compileShaders(SGL_OpenGLManager &oglm, SHADER_TYPE shaderType,
  *
  * @return nothing
  */
-void SGL_Shader::setFloat(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat value, GLboolean useShader)
+void SGL_Shader::setFloat(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat value, GLboolean useShader) noexcept
 {
     if (useShader)
         this->use(oglm);
@@ -149,7 +148,7 @@ void SGL_Shader::setFloat(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat v
  *
  * @return nothing
  */
-void SGL_Shader::setInteger(SGL_OpenGLManager &oglm, const GLchar *name, GLint value, GLboolean useShader)
+void SGL_Shader::setInteger(SGL_OpenGLManager &oglm, const GLchar *name, GLint value, GLboolean useShader) noexcept
 {
     if (useShader)
         this->use(oglm);
@@ -166,7 +165,7 @@ void SGL_Shader::setInteger(SGL_OpenGLManager &oglm, const GLchar *name, GLint v
  *
  * @return nothing
  */
-void SGL_Shader::setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLboolean useShader)
+void SGL_Shader::setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLboolean useShader) noexcept
 {
     if (useShader)
         this->use(oglm);
@@ -183,7 +182,7 @@ void SGL_Shader::setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloa
  *
  * @return nothing
  */
-void SGL_Shader::setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec2 value, GLboolean useShader)
+void SGL_Shader::setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec2 value, GLboolean useShader) noexcept
 {
     if (useShader)
         this->use(oglm);
@@ -202,7 +201,7 @@ void SGL_Shader::setVector2f(SGL_OpenGLManager &oglm, const GLchar *name, glm::v
  *
  * @return nothing
  */
-void SGL_Shader::setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLboolean useShader)
+void SGL_Shader::setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLboolean useShader) noexcept
 {
     if (useShader)
         this->use(oglm);
@@ -219,7 +218,7 @@ void SGL_Shader::setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloa
  *
  * @return nothing
  */
-void SGL_Shader::setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec3 value, GLboolean useShader)
+void SGL_Shader::setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec3 value, GLboolean useShader) noexcept
 {
     if (useShader)
         this->use(oglm);
@@ -239,7 +238,7 @@ void SGL_Shader::setVector3f(SGL_OpenGLManager &oglm, const GLchar *name, glm::v
  *
  * @return nothing
  */
-void SGL_Shader::setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean useShader)
+void SGL_Shader::setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean useShader) noexcept
 {
     if (useShader)
         this->use(oglm);
@@ -256,7 +255,7 @@ void SGL_Shader::setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, GLfloa
  *
  * @return nothing
  */
-void SGL_Shader::setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec4 value, GLboolean useShader)
+void SGL_Shader::setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, glm::vec4 value, GLboolean useShader) noexcept
 {
     if (useShader)
         this->use(oglm);
@@ -274,7 +273,7 @@ void SGL_Shader::setVector4f(SGL_OpenGLManager &oglm, const GLchar *name, glm::v
  *
  * @return nothing
  */
-void SGL_Shader::setMatrix4(SGL_OpenGLManager &oglm, const GLchar *name, glm::mat4 matrix, GLboolean useShader)
+void SGL_Shader::setMatrix4(SGL_OpenGLManager &oglm, const GLchar *name, glm::mat4 matrix, GLboolean useShader) noexcept
 {
     if(useShader)
         this->use(oglm);
