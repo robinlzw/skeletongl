@@ -51,6 +51,20 @@ namespace SGL
     const std::string DEFAULT_TEXTURE_NAME = "default_texture";
 }
 
+/**
+ * @brief Suble OpenGL API constants, to avoid feeding wrong data to the GPU
+ */
+namespace SGL_OGL_CONSTANTS
+{
+    // GL_LINES uses this value top set the line's width, note that if AA is enabled it limits the linw width
+    // support to 1.0f
+    const float MAX_LINE_WIDTH = 20.0f;
+    const float MIN_LINE_WIDTH = 1.0f;
+
+    // GLEnable consatnts
+};
+
+
 
 /**
  * @brief Project's folder structure

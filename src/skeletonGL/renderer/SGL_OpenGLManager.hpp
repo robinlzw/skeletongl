@@ -212,6 +212,10 @@ public:
     void frameBufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level) const noexcept;
     // Render framebuffer
     void blitFrameBuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter) const noexcept;
+
+    // Set the width (float) for GL_LINES
+    void glLineWidth(GLfloat width) const noexcept;
+
     // Checks the current FBO status
     GLenum checkFrameBufferStatus(GLenum target) const noexcept;
     // Resize the viewport
@@ -226,6 +230,11 @@ public:
     int totalEBO() const noexcept;
     // Total amount of active FBO for this OpenGL context
     int totalFBO() const noexcept;
+
+    // En / Dis able OpenGL capabilities
+    void enable(GLenum cap) const noexcept;
+    void disable(GLenum cap) const noexcept;
+    // void toggleLineAA(bool toggle) const noexcept;
 };
 
 #endif // SRC_SKELETONGL_RENDERER_OPENGLMANAGER_HPP

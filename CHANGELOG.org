@@ -2,8 +2,12 @@
 
 Also available at [[https://neohex.xyz/projects/?nav=skeletongl#changelog][NEOHEX.XYZ]]
 
-* ver 1.6 [ 10/05/2020 ] 
+* ver 1.7 [ 12/08/2020 ]
+  - Added a width specifier to the SGL_Line and its respective batch renderer
+  - Will be testing OpenGL capabilities with glEnable/glDisable, the SGL_OpenGLManager has its own enable / disable
+    that will filter invalid settings
 
+* ver 1.6 [ 10/05/2020 ] 
   - Uninitialized SGL_Sprites now render the internal default texture instead of throwing an error
   - Added a constant for the default texture name
   - Added support for both SGL blending modes and raw, OpenGL enum source and destination factors

@@ -214,6 +214,7 @@ public:
     void setChaosEffect(bool chaos);
     // Enable confuse effect?
     void setConfuseEffect(bool confuse);
+    void toggleLineAA(bool toggle);
 
     // FPS
     // Begin counting frame time

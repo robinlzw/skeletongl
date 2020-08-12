@@ -864,12 +864,12 @@ void SGL_OpenGLManager::depthTesting(bool value) noexcept
 {
     if (value)
     {
-        glEnable(GL_DEPTH_TEST);
+        this->enable(GL_DEPTH_TEST);
         currentGLSettings.depth.active = true;
     }
     else
     {
-        glDisable(GL_DEPTH_TEST);
+        this->disable(GL_DEPTH_TEST);
         currentGLSettings.depth.active = false;
     }
 }
@@ -903,12 +903,12 @@ void SGL_OpenGLManager::faceCulling(bool value) noexcept
 {
     if (value)
     {
-        glEnable(GL_CULL_FACE);
+        this->enable(GL_CULL_FACE);
         currentGLSettings.faceCulling.active = true;
     }
     else
     {
-        glDisable(GL_CULL_FACE);
+        this->disable(GL_CULL_FACE);
         currentGLSettings.faceCulling.active = false;
     }
 }
@@ -924,7 +924,7 @@ void SGL_OpenGLManager::blending(bool value, BLENDING_TYPE type, GLenum sfactor,
 {
     if (value || !(type == BLENDING_TYPE::NONE))
     {
-        glEnable(GL_BLEND);
+        this->enable(GL_BLEND);
         currentGLSettings.blending.active = true;
 
         if (type == BLENDING_TYPE::CUSTOM) // Use the provided sfactor & dfactor enums
@@ -952,11 +952,41 @@ void SGL_OpenGLManager::blending(bool value, BLENDING_TYPE type, GLenum sfactor,
     }
     else
     {
-        glDisable(GL_BLEND);
+        this->disable(GL_BLEND);
         currentGLSettings.blending.active = false;
     }
 }
 
+/**
+ * @brief Enables OpenGL capabilities
+ * @param cap GLenum to enable, https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/this->enable.xhtml
+ * @return nothing
+ */
+void SGL_OpenGLManager::enable(GLenum cap) const noexcept
+{
+    glEnable(cap);
+}
+
+/**
+ * @brief Disables OpenGL capabilities
+ * @param cap GLenum to disable, https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/this->enable.xhtml
+ * @return nothing
+ */
+void SGL_OpenGLManager::disable(GLenum cap) const noexcept
+{
+    glDisable(cap);
+}
+
+/**
+ * @brief Sets the GL_LINES width
+ * @param width The line's width, defaults to 1.0f and MAY cause odd behaviour if exceeded > 10, see the OGL doucs for your OS
+ * @param type Blending mode to use
+ * @return nothing
+ */
+void SGL_OpenGLManager::glLineWidth(GLfloat width) const noexcept
+{
+    glLineWidth(width);
+}
 
 /**
  * @brief Resize the view port

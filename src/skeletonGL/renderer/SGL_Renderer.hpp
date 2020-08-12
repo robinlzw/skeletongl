@@ -125,6 +125,7 @@ struct SGL_Line
     glm::vec2 positionA, positionB;              ///< Vertices for both ends of the line
     SGL_Color color;                             ///< Line color
     SGL_Shader shader;                           ///< Line shader
+    float width = 1.0f;
 };
 
 
@@ -239,7 +240,7 @@ public:
     // Render a line
     void renderLine(const SGL_Line &line) const;
     // Render a line
-    void renderLine(float x1, float y1, float x2, float y2, SGL_Color color);
+    void renderLine(float x1, float y1, float x2, float y2, float width, SGL_Color color);
 
     // Render a pixel
     void renderPixel(float x1, float y1, SGL_Color color);

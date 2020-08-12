@@ -241,6 +241,13 @@ void SGL_Renderer::renderLine(const SGL_Line &line) const
     glm::vec4 assignedColor = {line.color.r, line.color.g, line.color.b, line.color.a};
     activeShader.setVector4f(*WMOGLM, "lineColor", assignedColor);
     activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
+
+    // Line width, if AA is enabled it must be set to 1.0f!
+    if ( line.width > SGL_OGL_CONSTANTS::MIN_LINE_WIDTH && line.width < SGL_OGL_CONSTANTS::MAX_LINE_WIDTH )
+        glLineWidth(line.width);
+    else
+        glLineWidth(SGL_OGL_CONSTANTS::MIN_LINE_WIDTH);
+
     WMOGLM->drawArrays(GL_LINES, 0, 2);
 
     WMOGLM->unbindVAO();
@@ -258,7 +265,7 @@ void SGL_Renderer::renderLine(const SGL_Line &line) const
  *
  * @return nothing
  */
-void SGL_Renderer::renderLine(float x1, float y1, float x2, float y2, SGL_Color color)
+void SGL_Renderer::renderLine(float x1, float y1, float x2, float y2, float width, SGL_Color color)
 {
     // NOTE, coords are normalized, gotta deal with that
     GLfloat vertices[] = {
@@ -271,6 +278,13 @@ void SGL_Renderer::renderLine(float x1, float y1, float x2, float y2, SGL_Color 
     WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(vertices), &vertices[0]);
     glm::vec4 assignedColor = {color.r, color.g, color.b, color.a};
     pLineShader.setVector4f(*WMOGLM, "lineColor", assignedColor);
+
+    // Line width, if AA is enabled it must be set to 1.0f!
+    if (width > SGL_OGL_CONSTANTS::MIN_LINE_WIDTH && width < SGL_OGL_CONSTANTS::MAX_LINE_WIDTH )
+        glLineWidth(width);
+    else
+        glLineWidth(SGL_OGL_CONSTANTS::MIN_LINE_WIDTH);
+
     pLineShader.setFloat(*WMOGLM, "deltaTime", pLineShader.renderDetails.deltaTime);
     WMOGLM->drawArrays(GL_LINES, 0, 2);
 
@@ -853,6 +867,13 @@ void SGL_Renderer::renderLineBatch(const SGL_Line &line)
     glm::vec4 assignedColor = {line.color.r, line.color.g, line.color.b, line.color.a};
     activeShader.setVector4f(*WMOGLM, "lineColor", assignedColor);
     activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
+
+    // Line width, if AA is enabled it must be set to 1.0f!
+    if (line.width > SGL_OGL_CONSTANTS::MIN_LINE_WIDTH && line.width < SGL_OGL_CONSTANTS::MAX_LINE_WIDTH )
+        glLineWidth(line.width);
+    else
+        glLineWidth(SGL_OGL_CONSTANTS::MIN_LINE_WIDTH);
+
 
     // Render instanced data
     // WMOGLM->drawArrays(GL_POINTS, 0, 2);

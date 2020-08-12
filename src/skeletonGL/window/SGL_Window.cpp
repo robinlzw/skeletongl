@@ -469,8 +469,7 @@ void SGL_Window::start()
     SGL_Log("Camera and orthographic shader configured.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     // Configure renderer
     //this->pClearScreen = {1.0f, 1.0f, 1.0f, 1.0f};
-    renderer = std::make_unique<SGL_Renderer>(pOGLM, assetManager->getTexture(SGL::DEFAULT_TEXTURE_NAME), assetManager->getShader("line"), assetManager->getShader("point"), assetManager->getShader("text"), assetManager->getShader("spriteUV"), assetManager->getShader("spriteBatchUV"), assetManager->getShader("pixelBatch"),
-    assetManager->getShader("lineBatch"));
+    renderer = std::make_unique<SGL_Renderer>(pOGLM, assetManager->getTexture(SGL::DEFAULT_TEXTURE_NAME), assetManager->getShader("line"), assetManager->getShader("point"), assetManager->getShader("text"), assetManager->getShader("spriteUV"), assetManager->getShader("spriteBatchUV"), assetManager->getShader("pixelBatch"), assetManager->getShader("lineBatch"));
     SGL_Log("Renderer configured.", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     // Setup the post processor
     this->startFBO(pDefaultPPShader);
@@ -1224,4 +1223,10 @@ void SGL_Window::setPostProcessorShader(SGL_Shader shader)
         pDefaultPPShader = shader;
 }
 
-
+void SGL_Window::toggleLineAA(bool toggle)
+{
+    if (toggle)
+        pOGLM->enable(GL_LINE_SMOOTH);
+    else
+        pOGLM->disable(GL_LINE_SMOOTH);
+}
