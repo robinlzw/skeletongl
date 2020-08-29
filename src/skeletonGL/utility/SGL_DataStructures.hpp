@@ -163,20 +163,53 @@ struct SGL_Color
 };
 
 /**
+ * @brief Represents a single keystate
+ */
+struct SGL_InputKey
+{
+    GLboolean pressed, released;
+    SGL_InputKey() : pressed(false), released(false) {}
+};
+
+/**
+ * @brief Encapsulates an internal event (window events, UNIX system signals etc.)
+ */
+struct SGL_InternalEvent
+{
+    GLboolean active;
+
+    SGL_InternalEvent() : active(false) {}
+};
+
+/**
+ * @brief Represents a mouse
+ */
+struct SGL_InputMouse
+{
+    // Mouse scroll wheel is treated like a button, pressed = rolling in that direction
+    SGL_InputKey rightBtn, leftBtn, middleBtn, scrollDown, scrollUp;
+    std::int32_t cursorX, cursorY, cursorXNormalized, cursorYNormalized;
+
+    SGL_InputMouse() : cursorX(0), cursorY(0), cursorXNormalized(0), cursorYNormalized(0) {}
+};
+
+/**
  * @brief Represents the entire input state (and some helpful events) of a single frame
  */
 struct SGL_InputFrame
 {
-    GLboolean up, down, left, right;                                                   ///< Arrow keys
-    GLboolean q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m;                     ///< Letter keys
-    GLboolean num1, num2, num3, num4, num5, num6, num7, num8, num9;                    ///< Upper numbers
-    GLboolean mouseRightPressed, mouseRightReleased, mouseLeftPressed, mouseLeftReleased,
-        mouseMiddleReleased, mouseMiddlePressed, mouseScrollUp, mouseScrollDown;   ///< Mouse buttons
-    GLint rawMousePosX, rawMousePosY, normalizedMousePosX, normalizedMousePosY;        ///< Mouse position + normalized to internal resolution
-    GLboolean sdlInternalQuit;                                                         ///< Internal SDL exit event
-    GLboolean esc, space, enter, backspace, ctrl, shift, alt;                          ///< Modifiers
-    GLboolean mouseFocus, keyboardFocus, windowFocus, windowMinimized, windowRestored; ///< Window state
-    SGL_InputFrame() : q(false), w(false), e(false), r(false), t(false), y(false), u(false), i(false), o(false), p(false), a(false), s(false), d(false), f(false), g(false), h(false), j(false), k(false), l(false), z(false), x(false), c(false), v(false), b(false), n(false), m(false), num1(false), num2(false), num3(false), num4(false), num5(false), num6(false), num7(false), num8(false), num9(false), up(false), down(false), left(false), right(false), esc(false), space(false), enter(false), backspace(false), ctrl(false), shift(false),  alt(false), sdlInternalQuit(false), mouseLeftPressed(false), mouseLeftReleased(false), mouseRightPressed(false), mouseRightReleased(false), mouseMiddlePressed(false), mouseMiddleReleased(false), mouseScrollUp(false), mouseScrollDown(false), mouseFocus(false),  keyboardFocus(false), windowFocus(false), windowMinimized(false), windowRestored(false) {}
+    // Keyboard
+    SGL_InputKey up, down, left, right;                                                   ///< Arrow keys
+    SGL_InputKey q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m;                     ///< Letter keys
+    SGL_InputKey num1, num2, num3, num4, num5, num6, num7, num8, num9;                    ///< Upper numbers
+    SGL_InputKey esc, space, enter, backspace, ctrl, shift, alt;                          ///< Modifiers
+
+    // Mouse
+    SGL_InputMouse mouse;
+
+    // Events
+    SGL_InternalEvent sdlInternalQuit;                                                         ///< Internal SDL exit event
+    SGL_InternalEvent mouseFocus, keyboardFocus, windowFocus, windowMinimized, windowRestored; ///< Window state
 };
 
 /**

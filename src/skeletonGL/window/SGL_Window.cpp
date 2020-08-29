@@ -786,14 +786,14 @@ SGL_InputFrame SGL_Window::getFrameInput()
 
     // -- MOUSE --
     // Mouse position relative to the window dimensions (RAW)
-    SDL_GetMouseState(&input.rawMousePosX, &input.rawMousePosY);
+    SDL_GetMouseState(&input.mouse.cursorX, &input.mouse.cursorY);
     // Mouse position relative to the internal rendering resolution
     // Get the position in percent relative to the current resolution
-    float xPos = input.rawMousePosX / static_cast<float>(pWindowCreationSpecs.currentW);
-    float yPos = input.rawMousePosY / static_cast<float>(pWindowCreationSpecs.currentH);
+    float xPos = input.mouse.cursorX / static_cast<float>(pWindowCreationSpecs.currentW);
+    float yPos = input.mouse.cursorY / static_cast<float>(pWindowCreationSpecs.currentH);
     // Get the position relative to the internal resoultion using the percent
-    input.normalizedMousePosX = std::floor(xPos * static_cast<float>(pWindowCreationSpecs.internalW));
-    input.normalizedMousePosY = std::floor(yPos * static_cast<float>(pWindowCreationSpecs.internalH));
+    input.mouse.cursorXNormalized = std::floor(xPos * static_cast<float>(pWindowCreationSpecs.internalW));
+    input.mouse.cursorYNormalized = std::floor(yPos * static_cast<float>(pWindowCreationSpecs.internalH));
 
     while(SDL_PollEvent(&pEvent) != 0)
     {
@@ -817,33 +817,38 @@ SGL_InputFrame SGL_Window::getFrameInput()
                 break;
             case SDL_WINDOWEVENT_MINIMIZED:
                 SGL_Log("Window minimized: " + std::to_string(static_cast<int>(pEvent.window.windowID)), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+                input.sdlInternalQuit.active = true;
                 pIsMinimized = true;
                 break;
             case SDL_WINDOWEVENT_RESTORED:
                 SGL_Log("Window restored: " + std::to_string(static_cast<int>(pEvent.window.windowID)), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
-                input.windowMinimized = false;
-                input.windowRestored = true;
+                input.windowMinimized.active = false;
+                input.windowRestored.active = true;
                 pIsMinimized = false;
                 break;
             case SDL_WINDOWEVENT_ENTER:
                 SGL_Log("Window gained mouse focus: " + std::to_string(static_cast<int>(pEvent.window.windowID)), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+                input.mouseFocus.active = true;
                 pHasMouseFocus = true;
                 break;
             case SDL_WINDOWEVENT_LEAVE:
                 SGL_Log("Window lost mouse focus: " + std::to_string(static_cast<int>(pEvent.window.windowID)), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+                input.mouseFocus.active = false;
                 pHasMouseFocus = false;
                 break;
             case SDL_WINDOWEVENT_FOCUS_GAINED:
                 SGL_Log("Window gained keyboard focus: " + std::to_string(static_cast<int>(pEvent.window.windowID)), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+                input.keyboardFocus.active = true;
                 pHasKeyboardFocus = true;
                 break;
             case SDL_WINDOWEVENT_FOCUS_LOST:
                 SGL_Log("Window lost keyboard focus: " + std::to_string(static_cast<int>(pEvent.window.windowID)), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+                input.keyboardFocus.active = true;
                 pHasKeyboardFocus = false;
                 break;
             case SDL_WINDOWEVENT_CLOSE:
                 SGL_Log("Window has requested to exit: " + std::to_string(static_cast<int>(pEvent.window.windowID)), LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
-                input.sdlInternalQuit = true;
+                input.sdlInternalQuit.active = true;
                 break;
             }
         }
@@ -851,27 +856,27 @@ SGL_InputFrame SGL_Window::getFrameInput()
         if (pEvent.type == SDL_MOUSEBUTTONDOWN)
         {
             if (pEvent.button.button == SDL_BUTTON_MIDDLE)
-                input.mouseMiddlePressed = true;
+                input.mouse.middleBtn.pressed = true;
             if (pEvent.button.button == SDL_BUTTON_LEFT)
-                input.mouseLeftPressed = true;
+                input.mouse.leftBtn.pressed = true;
             if (pEvent.button.button == SDL_BUTTON_RIGHT)
-                input.mouseRightPressed = true;
+                input.mouse.rightBtn.pressed = true;
         }
         if (pEvent.type == SDL_MOUSEBUTTONUP)
         {
             if (pEvent.button.button == SDL_BUTTON_MIDDLE)
-                input.mouseMiddleReleased = true;
+                input.mouse.middleBtn.released = true;
             if (pEvent.button.button == SDL_BUTTON_LEFT)
-                input.mouseLeftReleased = true;
+                input.mouse.leftBtn.released = true;
             if (pEvent.button.button == SDL_BUTTON_RIGHT)
-                input.mouseRightReleased = true;
+                input.mouse.rightBtn.released = true;
         }
         if (pEvent.type == SDL_MOUSEWHEEL)
         {
             if (pEvent.wheel.y > 0) // Scroll up
-                input.mouseScrollUp = true;
+                input.mouse.scrollUp.pressed = true;
             if (pEvent.wheel.y < 0) // Scroll down
-                input.mouseScrollDown = true;
+                input.mouse.scrollDown.pressed = true;
         }
 
         // --- KEYBOARD ---
@@ -881,16 +886,16 @@ SGL_InputFrame SGL_Window::getFrameInput()
             switch(pEvent.key.keysym.sym)
             {
             case SDLK_ESCAPE:
-                input.esc = true;
+                input.esc.pressed = true;
                 break;
             case SDLK_SPACE:
-                input.space = true;
+                input.space.pressed = true;
                 break;
             case SDLK_RETURN: // Scancode for the enter key don't seem to work
-                input.enter = true;
+                input.enter.pressed = true;
                 break;
             case SDLK_RETURN2:
-                input.enter = true;
+                input.enter.pressed = true;
                 break;
             case SDLK_F1:
                 SDL_ShowCursor(1);
@@ -906,59 +911,59 @@ SGL_InputFrame SGL_Window::getFrameInput()
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     // Alphabet (qwerty)
     // First row
-    if (state[SDL_SCANCODE_Q]) { input.q = true; }
-    if (state[SDL_SCANCODE_W]) { input.w = true; }
-    if (state[SDL_SCANCODE_E]) { input.e = true; }
-    if (state[SDL_SCANCODE_R]) { input.r = true; }
-    if (state[SDL_SCANCODE_T]) { input.t = true; }
-    if (state[SDL_SCANCODE_Y]) { input.y = true; }
-    if (state[SDL_SCANCODE_U]) { input.u = true; }
-    if (state[SDL_SCANCODE_I]) { input.i = true; }
-    if (state[SDL_SCANCODE_O]) { input.o = true; }
-    if (state[SDL_SCANCODE_P]) { input.p = true; }
+    if (state[SDL_SCANCODE_Q]) { input.q.pressed = true; }
+    if (state[SDL_SCANCODE_W]) { input.w.pressed = true; }
+    if (state[SDL_SCANCODE_E]) { input.e.pressed = true; }
+    if (state[SDL_SCANCODE_R]) { input.r.pressed = true; }
+    if (state[SDL_SCANCODE_T]) { input.t.pressed = true; }
+    if (state[SDL_SCANCODE_Y]) { input.y.pressed = true; }
+    if (state[SDL_SCANCODE_U]) { input.u.pressed = true; }
+    if (state[SDL_SCANCODE_I]) { input.i.pressed = true; }
+    if (state[SDL_SCANCODE_O]) { input.o.pressed = true; }
+    if (state[SDL_SCANCODE_P]) { input.p.pressed = true; }
     // Second row
-    if (state[SDL_SCANCODE_A]) { input.a = true; }
-    if (state[SDL_SCANCODE_S]) { input.s = true; }
-    if (state[SDL_SCANCODE_D]) { input.d = true; }
-    if (state[SDL_SCANCODE_F]) { input.f = true; }
-    if (state[SDL_SCANCODE_G]) { input.g = true; }
-    if (state[SDL_SCANCODE_H]) { input.h = true; }
-    if (state[SDL_SCANCODE_J]) { input.j = true; }
-    if (state[SDL_SCANCODE_K]) { input.k = true; }
-    if (state[SDL_SCANCODE_L]) { input.l = true; }
+    if (state[SDL_SCANCODE_A]) { input.a.pressed = true; }
+    if (state[SDL_SCANCODE_S]) { input.s.pressed = true; }
+    if (state[SDL_SCANCODE_D]) { input.d.pressed = true; }
+    if (state[SDL_SCANCODE_F]) { input.f.pressed = true; }
+    if (state[SDL_SCANCODE_G]) { input.g.pressed = true; }
+    if (state[SDL_SCANCODE_H]) { input.h.pressed = true; }
+    if (state[SDL_SCANCODE_J]) { input.j.pressed = true; }
+    if (state[SDL_SCANCODE_K]) { input.k.pressed = true; }
+    if (state[SDL_SCANCODE_L]) { input.l.pressed = true; }
     // Third row
-    if (state[SDL_SCANCODE_Z]) { input.z = true; }
-    if (state[SDL_SCANCODE_X]) { input.x = true; }
-    if (state[SDL_SCANCODE_C]) { input.c = true; }
-    if (state[SDL_SCANCODE_V]) { input.v = true; }
-    if (state[SDL_SCANCODE_B]) { input.b = true; }
-    if (state[SDL_SCANCODE_N]) { input.n = true; }
-    if (state[SDL_SCANCODE_M]) { input.m = true; }
+    if (state[SDL_SCANCODE_Z]) { input.z.pressed = true; }
+    if (state[SDL_SCANCODE_X]) { input.x.pressed = true; }
+    if (state[SDL_SCANCODE_C]) { input.c.pressed = true; }
+    if (state[SDL_SCANCODE_V]) { input.v.pressed = true; }
+    if (state[SDL_SCANCODE_B]) { input.b.pressed = true; }
+    if (state[SDL_SCANCODE_N]) { input.n.pressed = true; }
+    if (state[SDL_SCANCODE_M]) { input.m.pressed = true; }
     // Arrow keys
-    if (state[SDL_SCANCODE_UP]) { input.up = true; }
-    if (state[SDL_SCANCODE_DOWN]) { input.down = true; }
-    if (state[SDL_SCANCODE_LEFT]) { input.left = true; }
-    if (state[SDL_SCANCODE_RIGHT]) { input.right = true; }
+    if (state[SDL_SCANCODE_UP]) { input.up.pressed = true; }
+    if (state[SDL_SCANCODE_DOWN]) { input.down.pressed = true; }
+    if (state[SDL_SCANCODE_LEFT]) { input.left.pressed = true; }
+    if (state[SDL_SCANCODE_RIGHT]) { input.right.pressed = true; }
     // Numbers
-    if (state[SDL_SCANCODE_1]) { input.num1 = true; }
-    if (state[SDL_SCANCODE_2]) { input.num2 = true; }
-    if (state[SDL_SCANCODE_3]) { input.num3 = true; }
-    if (state[SDL_SCANCODE_4]) { input.num4 = true; }
-    if (state[SDL_SCANCODE_5]) { input.num5 = true; }
-    if (state[SDL_SCANCODE_6]) { input.num6 = true; }
-    if (state[SDL_SCANCODE_7]) { input.num7 = true; }
-    if (state[SDL_SCANCODE_8]) { input.num8 = true; }
-    if (state[SDL_SCANCODE_9]) { input.num9 = true; }
+    if (state[SDL_SCANCODE_1]) { input.num1.pressed = true; }
+    if (state[SDL_SCANCODE_2]) { input.num2.pressed = true; }
+    if (state[SDL_SCANCODE_3]) { input.num3.pressed = true; }
+    if (state[SDL_SCANCODE_4]) { input.num4.pressed = true; }
+    if (state[SDL_SCANCODE_5]) { input.num5.pressed = true; }
+    if (state[SDL_SCANCODE_6]) { input.num6.pressed = true; }
+    if (state[SDL_SCANCODE_7]) { input.num7.pressed = true; }
+    if (state[SDL_SCANCODE_8]) { input.num8.pressed = true; }
+    if (state[SDL_SCANCODE_9]) { input.num9.pressed = true; }
     // Modifiers
-    if (state[SDL_SCANCODE_BACKSPACE]) { input.backspace = true; }
+    if (state[SDL_SCANCODE_BACKSPACE]) { input.backspace.pressed = true; }
     // if (state[SDL_SCANCODE_ESCAPE]) { input.esc = true; }
-    if (state[SDL_SCANCODE_LCTRL]) { input.ctrl = true; }
-    if (state[SDL_SCANCODE_LALT]) { input.alt = true; }
-    if (state[SDL_SCANCODE_LSHIFT]) { input.shift = true; }
-    if (state[SDL_SCANCODE_KP_ENTER]) { input.enter = true; }
-    if (state[SDL_SCANCODE_KP_SPACE]) { input.space = true; }
+    if (state[SDL_SCANCODE_LCTRL]) { input.ctrl.pressed = true; }
+    if (state[SDL_SCANCODE_LALT]) { input.alt.pressed = true; }
+    if (state[SDL_SCANCODE_LSHIFT]) { input.shift.pressed = true; }
+    if (state[SDL_SCANCODE_KP_ENTER]) { input.enter.pressed = true; }
+    if (state[SDL_SCANCODE_KP_SPACE]) { input.space.pressed = true; }
     // if (state[SDL_SCANCODE_ENTER || SDL_SCANCODE_ENTER2]) { input.enter = true; }
-    if (state[SDL_SCANCODE_RETURN || SDL_SCANCODE_RETURN2]) { input.enter = true; }
+    if (state[SDL_SCANCODE_RETURN || SDL_SCANCODE_RETURN2]) { input.enter.pressed = true; }
 
     // Save the current input as delta to compare
     pDeltaInput = input;
@@ -1035,8 +1040,8 @@ void SGL_Window::endFrame()
     pDeltaTimeMS /= 1000000000;
 
     pDefaultPPShader.renderDetails.deltaTime = pDeltaTimeMS;
-    pDefaultPPShader.renderDetails.mousePosX = pDeltaInput.normalizedMousePosX;
-    pDefaultPPShader.renderDetails.mousePosY = pDeltaInput.normalizedMousePosY;
+    pDefaultPPShader.renderDetails.mousePosX = pDeltaInput.mouse.cursorXNormalized;
+    pDefaultPPShader.renderDetails.mousePosY = pDeltaInput.mouse.cursorYNormalized;
 
     // Render final FBO texture
     this->pPostProcessorFBO->render(pDefaultPPShader);
