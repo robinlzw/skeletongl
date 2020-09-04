@@ -13,6 +13,7 @@ Also available at [[https://neohex.xyz/projects/?nav=skeletongl#changelog][NEOHE
   - Added a makefile / compile time macro to add or remove error checking after render calls
   - SGL_Pixel can now specify pixel size
   - SGL_Line can now specify line width
+  - Optimized away many unnecessary calls to OpenGL VBOs
 
 * ver 1.8 <2020-08-29 Sat 18:24>
   - Reworked the input systems, the changes are minor but were necessary, make sure to update your input handling!
