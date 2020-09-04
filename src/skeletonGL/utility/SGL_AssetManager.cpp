@@ -266,10 +266,11 @@ SGL_Texture SGL_AssetManager::loadTextureFromFile(const GLchar *file, GLboolean 
 }
 
 /**
- * @brief Return the total memory allocated by this process
+ * @brief Return the total GPU memory allocated by SGL
  * @return int Total memory in bytes
  */
 int SGL_AssetManager::getTextureMemoryGPU() const
 {
-    return pTextureGPUMemory;
+    //return pTextureGPUMemory;
+    return static_cast<int>(pTextureGPUMemory + SGL_OGL_CONSTANTS::MAX_LINE_BATCH_INSTANCES + SGL_OGL_CONSTANTS::MAX_SPRITE_BATCH_INSTANCES + SGL_OGL_CONSTANTS::MAX_PIXEL_BATCH_INSTANCES);
 }

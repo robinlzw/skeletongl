@@ -37,6 +37,7 @@
 
 // PRE-PROCESSOR COMPILATION OPTIONS
 // #define SGL_OUTPUT_OPENGL_DETAILS true ///< Enables (extra) OpenGLManager output. Useful for debugging.
+// #define SGL_CHECK_FOR_ERRORS_ON_RENDER false
 
 /**
  * @brief General purpose
@@ -61,7 +62,14 @@ namespace SGL_OGL_CONSTANTS
     const float MAX_LINE_WIDTH = 20.0f;
     const float MIN_LINE_WIDTH = 1.0f;
 
-    // GLEnable consatnts
+    const float MAX_PIXEL_SIZE = 20.0f;
+    const float MIN_PIXEL_SIZE = 1.0f;
+
+    // These rendering consatants are the maximum amount of simultaneous instances to be rendered in a batch
+    // and MUST NOT BE EXCEEDED
+    const std::uint32_t MAX_SPRITE_BATCH_INSTANCES = 10000;
+    const std::uint32_t MAX_PIXEL_BATCH_INSTANCES = 10000;
+    const std::uint32_t MAX_LINE_BATCH_INSTANCES = 10000;
 };
 
 
@@ -318,6 +326,10 @@ enum BLENDING_TYPE
     SPRITE_RENDERING,   // DEFAULT OF SGL_SPRITE
     TEXT_RENDERING,     // DEFAULT TO THE SGL_RENDERER TEXT RENDERER
     PARTICLE_RENDERING, // FOR PARTICLES
+    INVISIBLE_RENDERING,
+    TEST_RENDERING_1,
+    TEST_RENDERING_2,
+    TEST_RENDERING_3
 };
 
 enum OPENGL_BLENDING_MODES

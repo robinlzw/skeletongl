@@ -214,7 +214,8 @@ public:
     void blitFrameBuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter) const noexcept;
 
     // Set the width (float) for GL_LINES
-    void glLineWidth(GLfloat width) const noexcept;
+    void lineWidth(GLfloat width) const noexcept;
+    void pixelSize(GLfloat size) const noexcept;
 
     // Checks the current FBO status
     GLenum checkFrameBufferStatus(GLenum target) const noexcept;

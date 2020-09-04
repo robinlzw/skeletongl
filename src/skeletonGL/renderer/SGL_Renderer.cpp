@@ -125,6 +125,7 @@ SGL_Renderer::SGL_Renderer(std::shared_ptr<SGL_OpenGLManager> oglm, const SGL_Te
 SGL_Renderer::~SGL_Renderer()
 {
     delete[] modelMatrices;
+    delete[] pLineVectors;
 
     // VAOs
     WMOGLM->deleteVAO(this->pLineVAO);
@@ -176,11 +177,32 @@ void SGL_Renderer::renderPixel(const SGL_Pixel &pixel) const
     glm::vec4 assignedColor = {pixel.color.r, pixel.color.g, pixel.color.b, pixel.color.a};
     activeShader.setVector4f(*WMOGLM, "pointColor", assignedColor);
     activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
+
+    // Pixel width, if AA is enabled it must be set to 1.0f!
+    if ( pixel.size > SGL_OGL_CONSTANTS::MIN_PIXEL_SIZE && pixel.size < SGL_OGL_CONSTANTS::MAX_PIXEL_SIZE )
+        WMOGLM->pixelSize(pixel.size);
+    else
+        WMOGLM->pixelSize(SGL_OGL_CONSTANTS::MIN_PIXEL_SIZE);
+
+    // Set the blending mode
+    if (pixel.blending == 0)
+        WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
+    else
+        WMOGLM->blending(true, pixel.blending);
+
+
     WMOGLM->drawArrays(GL_POINTS, 0, 2);
 
+    // Cleanup
+    WMOGLM->pixelSize(SGL_OGL_CONSTANTS::MIN_PIXEL_SIZE);
+    WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
     WMOGLM->unbindVAO();
     WMOGLM->unbindVBO();
     activeShader.unbind(*WMOGLM);
+
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
+    WMOGLM->checkForGLErrors();
+#endif
 }
 
 
@@ -205,13 +227,20 @@ void SGL_Renderer::renderPixel(float x1, float y1, SGL_Color color)
     WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(vertices), &vertices[0]);
     glm::vec4 assignedColor = {color.r, color.g, color.b, color.a};
     pPixelShader.setVector4f(*WMOGLM, "pointColor", assignedColor);
+
     pPixelShader.setFloat(*WMOGLM, "deltaTime", pPixelShader.renderDetails.deltaTime);
+
+    WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
 
     WMOGLM->drawArrays(GL_POINTS, 0, 2);
 
     WMOGLM->unbindVAO();
     WMOGLM->unbindVBO();
     pPixelShader.unbind(*WMOGLM);
+
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
+    WMOGLM->checkForGLErrors();
+#endif
 }
 
 
@@ -248,11 +277,26 @@ void SGL_Renderer::renderLine(const SGL_Line &line) const
     else
         glLineWidth(SGL_OGL_CONSTANTS::MIN_LINE_WIDTH);
 
+    // Set the blending mode
+    if (line.blending == 0)
+        WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
+    else
+        WMOGLM->blending(true, line.blending);
+
+
     WMOGLM->drawArrays(GL_LINES, 0, 2);
 
+    // Reset line width
+    glLineWidth(SGL_OGL_CONSTANTS::MIN_LINE_WIDTH);
+    WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
     WMOGLM->unbindVAO();
     WMOGLM->unbindVBO();
     activeShader.unbind(*WMOGLM);
+
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
+    WMOGLM->checkForGLErrors();
+#endif
+
 }
 
 /**
@@ -285,12 +329,19 @@ void SGL_Renderer::renderLine(float x1, float y1, float x2, float y2, float widt
     else
         glLineWidth(SGL_OGL_CONSTANTS::MIN_LINE_WIDTH);
 
+    WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
+
     pLineShader.setFloat(*WMOGLM, "deltaTime", pLineShader.renderDetails.deltaTime);
     WMOGLM->drawArrays(GL_LINES, 0, 2);
 
     WMOGLM->unbindVAO();
     WMOGLM->unbindVBO();
     pLineShader.unbind(*WMOGLM);
+
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
+    WMOGLM->checkForGLErrors();
+#endif
+
 }
 
 /**
@@ -358,6 +409,10 @@ void SGL_Renderer::renderText(SGL_Text &text)
     activeShader.unbind(*WMOGLM);
     WMOGLM->bindTexture(GL_TEXTURE_2D, 0);
     WMOGLM->faceCulling(false);
+
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
+    WMOGLM->checkForGLErrors();
+#endif
 }
 
 /**
@@ -422,6 +477,11 @@ void SGL_Renderer::renderText(std::string text, GLfloat x, GLfloat y, GLfloat sc
     this->pTextShader.unbind(*WMOGLM);
     WMOGLM->bindTexture(GL_TEXTURE_2D, 0);
     WMOGLM->faceCulling(false);
+
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
+    WMOGLM->checkForGLErrors();
+#endif
+
 }
 
 /**
@@ -495,14 +555,12 @@ void SGL_Renderer::renderSprite(const SGL_Sprite &sprite) const
     };
 
     WMOGLM->bindVAO(this->pSpriteVAO);
-    WMOGLM->bindVBO(this->pTextureUVVBO);
     activeShader.use(*WMOGLM);
-    // SGL_Log("shader bound");
-    // WMOGLM->checkForGLErrors();
+
     // Replace current texture coordinates
+    WMOGLM->bindVBO(this->pTextureUVVBO);
     WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(UV), &UV[0]);
-    // SGL_Log("buffer UV");
-    //     WMOGLM->checkForGLErrors();
+
     // If the user didn't specify a blending mode use the renderers default
     if (sprite.blending == 0)
         WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
@@ -518,8 +576,6 @@ void SGL_Renderer::renderSprite(const SGL_Sprite &sprite) const
     model = glm::translate(model, glm::vec3(-sprite.rotationOrigin.x, -sprite.rotationOrigin.y, 0.0f)); //set the rotation origin back to origin
     model = glm::scale(model, glm::vec3(sprite.size, 1.0f)); //scale
 
-    // SGL_Log("matrix transofrms");
-
     // Parse uniforms
     activeShader.setMatrix4(*WMOGLM, "model", model);
     // Render texture quad
@@ -527,27 +583,22 @@ void SGL_Renderer::renderSprite(const SGL_Sprite &sprite) const
     activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
     activeShader.setVector2f(*WMOGLM, "spriteDimensions", sprite.size.x, sprite.size.y);
 
-    // SGL_Log("parsed uniforms");
-    //     WMOGLM->checkForGLErrors();
-    // Activate textures
+    // Activate the texture
     WMOGLM->activeTexture(GL_TEXTURE0);
-    // SGL_Log("texture active");
-    //     WMOGLM->checkForGLErrors();
     activeTexture.bind(*WMOGLM);
-    // Draw it
+
     WMOGLM->drawArrays(GL_TRIANGLES, 0, 6);
-    // SGL_Log("rendered");
-    //     WMOGLM->checkForGLErrors();
 
+    // Cleanup
     activeShader.unbind(*WMOGLM);
     WMOGLM->unbindVAO();
     WMOGLM->unbindVBO();
-    // restore default blending status
     WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
 
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
     WMOGLM->checkForGLErrors();
+#endif
 }
-
 
 /**
  * @brief Renders a sprite batch using instanced rendering
@@ -556,121 +607,7 @@ void SGL_Renderer::renderSprite(const SGL_Sprite &sprite) const
  *
  * @return nothing
  */
-void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite)
-{
-    SGL_Shader activeShader;
-    if (sprite.shader.shaderType != SHADER_TYPE::SPRITE)
-        activeShader = pSpriteBatchShader;
-    else
-        activeShader = sprite.shader;
-
-    activeShader = pSpriteBatchShader;
-
-    SGL_Texture activeTexture;
-    if (sprite.texture.width == 0) // Uninitialized texture
-        activeTexture = pDefaultTexture;
-    else
-        activeTexture = sprite.texture;
-
-
-
-    GLfloat UV[] = {
-        sprite.uvCoords.UV_topLeft.x / sprite.texture.width, sprite.uvCoords.UV_topLeft.y / sprite.texture.height,
-        sprite.uvCoords.UV_botRight.x / sprite.texture.width, sprite.uvCoords.UV_botRight.y / sprite.texture.height,
-        sprite.uvCoords.UV_botLeft.x / sprite.texture.width, sprite.uvCoords.UV_botLeft.y / sprite.texture.height,
-
-        sprite.uvCoords.UV_topLeft.x / sprite.texture.width, sprite.uvCoords.UV_topLeft.y / sprite.texture.height,
-        sprite.uvCoords.UV_topRight.x / sprite.texture.width, sprite.uvCoords.UV_topRight.y / sprite.texture.height,
-        sprite.uvCoords.UV_botRight.x / sprite.texture.width, sprite.uvCoords.UV_botRight.y / sprite.texture.height,
-    };
-
-    WMOGLM->bindVAO(this->pSpriteBatchVAO);
-    WMOGLM->bindVBO(this->pTextureUVVBO);
-    activeShader.use(*WMOGLM);
-    // Replace current texture coordinates
-    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(UV), &UV[0]);
-    // If the user didn't specify a blending mode use the renderers default
-    if (sprite.blending == 0)
-        WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
-    else
-        WMOGLM->blending(true, sprite.blending);
-
-
-    // TESTING --
-    for (int i = 0; i < pSpriteBatchAmount; ++i)
-    {
-        // Prepare transformations
-        glm::mat4 model(1.0f);
-        model = glm::translate(model, glm::vec3(i*80, i*15, 0.0f)); //move
-        // // Move origin of rotation specified in sprite's data
-        model = glm::translate(model, glm::vec3(sprite.rotationOrigin.x, sprite.rotationOrigin.y, 0.0f));
-        model = glm::rotate(model, sprite.rotation, glm::vec3(0.0f, 0.0f, 1.0f));//rotate
-        model = glm::translate(model, glm::vec3(-sprite.rotationOrigin.x, -sprite.rotationOrigin.y, 0.0f)); //set the rotation origin back to origin
-        model = glm::scale(model, glm::vec3(sprite.size, 1.0f)); //scale
-
-        // model = glm::translate(model, glm::vec3(i*3, .rotationOrigin.y, 0.0f));
-        // model = glm::rotate(model, sprite.rotation, glm::vec3(0.0f, 0.0f, 1.0f));//rotate
-        // model = glm::translate(model, glm::vec3(-sprite.rotationOrigin.x, -sprite.rotationOrigin.y, 0.0f)); //set the rotation origin back to origin
-        // model = glm::scale(model, glm::vec3(32, 32, 1.0f)); //scale
-        modelMatrices[i] = model;
-
-        // SGL_Log("X: " + std::to_string(modelMatrices[i][0][0]));
-    }
-
-
-    // WMOGLM->checkForGLErrors();
-
-
-    // SGL_Log("Reloading instance buffers.");
-    WMOGLM->bindVBO(pSpriteBatchInstancesVBO);
-    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::mat4) * pSpriteBatchAmount, &modelMatrices[0]);
-    WMOGLM->unbindVBO();
-
-    WMOGLM->bindVBO(this->pSpriteBatchVBO);
-    // SGL_Log("X: " + std::to_string(modelMatrices[0][0][0]));
-    // Prepare transformations
-    // glm::mat4 model;
-    // model = glm::translate(model, glm::vec3(sprite.position, 0.0f)); //move
-    // // Move origin of rotation specified in sprite's data
-    // model = glm::translate(model, glm::vec3(sprite.rotationOrigin.x, sprite.rotationOrigin.y, 0.0f));
-    // model = glm::rotate(model, sprite.rotation, glm::vec3(0.0f, 0.0f, 1.0f));//rotate
-    // model = glm::translate(model, glm::vec3(-sprite.rotationOrigin.x, -sprite.rotationOrigin.y, 0.0f)); //set the rotation origin back to origin
-    // model = glm::scale(model, glm::vec3(sprite.size, 1.0f)); //scale
-
-    // // Parse uniforms
-    // activeShader.setMatrix4(*WMOGLM, "model", model);
-    // Render texture quad
-    activeShader.setVector4f(*WMOGLM, "spriteColor", sprite.color.r, sprite.color.g, sprite.color.b, sprite.color.a);
-    activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
-    activeShader.setVector2f(*WMOGLM, "spriteDimensions", sprite.size.x, sprite.size.y);
-    // Activate textures
-    WMOGLM->activeTexture(GL_TEXTURE0);
-    activeTexture.bind(*WMOGLM);
-    // Draw it
-    // WMOGLM->drawArrays(GL_TRIANGLES, 0, 6);
-    // WMOGLM->checkForGLErrors();
-
-    WMOGLM->drawArraysInstanced(GL_TRIANGLES, 0, 6, pSpriteBatchAmount);
-    // WMOGLM->drawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, pSpriteBatchAmount);
-    // WMOGLM->checkForGLErrors();
-
-    activeShader.unbind(*WMOGLM);
-    WMOGLM->unbindVAO();
-    WMOGLM->unbindVBO();
-    // restore default blending status
-    WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
-}
-
-
-
-/**
- * @brief Renders a sprite batch using instanced rendering
- * @param sprite SGL_Sprite to be rendered
- * @param sprite SGL_Sprite to be rendered
- *
- * @return nothing
- */
-void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite, const std::vector<glm::vec2> *vectors)
+void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite, const std::vector<glm::mat4> *matrices)
 {
     SGL_Shader activeShader;
     if (sprite.shader.shaderType != SHADER_TYPE::SPRITE)
@@ -690,50 +627,24 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite, const std::vector
         sprite.uvCoords.UV_botRight.x / sprite.texture.width, sprite.uvCoords.UV_botRight.y / sprite.texture.height,
     };
 
+    // Activate VAO & load shader
     WMOGLM->bindVAO(this->pSpriteBatchVAO);
-    WMOGLM->bindVBO(this->pTextureUVVBO);
     activeShader.use(*WMOGLM);
+
     // Replace current texture coordinates
+    WMOGLM->bindVBO(this->pTextureUVVBO);
     WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(UV), &UV[0]);
+
     // If the user didn't specify a blending mode use the renderers default
     if (sprite.blending == 0)
         WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
     else
         WMOGLM->blending(true, sprite.blending);
 
-
-    // TESTING --
-    std::uint16_t index = 0;
-    // for (int i = 0; i < vectors.size(); ++i)
-    for (std::vector<glm::vec2>::const_iterator i = vectors->begin(); i < vectors->end(); ++i)
-    {
-        // Prepare transformations
-        glm::mat4 model(1.0f);
-        model = glm::translate(model, glm::vec3((*i).x, (*i).y, 0.0f)); //move
-        // // Move origin of rotation specified in sprite's data
-        model = glm::translate(model, glm::vec3(sprite.rotationOrigin.x, sprite.rotationOrigin.y, 0.0f));
-        model = glm::rotate(model, sprite.rotation, glm::vec3(0.0f, 0.0f, 1.0f));//rotate
-        model = glm::translate(model, glm::vec3(-sprite.rotationOrigin.x, -sprite.rotationOrigin.y, 0.0f)); //set the rotation origin back to origin
-        model = glm::scale(model, glm::vec3(sprite.size, 1.0f)); //scale
-
-        // model = glm::translate(model, glm::vec3(i*3, .rotationOrigin.y, 0.0f));
-        // model = glm::rotate(model, sprite.rotation, glm::vec3(0.0f, 0.0f, 1.0f));//rotate
-        // model = glm::translate(model, glm::vec3(-sprite.rotationOrigin.x, -sprite.rotationOrigin.y, 0.0f)); //set the rotation origin back to origin
-        // model = glm::scale(model, glm::vec3(32, 32, 1.0f)); //scale
-        modelMatrices[index] = model;
-        index++;
-        // SGL_Log("X: " + std::to_string(modelMatrices[i][0][0]));
-    }
-
-
-    // WMOGLM->checkForGLErrors();
-
-    // THE VECTOR SIZE CAN NOT BE LARGER THAN pSpriteBatchAmount
+    // Update the batch data buffer
     WMOGLM->bindVBO(pSpriteBatchInstancesVBO);
-    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::mat4) * vectors->size(), &modelMatrices[0]);
+    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::mat4) * matrices->size(), matrices->data());
     WMOGLM->unbindVBO();
-
-    WMOGLM->bindVBO(this->pSpriteBatchVBO);
 
     // Render texture quad
     activeShader.setVector4f(*WMOGLM, "spriteColor", sprite.color.r, sprite.color.g, sprite.color.b, sprite.color.a);
@@ -744,148 +655,125 @@ void SGL_Renderer::renderSpriteBatch(const SGL_Sprite &sprite, const std::vector
     WMOGLM->activeTexture(GL_TEXTURE0);
     sprite.texture.bind(*WMOGLM);
 
-    // Render it
-    WMOGLM->drawArraysInstanced(GL_TRIANGLES, 0, 6, vectors->size());
+    WMOGLM->drawArraysInstanced(GL_TRIANGLES, 0, 6, matrices->size());
 
+    // Cleanup
     activeShader.unbind(*WMOGLM);
     WMOGLM->unbindVAO();
     WMOGLM->unbindVBO();
-    // restore default blending status
     WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
+
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
+    WMOGLM->checkForGLErrors();
+#endif
+
 }
 
 
 
-
-/**
- * @brief Renders a pixel batch using instanced rendering
- *
- * @return nothing
- */
-void SGL_Renderer::renderPixelBatch(const SGL_Pixel &pixel)
+void SGL_Renderer::renderLineBatch(const SGL_Line &line, const std::vector<glm::vec2> *vectors)
 {
     SGL_Shader activeShader;
-    // if (pixel.shader.shaderType != SHADER_TYPE::PIXEL)
-    //     activeShader = pPixelBatchShader;
-    // else
-    //     activeShader = pixel.shader;
-
-    activeShader = pPixelBatchShader;
-
-    // NOTE, coords are normalized, gotta deal with that
-    GLfloat vertices[] = {
-        pixel.position.x, pixel.position.y
-    };
-    WMOGLM->bindVAO(this->pPixelBatchVAO);
-    WMOGLM->bindVBO(this->pPixelBatchVBO);
-    activeShader.use(*WMOGLM);
-
-    // Update UV data
-    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(vertices), &vertices[0]);
-
-    WMOGLM->checkForGLErrors();
-
-    // Update batch data
-    glm::vec2 translations[pPixelBatchAmount];
-    int index = 0;
-    float offset = 0.1;
-    for(int i = 0; i < pPixelBatchAmount; ++i)
-    {
-        glm::vec2 translation;
-        translation.x = i + 32;
-        translation.y = i + 35;
-        translations[index++] = translation;
-    }
-
-    WMOGLM->bindVBO(pPixelBatchInstancesVBO);
-    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::vec2) * pPixelBatchAmount, &translations[0]);
-    WMOGLM->unbindVBO();
-
-    WMOGLM->checkForGLErrors();
-    glm::vec4 assignedColor = {pixel.color.r, pixel.color.g, pixel.color.b, pixel.color.a};
-    activeShader.setVector4f(*WMOGLM, "pointColor", assignedColor);
-    activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
-
-    // Render instanced data
-    // WMOGLM->drawArrays(GL_POINTS, 0, 2);
-    WMOGLM->drawArraysInstanced(GL_POINTS, 0, 2, pPixelBatchAmount);
-
-    WMOGLM->checkForGLErrors();
-
-    WMOGLM->unbindVAO();
-    WMOGLM->unbindVBO();
-    activeShader.unbind(*WMOGLM);
-
-}
-
-
-/**
- * @brief Renders a line batch
- *
- * @return nothing
- */
-void SGL_Renderer::renderLineBatch(const SGL_Line &line)
-{
-    SGL_Shader activeShader;
-    // if (pixel.shader.shaderType != SHADER_TYPE::PIXEL)
-    //     activeShader = pPixelBatchShader;
-    // else
-    //     activeShader = line.shader;
-
+    if (line.shader.shaderType != SHADER_TYPE::LINE)
     activeShader = pLineBatchShader;
+    else
+        activeShader = line.shader;
 
-    // NOTE, coords are normalized, gotta deal with that
-        GLfloat vertices[] = {
-        line.positionA.x, line.positionA.y, line.positionB.x, line.positionB.y
-    };
     WMOGLM->bindVAO(this->pLineBatchVAO);
-    WMOGLM->bindVBO(this->pLineBatchVBO);
     activeShader.use(*WMOGLM);
 
-    // Update UV data
+    // Update the VBO position data
+    GLfloat vertices[] = { line.positionA.x, line.positionA.y, line.positionB.x, line.positionB.y };
+    WMOGLM->bindVBO(this->pLineBatchVBO);
     WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(vertices), &vertices[0]);
 
-    // WMOGLM->checkForGLErrors();
-
-    // Update batch data
-    glm::vec4 translations[pLineBatchAmount];
-    int index = 0;
-    for(int i = 0; i < pLineBatchAmount; ++i)
-    {
-        glm::vec4 translation(1.0f);
-        translation.x = i + 1;
-        translation.y = i + 1;
-        translation.z = i + 3;
-        translation.w = i + 3;
-        translations[index++] = translation;
-    }
+    // Update the batch list
     WMOGLM->bindVBO(pLineBatchInstancesVBO);
-    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::vec4) * pLineBatchAmount, &translations[0]);
+    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::vec4) * vectors->size(), vectors->data());
     WMOGLM->unbindVBO();
 
-    WMOGLM->checkForGLErrors();
+    // Set shader uniforms
     glm::vec4 assignedColor = {line.color.r, line.color.g, line.color.b, line.color.a};
     activeShader.setVector4f(*WMOGLM, "lineColor", assignedColor);
     activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
 
     // Line width, if AA is enabled it must be set to 1.0f!
-    if (line.width > SGL_OGL_CONSTANTS::MIN_LINE_WIDTH && line.width < SGL_OGL_CONSTANTS::MAX_LINE_WIDTH )
-        glLineWidth(line.width);
+    if ( line.width > SGL_OGL_CONSTANTS::MIN_LINE_WIDTH && line.width < SGL_OGL_CONSTANTS::MAX_LINE_WIDTH )
+        WMOGLM->lineWidth(line.width);
     else
-        glLineWidth(SGL_OGL_CONSTANTS::MIN_LINE_WIDTH);
+        WMOGLM->lineWidth(SGL_OGL_CONSTANTS::MIN_LINE_WIDTH);
 
+    // Set the blending mode
+    if (line.blending == 0)
+        WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
+    else
+        WMOGLM->blending(true, line.blending);
 
     // Render instanced data
-    // WMOGLM->drawArrays(GL_POINTS, 0, 2);
-    WMOGLM->drawArraysInstanced(GL_LINES, 0, 2, pLineBatchAmount);
+    WMOGLM->drawArraysInstanced(GL_LINES, 0, 2, vectors->size());
 
-    WMOGLM->checkForGLErrors();
-
+    // Cleanup
+    WMOGLM->lineWidth(SGL_OGL_CONSTANTS::MIN_LINE_WIDTH);
+    WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
     WMOGLM->unbindVAO();
     WMOGLM->unbindVBO();
     activeShader.unbind(*WMOGLM);
+
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
+    WMOGLM->checkForGLErrors();
+#endif
 }
 
+
+void SGL_Renderer::renderPixelBatch(const SGL_Pixel &pixel, const std::vector<glm::vec2> *vectors)
+{
+    SGL_Shader activeShader;
+    if (pixel.shader.shaderType != SHADER_TYPE::PIXEL)
+        activeShader = pPixelBatchShader;
+    else
+        activeShader = pixel.shader;
+
+    WMOGLM->bindVAO(this->pPixelBatchVAO);
+    // WMOGLM->bindVBO(this->pPixelBatchVBO);
+    activeShader.use(*WMOGLM);
+
+    // Update batch data
+    WMOGLM->bindVBO(pPixelBatchInstancesVBO);
+    WMOGLM->bufferSubData(GL_ARRAY_BUFFER, NULL, sizeof(glm::vec2) * vectors->size(), vectors->data());
+    WMOGLM->unbindVBO();
+
+    // Set shader uniforms
+    glm::vec4 assignedColor = {pixel.color.r, pixel.color.g, pixel.color.b, pixel.color.a};
+    activeShader.setVector4f(*WMOGLM, "pointColor", assignedColor);
+    activeShader.setFloat(*WMOGLM, "deltaTime", activeShader.renderDetails.deltaTime);
+
+    // Pixel width, if AA is enabled it must be set to 1.0f!
+    if ( pixel.size > SGL_OGL_CONSTANTS::MIN_PIXEL_SIZE && pixel.size < SGL_OGL_CONSTANTS::MAX_PIXEL_SIZE )
+        WMOGLM->pixelSize(pixel.size);
+    else
+        WMOGLM->pixelSize(SGL_OGL_CONSTANTS::MIN_PIXEL_SIZE);
+
+    // Set the blending mode
+    if (pixel.blending == 0)
+        WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
+    else
+        WMOGLM->blending(true, pixel.blending);
+
+
+    // Render instanced data
+    WMOGLM->drawArraysInstanced(GL_POINTS, 0, 2, vectors->size());
+
+    // Cleanup
+    WMOGLM->unbindVAO();
+    WMOGLM->unbindVBO();
+    WMOGLM->pixelSize(SGL_OGL_CONSTANTS::MIN_PIXEL_SIZE);
+    WMOGLM->blending(true, BLENDING_TYPE::DEFAULT_RENDERING);
+    activeShader.unbind(*WMOGLM);
+
+#ifdef SGL_CHECK_FOR_ERRORS_ON_RENDER
+    WMOGLM->checkForGLErrors();
+#endif
+}
 
 /**
  * @brief Load the line buffers
@@ -895,6 +783,7 @@ void SGL_Renderer::renderLineBatch(const SGL_Line &line)
  */
 void SGL_Renderer::loadLineBuffers(SGL_Shader shader) noexcept
 {
+    SGL_Log("Configuring the line renderer...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     shader.use(*WMOGLM);
 
     GLfloat vertices[] = {
@@ -919,27 +808,26 @@ void SGL_Renderer::loadLineBuffers(SGL_Shader shader) noexcept
  */
 void SGL_Renderer::loadLineBatchBuffers(SGL_Shader shader) noexcept
 {
-    SGL_Log("Configuring line batch renderer...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
+    SGL_Log("Configuring the line batch renderer...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     shader.use(*WMOGLM);
 
     GLfloat vertices[] = {
         0.0f, 0.0f, 0.0f, 0.0f
     };
     WMOGLM->bindVAO(this->pLineBatchVAO);
-
     WMOGLM->bindVBO(this->pLineBatchVBO);
     WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
     WMOGLM->enableVertexAttribArray(0);
     WMOGLM->vertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)0);
 
     WMOGLM->checkForGLErrors();
+    // Reserve the line batch memory
+    glm::vec4 memRes[SGL_OGL_CONSTANTS::MAX_LINE_BATCH_INSTANCES];
+    pLineVectors = new glm::vec4(SGL_OGL_CONSTANTS::MAX_LINE_BATCH_INSTANCES);
 
-    this->pLineBatchAmount = 10000;
-    glm::vec4 memRes[pLineBatchAmount];
-
-    // Pixel batching
+    // Line batching
     WMOGLM->bindVBO(pLineBatchInstancesVBO);
-    WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * pLineBatchAmount, &memRes[0], GL_STATIC_DRAW);
+    WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * SGL_OGL_CONSTANTS::MAX_LINE_BATCH_INSTANCES, &memRes[0], GL_STATIC_DRAW);
 
     // Line batching
     SGL_Log("Configuring line batch shader attrib pointer 3.");
@@ -962,6 +850,7 @@ void SGL_Renderer::loadLineBatchBuffers(SGL_Shader shader) noexcept
  */
 void SGL_Renderer::loadPointBuffers(SGL_Shader shader) noexcept
 {
+    SGL_Log("Configuring the pixel renderer...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     shader.use(*WMOGLM);
 
     GLfloat vertices[] = {
@@ -986,35 +875,21 @@ void SGL_Renderer::loadPointBuffers(SGL_Shader shader) noexcept
  */
 void SGL_Renderer::loadPixelBatchBuffers(SGL_Shader shader) noexcept
 {
+    SGL_Log("Configuring the pixel batch renderer...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     shader.use(*WMOGLM);
 
     GLfloat vertices[] = {
         0.0f, 0.0f
     };
 
-    this->pPixelBatchAmount = 100;
-    glm::vec2 translations[pPixelBatchAmount];
-    int index = 0;
-    float offset = 0.1;
-    // for(int y = -10; y < pSpriteBatchAmount; y += 2)
-    // {
-    //     for(int x = -10; x < 10; x += 2)
-    //     {
-    //         glm::vec2 translation;
-    //         translation.x = (float)x / 10.0f + offset;
-    //         translation.y = (float)y / 10.0f + offset;
-    //         translations[index++] = translation;
-    //     }
-    // }
-
-
-    SGL_Log("Generating pixel batcher VBOs and VAOs.");
+    // Reserve the pixel batch memory
+    glm::vec2 memRes[SGL_OGL_CONSTANTS::MAX_PIXEL_BATCH_INSTANCES];
 
     WMOGLM->bindVAO(this->pPixelBatchVAO);
 
     // Pixel batching
     WMOGLM->bindVBO(pPixelBatchInstancesVBO);
-    WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * pPixelBatchAmount, &translations[0], GL_STATIC_DRAW);
+    WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * SGL_OGL_CONSTANTS::MAX_PIXEL_BATCH_INSTANCES, &memRes[0], GL_STATIC_DRAW);
     WMOGLM->unbindVBO();
 
     // Model coords
@@ -1024,7 +899,6 @@ void SGL_Renderer::loadPixelBatchBuffers(SGL_Shader shader) noexcept
     WMOGLM->vertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
 
     // Pixel batching
-    GLsizei vec2Size = sizeof(glm::vec2);
     SGL_Log("Configuring pixel batch shader attrib pointer 3.");
     WMOGLM->bindVBO(pPixelBatchInstancesVBO);
     WMOGLM->enableVertexAttribArray(3);
@@ -1046,6 +920,7 @@ void SGL_Renderer::loadPixelBatchBuffers(SGL_Shader shader) noexcept
  */
 void SGL_Renderer::loadSpriteBuffers(SGL_Shader shader) noexcept
 {
+    SGL_Log("Configuring the sprite renderer...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     GLfloat vertices[] = {
         // pos   tex
         0.0f, 1.0f,
@@ -1096,6 +971,7 @@ void SGL_Renderer::loadSpriteBuffers(SGL_Shader shader) noexcept
  */
 void SGL_Renderer::loadSpriteBatchBuffers(SGL_Shader shader) noexcept
 {
+    SGL_Log("Configuring the sprite batch renderer...", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_DEFAULT);
     GLfloat vertices[] = {
         // pos   tex
         0.0f, 1.0f,
@@ -1116,68 +992,53 @@ void SGL_Renderer::loadSpriteBatchBuffers(SGL_Shader shader) noexcept
         1.0f, 0.0f, // bot right
     };
 
-
-    pSpriteBatchAmount = 20000;
-    modelMatrices = new glm::mat4[pSpriteBatchAmount];
-
-    for (int i = 0; i < pSpriteBatchAmount; ++i)
-    {
-        // Prepare transformations
-        glm::mat4 model;
-        // model = glm::translate(model, glm::vec3(i*10, i*5, 0.0f)); //move
-        // // Move origin of rotation specified in sprite's data
-        // model = glm::translate(model, glm::vec3(sprite.rotationOrigin.x, sprite.rotationOrigin.y, 0.0f));
-        // model = glm::rotate(model, sprite.rotation, glm::vec3(0.0f, 0.0f, 1.0f));//rotate
-        // model = glm::translate(model, glm::vec3(-sprite.rotationOrigin.x, -sprite.rotationOrigin.y, 0.0f)); //set the rotation origin back to origin
-        // model = glm::scale(model, glm::vec3(sprite.size, 1.0f)); //scale
-
-        // model = glm::translate(model, glm::vec3(i*3, .rotationOrigin.y, 0.0f));
-        // model = glm::rotate(model, sprite.rotation, glm::vec3(0.0f, 0.0f, 1.0f));//rotate
-        // model = glm::translate(model, glm::vec3(-sprite.rotationOrigin.x, -sprite.rotationOrigin.y, 0.0f)); //set the rotation origin back to origin
-        // model = glm::scale(model, glm::vec3(32, 32, 1.0f)); //scale
-        modelMatrices[i] = model;
-
-        // SGL_Log("X: " + std::to_string(modelMatrices[i][0][0]));
-    }
-
+    // Reserve the memory required to store the sprite batch
+    modelMatrices = new glm::mat4[SGL_OGL_CONSTANTS::MAX_SPRITE_BATCH_INSTANCES];
 
     WMOGLM->checkForGLErrors();
 
     WMOGLM->bindVAO(this->pSpriteBatchVAO);
     shader.use(*WMOGLM);
 
-
-
-    SGL_Log("Generating instance buffers.");
     WMOGLM->checkForGLErrors();
+
+    // Parse buffers to VBOs
+
+    // Sprite batch
     WMOGLM->bindVBO(pSpriteBatchInstancesVBO);
-    WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * pSpriteBatchAmount, &modelMatrices[0], GL_STATIC_DRAW);
+    WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * SGL_OGL_CONSTANTS::MAX_SPRITE_BATCH_INSTANCES, &modelMatrices[0], GL_STATIC_DRAW);
     WMOGLM->unbindVBO();
-    // Parse buffers to GPU
+
+    // UV Coords
     WMOGLM->bindVBO(this->pTextureUVVBO);
     WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(UVCoords), UVCoords, GL_DYNAMIC_DRAW);
+
+    // Base sprite model
     WMOGLM->bindVBO(this->pSpriteBatchVBO);
     WMOGLM->bufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
+    // Bind to shaders
 
     // Bind vertex data
     WMOGLM->bindVBO(this->pSpriteBatchVBO);
     WMOGLM->enableVertexAttribArray(0);
     WMOGLM->vertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
 
+    // Bind texture data
     WMOGLM->bindVBO(this->pTextureUVVBO);
     WMOGLM->enableVertexAttribArray(1);
     WMOGLM->vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
 
     // Set instancing data
     GLsizei vec4Size = sizeof(glm::vec4);
-    SGL_Log("Configuring shader attrib pointer 3.");
+    // SGL_Log("Configuring shader attrib pointer 3.");
     WMOGLM->bindVBO(pSpriteBatchInstancesVBO);
     WMOGLM->enableVertexAttribArray(3);
     WMOGLM->checkForGLErrors();
     WMOGLM->vertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, vec4Size * 4, (void*)0);
     WMOGLM->checkForGLErrors();
 
-    SGL_Log("Configuring shader attrib pointer 4.");
+    // SGL_Log("Configuring shader attrib pointer 4.");
     WMOGLM->enableVertexAttribArray(4);
     WMOGLM->vertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, vec4Size * 4, (void*)(vec4Size));
     WMOGLM->checkForGLErrors();

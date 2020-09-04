@@ -45,7 +45,7 @@ private:
     std::shared_ptr<SGL_OpenGLManager> WMOGLM;                    ///< Owned by the windowManager
     std::map<std::string, SGL_Shader> shaders;                    ///< Map of all available shaders
     std::map<std::string, SGL_Texture> textures;                  ///< Map of all available textures
-    long long int pTextureGPUMemory;                              ///< How much GPU memory the program is using
+    std::uint64_t pTextureGPUMemory;                              ///< How much GPU memory the program is using
 
     // Parses, compiles and links a shader, geometry shader is optional
     SGL_Shader loadShaderFromFile(SHADER_TYPE shaderType, const GLchar *vertexSource, const GLchar *fragmentSource, const GLchar *geometrySource = nullptr);

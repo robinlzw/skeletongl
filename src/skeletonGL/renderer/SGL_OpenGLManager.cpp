@@ -947,6 +947,21 @@ void SGL_OpenGLManager::blending(bool value, BLENDING_TYPE type, GLenum sfactor,
             case PARTICLE_RENDERING:
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE);
                 break;
+            case INVISIBLE_RENDERING:
+                glBlendFunc(GL_ZERO, GL_ZERO);
+                break;
+
+            case TEST_RENDERING_1:
+                glBlendFunc(GL_SRC_COLOR, GL_ZERO);
+                break;
+            case TEST_RENDERING_2:
+                // glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_ONE);
+                glBlendFunc(GL_SRC_COLOR, GL_ONE);
+                break;
+            case TEST_RENDERING_3:
+                glBlendFunc(GL_SRC_COLOR, GL_DST_COLOR);
+                break;
+
             }
         }
     }
@@ -980,12 +995,21 @@ void SGL_OpenGLManager::disable(GLenum cap) const noexcept
 /**
  * @brief Sets the GL_LINES width
  * @param width The line's width, defaults to 1.0f and MAY cause odd behaviour if exceeded > 10, see the OGL doucs for your OS
- * @param type Blending mode to use
  * @return nothing
  */
-void SGL_OpenGLManager::glLineWidth(GLfloat width) const noexcept
+void SGL_OpenGLManager::lineWidth(GLfloat width) const noexcept
 {
     glLineWidth(width);
+}
+
+/**
+ * @brief Sets the GL_POINT size
+ * @param width The pixel's width, defaults to 1.0f and MAY cause odd behaviour if exceeded > 10, see the OGL doucs for your OS
+ * @return nothing
+ */
+void SGL_OpenGLManager::pixelSize(GLfloat size) const noexcept
+{
+    glPointSize(size);
 }
 
 /**
@@ -1176,7 +1200,7 @@ void SGL_OpenGLManager::checkForGLErrors() noexcept
 {
     GLenum errCode;
     const GLubyte *errString;
-
+    // SGL_Log("DEBUG MACRO ENABLED", LOG_LEVEL::SGL_DEBUG, LOG_COLOR::TERM_RED);
     if ((errCode = glGetError()) != GL_NO_ERROR)
     {
         if (initialErrorCap == 0)
